@@ -1,0 +1,33 @@
+{
+  "title": "Willkommen",
+  "home": {
+    "joingroup": "Gruppe beitreten",
+    "creategroup": "Erstelle eine Gruppe",
+    "backtohome": "Zurück zur Startseite",
+    "pickusername": "Wähle einen Namen & Avatar",
+    "yourname": "Dein Name",
+    "wherecode": "Wo ist der Code?",
+    "joingroupheader": "Willst du jemandem beitreten?",
+    "creategroupheader": "Eine neue Gruppe erstellen"
+  },
+  "lobby": {
+    "pickgames": "Wähle die Spiele, die du spielen möchtest",
+    "letsgo": "Let’s goooooo",
+    "pickmode": "Wähle einen Spielmodus",
+    "standardmode": "Standard",
+    "drinkingmode": "Trinkspiel"
+  },
+  "help": {
+    "whatismindr": "Was ist mindr?",
+    "explainmindr": "Mindr ist eine Sammlung von verschiedenen Party- und Gelegenheitsspielen, die du online mit deinen Freunden spielen kannst. Du kannst jeden Spielmodus nach deinen Wünschen aktivieren und deaktivieren und zwischen dem Standard- oder Trinkspielmodus wählen.",
+    "whatgames": "Welche Spiele können wir spielen?"
+  },
+  "gamemode": {
+    "quiz": "Quiz",
+    "drawguess": "Montagsmaler",
+    "mostlikely": "Wer würde eher",
+    "bestartist": "Größter Künstler",
+    "survey": "Umfrage",
+    "whoknowsyou": "Wer kennt dich"
+  }
+}

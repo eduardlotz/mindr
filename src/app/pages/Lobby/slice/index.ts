@@ -4,13 +4,50 @@ import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { lobbySaga } from './saga';
 import { LobbyState } from './types';
 
-export const initialState: LobbyState = {};
+export const initialState: LobbyState = {
+  user: {
+    name: '',
+    avatarUrl: '',
+    groupCode: '',
+    joinedGroup: false,
+  },
+  lobby: {
+    groupCode: '',
+    activeGamemodes: [],
+    gameMasterId: -1,
+    isStandardMode: true,
+  },
+};
 
 const slice = createSlice({
   name: 'lobby',
   initialState,
   reducers: {
-    someAction(state, action: PayloadAction<any>) {},
+    setUsername(state, action: PayloadAction<string>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.user.name = action.payload;
+    },
+    setAvatarUrl(state, action: PayloadAction<string>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.user.avatarUrl = action.payload;
+    },
+    setGroupCode(state, action: PayloadAction<string>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.user.groupCode = action.payload;
+    },
+    setJoinedGroup(state, action: PayloadAction<boolean>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.user.joinedGroup = action.payload;
+    },
+    setIsStandardMode(state, action: PayloadAction<boolean>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.lobby.isStandardMode = action.payload;
+    },
   },
 });
 

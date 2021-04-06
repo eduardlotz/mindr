@@ -3,261 +3,325 @@
  * Homepage
  *
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHomepageSlice } from './slice';
-import { selectModal, selectModalContent } from './slice/selectors';
+import { selectModal } from './slice/selectors';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import Modal from 'react-modal';
-import { Logo } from 'app/components/Logo';
-import Icon from 'app/components/Icon';
+import { H2, H5 } from 'app/components/styled/Headers';
+import { colors } from 'styles/colors';
+import { LinkButton, SecondaryButton } from 'app/components/Button';
+import { JoinGroup } from 'app/components/JoinGroup';
 
-const gameModes = [
-  {
-    title: 'Quiz',
-    imageClass: 'quiz',
-    rules: 'How to play Quiz',
-  },
-  {
-    title: 'Draw & Guess',
-    imageClass: 'draw-and-guess',
-    rules: 'How to play Draw & Guess',
-  },
-  {
-    title: 'Most likely',
-    imageClass: 'most-likely',
-    rules: 'How to play Most Likely',
-  },
-  {
-    title: 'Best artist',
-    imageClass: 'best-artist',
-    rules: 'How to play Best artist',
-  },
-  {
-    title: 'Survey',
-    imageClass: 'survey',
-    rules: 'How to play Survey',
-  },
-  {
-    title: 'Who knows you',
-    imageClass: 'who-knows-you',
-    rules: 'How to play Who knows you',
-  },
-];
+import groupCodeImage from '../../../assets/groupcode-help.jpg';
+import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
+import avatars from 'assets/avatars/avatars';
+import { useLobbySlice } from '../Lobby/slice';
 
-Modal.setAppElement('#root');
+import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
+import { games } from './gamesModes';
+import { variants } from 'styles/variants';
 
-interface Props {}
+const codeTextImage = () => {
+  <FlexColDiv>
+    <P>
+      Ask your friends to tell you their code. It's in the upper right corner.
+    </P>
+    <BigImage src={groupCodeImage} />
+  </FlexColDiv>;
+};
 
-export function Homepage(props: Props) {
-  const variants = {
+const groupCodeContent = {
+  title: 'Where is the code?',
+  content: codeTextImage,
+};
+
+export function Homepage({ match }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t, i18n } = useTranslation();
+
+  // Use the slice we created
+  const { actions: homeActions } = useHomepageSlice();
+
+  const { actions: lobbyActions } = useLobbySlice();
+
+  // Used to dispatch slice actions
+  const dispatch = useDispatch();
+
+  const username = useSelector(selectUsername);
+  const selectedAvatar = useSelector(selectUserAvatar);
+
+  // type needs to be declared in order to work with typescript
+  const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(lobbyActions.setUsername(e.target.value));
+  };
+
+  const setAvatar = url => {
+    dispatch(lobbyActions.setAvatarUrl(url));
+  };
+
+  const setModal = content => {
+    dispatch(homeActions.setModalContent(content));
+    dispatch(homeActions.setModalOpen(true));
+  };
+
+  useEffect(() => {
+    dispatch(homeActions.setGameModes(games));
+    dispatch(lobbyActions.setJoinedGroup(false));
+  }, []);
+
+  const popUpVariants = {
     visible: i => ({
       opacity: 1,
       scale: 1,
       transition: {
         type: 'spring',
-        delay: 0.5 + i * 0.1,
+        damping: 10,
+        mass: 0.75,
+        stiffness: 40,
+        delay: 0.1 + i * 0.02,
       },
     }),
     hidden: { opacity: 0, scale: 0.9 },
-  };
-
-  const textBlockVariants = {
-    visible: {
-      opacity: 1,
-      scale: 1,
+    onHover: {
+      scale: 1.3,
+      boxShadow: '0px 8px 20px rgba(51, 51, 51, 0.116)',
       transition: {
-        type: 'spring',
-        when: 'beforeChildren',
-        staggerChildren: 0.3,
+        ease: 'easeInOut',
+        duration: 0.2,
+        delay: 0,
       },
     },
-    hidden: { opacity: 0, scale: 0.9, transition: { when: 'afterChildren' } },
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
-
-  // Use the slice we created
-  const { actions } = useHomepageSlice();
-
-  // Used to dispatch slice actions
-  const dispatch = useDispatch();
-
-  // `selectors` are used to read the state. Explained in other chapter
-  // Will be inferred as `string` type ✅
-  const modalIsOpen = useSelector(selectModal);
-  const modalContent = useSelector(selectModalContent);
-
-  const closeModal = () => {
-    // Trigger the action to change the state. It accepts `string` as we declared in `slice.ts`. Fully type-safe ✅
-    dispatch(actions.showModal(false));
-  };
-
-  const setModalContent = content => {
-    dispatch(actions.setModalContent(content));
-    dispatch(actions.showModal(true));
+    exit: {
+      opacity: 0,
+      scale: 0.9,
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.75,
+        stiffness: 40,
+      },
+    },
   };
 
   return (
-    <div className="main-container">
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <h2>{modalContent.name}</h2>
-        <i className={`image ${modalContent.imageClass}`} />
-
-        <button className="modal-close" onClick={closeModal}>
-          close
-        </button>
-        <div>{modalContent.rules}</div>
-      </Modal>
-      <InfoContainer>
-        <Logo size={64} color={'#4A8CEF'} />
-        <ContentBlock
+    <>
+      <UserCreationContainer
+        variants={variants.container}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <UserContainer
+          variants={variants.slideUp}
           initial="hidden"
           animate="visible"
-          variants={textBlockVariants}
-          className="content-block"
+          exit="exit"
         >
-          <H1>What is mindr?</H1>
-          <P>
-            Mindr is a mix of several <Bold>party & casual</Bold> games you can
-            play <Bold>online with your friends.</Bold> You can enable and
-            disable each game mode according to your needs and pick between the{' '}
-            <Bold>standard or drinking mode.</Bold>
-          </P>
-        </ContentBlock>
-        <ContentBlock>
-          <H1>What games can we play?</H1>
-          <Small>Click on a game mode to see how to play.</Small>
-          <HowToContainer>
-            {gameModes.map((mode, i) => {
-              return (
-                <AnimatePresence>
-                  <GameModeTab
-                    key={i}
-                    custom={i}
-                    initial="hidden"
-                    animate="visible"
-                    variants={variants}
-                    className="game-mode-tab"
-                    onClick={() => setModalContent(mode)}
-                  >
-                    <Icon name={mode.imageClass} width="128" height="128" />
-                    <H5>{mode.title}</H5>
-                  </GameModeTab>
-                </AnimatePresence>
-              );
-            })}
-          </HowToContainer>
-        </ContentBlock>
-      </InfoContainer>
-      <StartGameContainer>
-        <ContentBlock>
-          <InlineBlock>
-            <H2>Want to join your friends?</H2>
-            <A href="#">Where is the code?</A>
-          </InlineBlock>
-          <Form>
-            <GroupCode placeholder="----" />
-            <PrimaryButton type="submit">
-              Join group
-              <Icon
-                name="circle-arrow-right"
-                fill="white"
-                height="24"
-                width="24"
-                style={{ marginLeft: '16px' }}
+          <FlexColDiv>
+            <H2>{t('home.pickusername')}</H2>
+            <UsernameInput
+              placeholder={t('home.yourname')}
+              value={username}
+              onChange={setUsername}
+              maxLength={20}
+            />
+          </FlexColDiv>
+          {selectedAvatar ? (
+            <BigAvatar src={selectedAvatar} />
+          ) : (
+            <BigAvatar src={undefinedAvatar} />
+          )}
+        </UserContainer>
+        <AvatarSelectionContainer
+          variants={variants.slideUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {avatars.map((avatar, i) => {
+            return (
+              <AvatarImg
+                src={avatar}
+                variants={popUpVariants}
+                key={i}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                onClick={() => setAvatar(avatar)}
+                className={selectedAvatar === avatar ? 'selected' : ''}
               />
-            </PrimaryButton>
-          </Form>
+            );
+          })}
+        </AvatarSelectionContainer>
+      </UserCreationContainer>
+
+      {/* Bottom Panel for joining or creating a group */}
+      <StartGameContainer
+        variants={variants.slideUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <ContentBlock
+          variants={variants.slideUpItem}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <InlineBlock>
+            <H2 className="margin-clear">{t('home.joingroupheader')}</H2>
+            <LinkButton onClick={() => setModal(groupCodeContent)}>
+              {t('home.wherecode')}
+            </LinkButton>
+          </InlineBlock>
+          <JoinGroup />
         </ContentBlock>
-        <ContentBlock>
+        <ContentBlock
+          variants={variants.slideUpItem}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
           <div className="create-group">
-            <H2>You're the first one here?</H2>
-            <SecondaryButton>Create a new group</SecondaryButton>
+            <H2>{t('home.creategroupheader')}</H2>
+            <SecondaryButton>{t('home.creategroup')}</SecondaryButton>
           </div>
         </ContentBlock>
       </StartGameContainer>
-    </div>
+    </>
   );
 }
 
-const InfoContainer = styled.div`
-  width: 50%;
-  max-width: 50%;
-  margin: 0;
-  height: 100%;
-  align-items: flex-start;
-  padding: 32px 6rem 32px 3rem;
+const UserCreationContainer = styled(motion.div)``;
+
+const UsernameInput = styled.input`
+  height: 58px;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-`;
 
-const StartGameContainer = styled.div`
-  width: 50%;
-  max-width: 50%;
-  margin: 0;
-  height: 100%;
-  align-items: flex-start;
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 32px 6rem 32px 3rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #f6f9fe;
+  padding: 16px 24px;
+  margin-right: 16px;
 
-  justify-content: center;
-`;
+  background: transparent;
+  border: 2px solid ${colors.basic.lightgrey};
+  border-radius: 16px;
+  color: ${colors.basic.almostblack};
 
-const HowToContainer = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
-  margin: 16px 0 40px 0;
-`;
-
-const H1 = styled.h1`
-  width: 100%;
-  margin: 32px 0 8px 0;
-
-  font-family: HK Grotesk, sans-serif;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 38px;
-  line-height: 50px;
-
-  color: #111111;
-`;
-
-const H2 = styled.h2`
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 32px;
-  line-height: 42px;
-
-  color: #111111;
-`;
-
-const H5 = styled.h5`
   font-family: HK Grotesk;
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
   line-height: 26px;
+  text-align: left;
+  letter-spacing: 0.4px;
 
-  color: #111111;
+  transition: border-color 0.25s ease-out;
+
+  &:focus,
+  &:hover {
+    outline: none;
+    border-color: ${colors.input.borderFocus};
+  }
+
+  &::placeholder {
+    color: #b6b6b6;
+  }
 `;
 
-const P = styled.p`
+const BigAvatar = styled(motion.img)`
+  height: 100%;
+  width: 116px;
+`;
+
+const UserContainer = styled(motion.div)`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+`;
+
+const AvatarSelectionContainer = styled(motion.div)`
+  display: grid;
+  max-width: 100%;
+  width: 100%;
+
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-gap: 32px 48px;
+
+  background-color: ${colors.basic.lightblue};
+  border-radius: 16px;
+
+  margin-bottom: 40px;
+  padding: 32px 40px;
+`;
+
+const AvatarImg = styled(motion.img)`
+  position: relative;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+  object-fit: contain;
+  background-size: 100% 100%;
+
+  cursor: pointer;
+
+  &.selected {
+    box-shadow: 0px 8px 16px 0px rgba(12, 72, 163, 0.12);
+    opacity: 0.8;
+  }
+`;
+
+const FlexColDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+`;
+
+const FlexRowDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+`;
+
+const BigImage = styled(motion.img)`
+  width: auto;
+  height: 420px;
+
+  margin-top: 24px;
+  border-radius: 12px;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+`;
+
+const StartGameContainer = styled(motion.div)`
+  width: 100%;
+
+  margin: 0;
+  align-items: flex-start;
+
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: ${colors.basic.white};
+
+  justify-content: center;
+`;
+
+const P = styled(motion.p)`
   width: 100%;
 
   font-family: HK Grotesk;
@@ -266,10 +330,10 @@ const P = styled.p`
   font-size: 20px;
   line-height: 26px;
 
-  color: $grey;
+  color: ${colors.basic.textgrey};
 `;
 
-const A = styled.a`
+const A = styled(motion.a)`
   font-family: HK Grotesk;
   font-style: normal;
   font-weight: 500;
@@ -278,12 +342,12 @@ const A = styled.a`
 
   text-decoration-line: underline;
 
-  color: #4a8cef;
+  color: ${colors.basic.almostblack};
 `;
 
 const Bold = styled.span`
   font-weight: bold;
-  color: $black;
+  color: ${colors.basic.almostblack};
 `;
 
 const Small = styled.small`
@@ -296,13 +360,13 @@ const Small = styled.small`
   font-size: 18px;
   line-height: 23px;
 
-  color: #979797;
+  color: ${colors.basic.darkgrey};
 `;
 
 const ContentBlock = styled(motion.div)`
   width: 100%;
   &:first-child {
-    margin-bottom: 180px;
+    margin-bottom: 40px;
   }
 `;
 
@@ -311,74 +375,7 @@ const InlineBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: row;
-`;
-
-const GroupCode = styled.input`
-  padding: 16px 24px;
-
-  width: 86px;
-  height: 58px;
-  left: 996px;
-  top: 270px;
-
-  margin-right: 16px;
-
-  background: transparent;
-  border: 2px solid #9fbbf2;
-  border-radius: 16px;
-  color: #6599e8;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
-`;
-
-const PrimaryButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 56px;
-  width: 100%;
-  padding: 16px 72px;
-  border-radius: 16px;
-  border: none;
-  color: #ffffff;
-  background: #4a8cef;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
-`;
-
-const SecondaryButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 56px;
-  width: 100%;
-  padding: 16px 72px;
-  border-radius: 16px;
-
-  background: rgba(159, 187, 242, 0.2);
-  border: 2px solid #9fbbf2;
-  color: #6599e8;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
+  margin-bottom: 24px;
 `;
 
 const GameModeTab = styled(motion.div)`
@@ -386,7 +383,7 @@ const GameModeTab = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   padding: 16px 32px;
-  height: 194px;
+  height: auto;
 
   background: #ffffff;
   border: 2px solid #f4f5f7;

@@ -24,6 +24,8 @@ import { configureAppStore } from 'store/configureStore';
 
 import reportWebVitals from 'reportWebVitals';
 
+import { BrowserRouter } from 'react-router-dom';
+
 // Initialize languages
 import './locales/i18n';
 
@@ -34,7 +36,9 @@ ReactDOM.render(
   <Provider store={store}>
     <HelmetProvider>
       <React.StrictMode>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </React.StrictMode>
     </HelmetProvider>
   </Provider>,

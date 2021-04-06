@@ -1,9 +1,17 @@
 /* --- STATE --- */
 export interface HomepageState {
-  modalIsOpen: boolean;
-  modalContent: {
-    name: string;
+  modal: {
+    isOpen: boolean;
+    title: string;
     imageClass: string;
-    rules: string;
+    content: Array<string>;
+    mode: string;
   };
+  gameModes: [
+    {
+      title: string;
+      imageClass: string;
+      rules: Array<string>;
+    },
+  ];
 }

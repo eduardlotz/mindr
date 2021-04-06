@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'HK Grotesk', Helvetica, Arial, sans-serif;
   }
 
   #root {
@@ -17,13 +17,20 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   p,
-  label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
-    line-height: 1.5em;
+  label, a {
+    font-family: 'HK Grotesk', Helvetica, Arial, sans-serif;
   }
 
   input, select {
     font-family: inherit;
     font-size: inherit;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 `;

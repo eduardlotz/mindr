@@ -5,27 +5,34 @@ import { HomepageSaga } from './saga';
 import { HomepageState } from './types';
 
 export const initialState: HomepageState = {
-  modalIsOpen: false,
-  modalContent: {
-    name: '',
+  modal: {
+    isOpen: false,
+    title: '',
     imageClass: '',
-    rules: '',
+    content: [],
+    mode: 'gameMode',
   },
+  gameModes: [{ title: '', imageClass: '', rules: [] }],
 };
 
 const slice = createSlice({
   name: 'Homepage',
   initialState,
   reducers: {
-    showModal(state, action: PayloadAction<boolean>) {
+    setModalOpen(state, action: PayloadAction<boolean>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
-      state.modalIsOpen = action.payload;
+      state.modal.isOpen = action.payload;
     },
     setModalContent(state, action: PayloadAction<any>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
-      state.modalContent = action.payload;
+      state.modal.title = action.payload.title;
+      state.modal.imageClass = action.payload.imageClass;
+      state.modal.content = action.payload.content;
+    },
+    setGameModes(state, action: PayloadAction<any>) {
+      state.gameModes = action.payload;
     },
   },
 });

@@ -1,3 +1,33 @@
 {
-  "title": "welcome"
+  "home": {
+    "joingroup": "Join Group",
+    "creategroup": "Create a new group",
+    "backtohome": "back to Home",
+    "pickusername": "Pick an username & avatar",
+    "yourname": "Your name",
+    "wherecode": "Where is the code?",
+    "joingroupheader": "Want to join someone?",
+    "creategroupheader": "Create a new group"
+  },
+  "lobby": {
+    "pickgames": "Pick the games you want to play",
+    "letsgo": "Let’s goooooo",
+    "pickmode": "Pick a game mode",
+    "standardmode": "Standard mode",
+    "drinkingmode": "Drinking mode"
+  },
+  "help": {
+    "whatismindr": "What is mindr?",
+    "explainmindr": "Mindr is a mix of several party & casual games you can play online with your friends. You can enable and disable each game mode according to your needs and pick between the standard or drinking mode.",
+    "whatgames": "What games can we play?",
+    "whatgameshint": "Click on a game mode to see how to play."
+  },
+  "gamemode": {
+    "quiz": "Quiz",
+    "drawguess": "Draw & Guess",
+    "mostlikely": "Most Likely",
+    "bestartist": "Best Artist",
+    "survey": "Survey",
+    "whoknowsyou": "Who knows you"
+  }
 }
