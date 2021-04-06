@@ -8,15 +8,14 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage/Loadable';
 import { H1, H5 } from 'app/components/styled/Headers';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGameModes, selectModal } from '../Homepage/slice/selectors';
+import { selectGameModes } from '../Homepage/slice/selectors';
 import { useHomepageSlice } from '../Homepage/slice';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
 import { Link, useHistory } from 'react-router-dom';
-import { NONAME } from 'dns';
 import { variants } from 'styles/variants';
 
 interface Props {}
@@ -75,8 +74,6 @@ export const Help = memo((props: Props) => {
 
   // `selectors` are used to read the state.
   const gameModes = useSelector(selectGameModes);
-
-  const modal = useSelector(selectModal);
 
   const setModal = content => {
     dispatch(actions.setModalContent(content));
@@ -277,11 +274,6 @@ const GameModeTab = styled(motion.div)`
 
 const ContentBlock = styled(motion.div)`
   width: 100%;
-`;
-
-const Bold = styled.span`
-  font-weight: bold;
-  color: ${colors.basic.almostblack};
 `;
 
 const P = styled(motion.p)`

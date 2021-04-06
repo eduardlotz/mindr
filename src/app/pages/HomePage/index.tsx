@@ -6,11 +6,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHomepageSlice } from './slice';
-import { selectModal } from './slice/selectors';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
-import { H2, H5 } from 'app/components/styled/Headers';
+import { motion } from 'framer-motion';
+import { H2 } from 'app/components/styled/Headers';
 import { colors } from 'styles/colors';
 import { LinkButton, SecondaryButton } from 'app/components/Button';
 import { JoinGroup } from 'app/components/JoinGroup';
@@ -283,28 +282,12 @@ const FlexColDiv = styled.div`
   width: 80%;
 `;
 
-const FlexRowDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: center;
-`;
-
 const BigImage = styled(motion.img)`
   width: auto;
   height: 420px;
 
   margin-top: 24px;
   border-radius: 12px;
-`;
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding-bottom: 80px;
 `;
 
 const StartGameContainer = styled(motion.div)`
@@ -333,36 +316,6 @@ const P = styled(motion.p)`
   color: ${colors.basic.textgrey};
 `;
 
-const A = styled(motion.a)`
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 21px;
-
-  text-decoration-line: underline;
-
-  color: ${colors.basic.almostblack};
-`;
-
-const Bold = styled.span`
-  font-weight: bold;
-  color: ${colors.basic.almostblack};
-`;
-
-const Small = styled.small`
-  display: flex;
-  align-items: center;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 23px;
-
-  color: ${colors.basic.darkgrey};
-`;
-
 const ContentBlock = styled(motion.div)`
   width: 100%;
   &:first-child {
@@ -376,22 +329,4 @@ const InlineBlock = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-`;
-
-const GameModeTab = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 32px;
-  height: auto;
-
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: border-color 0.25s ease-out;
-
-  &:hover {
-    border-color: #111111;
-  }
 `;

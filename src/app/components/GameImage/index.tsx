@@ -4,7 +4,7 @@
  *
  */
 import React from 'react';
-import styled, { StyledFunction } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 
 interface Props {
   name: string;

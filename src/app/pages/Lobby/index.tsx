@@ -6,16 +6,14 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { messages } from './messages';
 import { GameImage } from 'app/components/GameImage';
-import { H1, H2, H5 } from 'app/components/styled/Headers';
+import { H2, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
-import { PrimaryButton, PrimaryFloatingButton } from 'app/components/Button';
+import { PrimaryFloatingButton } from 'app/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHomepageSlice } from '../Homepage/slice';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useEffect } from 'react';
 import { useLobbySlice } from './slice';
@@ -246,19 +244,6 @@ const GameModeTab = styled(motion.div)`
 
 const ContentBlock = styled(motion.div)`
   width: 100%;
-`;
-
-const Small = styled.small`
-  display: flex;
-  align-items: center;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 23px;
-
-  color: ${colors.basic.darkgrey};
 `;
 
 const GameModesContainer = styled.div`

@@ -16,7 +16,7 @@ import avatar15 from './avatar-15.jpg';
 import avatar16 from './avatar-16.jpg';
 // TODO refactor to a dynamic method
 
-export default [
+const avatars = [
   avatar1,
   avatar2,
   avatar3,
@@ -34,3 +34,5 @@ export default [
   avatar15,
   avatar16,
 ];
+
+export default avatars;

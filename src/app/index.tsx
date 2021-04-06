@@ -8,59 +8,28 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import {
-  Switch,
-  Route,
-  BrowserRouter,
-  useLocation,
-  Link,
-} from 'react-router-dom';
-
-import groupCodeImage from '../assets/groupcode-help.jpg';
+import { Switch, Route, useLocation } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
 import { Homepage } from './pages/Homepage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
-import { CreatePlayer } from './pages/CreatePlayer/Loadable';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Help } from './pages/Help/Loadable';
 import styled from 'styled-components/macro';
 import { Navbar } from './components/Navbar/Loadable';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHomepageSlice } from './pages/Homepage/slice';
+import { useSelector } from 'react-redux';
 import { selectModal } from './pages/Homepage/slice/selectors';
 import { MotionModal } from './components/MotionModal';
-import { colors } from 'styles/colors';
 import { Lobby } from './pages/Lobby/Loadable';
 
 export function App() {
   const { i18n } = useTranslation();
   const location = useLocation();
 
-  // Use the slice we created
-  const { actions: homeActions } = useHomepageSlice();
-
-  // Used to dispatch slice actions
-  const dispatch = useDispatch();
-
   // `selectors` are used to read the state.
   const modal = useSelector(selectModal);
-
-  const codeTextImage = () => {
-    <FlexColDiv>
-      <P>
-        Ask your friends to tell you their code. It's in the upper right corner.
-      </P>
-      <BigImage src={groupCodeImage} />
-    </FlexColDiv>;
-  };
-
-  const groupCodeContent = {
-    title: 'Where is the code?',
-    content: codeTextImage,
-  };
 
   return (
     <>
@@ -103,30 +72,4 @@ const MainContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
   padding-bottom: 80px;
-`;
-
-const FlexColDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-`;
-
-const BigImage = styled(motion.img)`
-  width: auto;
-  height: 420px;
-
-  margin-top: 24px;
-  border-radius: 12px;
-`;
-
-const P = styled(motion.p)`
-  width: 100%;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 26px;
-
-  color: ${colors.basic.textgrey};
 `;

@@ -9,7 +9,7 @@ import {
   selectGroupCode,
   selectJoinedGroup,
 } from 'app/pages/Lobby/slice/selectors';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,7 @@ import { Logo } from '../Logo';
 interface Props {}
 
 export function Navbar(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
   const username = useSelector(selectUsername);
