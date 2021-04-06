@@ -12,7 +12,7 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
-import { Homepage } from './pages/Homepage/Loadable';
+import { Homepage } from './pages/Homepage';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
