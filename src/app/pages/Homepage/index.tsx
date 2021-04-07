@@ -69,7 +69,7 @@ export function Homepage({ match }) {
   useEffect(() => {
     dispatch(homeActions.setGameModes(games));
     dispatch(lobbyActions.setJoinedGroup(false));
-  }, []);
+  }, [dispatch, homeActions, lobbyActions]);
 
   const popUpVariants = {
     visible: i => ({

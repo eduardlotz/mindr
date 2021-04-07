@@ -43,7 +43,7 @@ export function Lobby(props: Props) {
 
   useEffect(() => {
     dispatch(lobbyActions.setJoinedGroup(true));
-  }, []);
+  }, [dispatch, lobbyActions]);
 
   const gameTabVariants = {
     visible: i => ({

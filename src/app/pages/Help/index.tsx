@@ -20,49 +20,49 @@ import { variants } from 'styles/variants';
 
 interface Props {}
 
+const games = [
+  {
+    title: 'quiz',
+    imageClass: 'quiz',
+    content: [
+      '1. Every player gets the same question with 4 possible answers.',
+      '2. You have 20 seconds to pick the right answer.',
+      '3. The faster you answer correctly, the more points you get.',
+    ],
+  },
+  {
+    title: 'drawguess',
+    imageClass: 'draw-and-guess',
+    content: ['How to play Draw & Guess'],
+  },
+  {
+    title: 'mostlikely',
+    imageClass: 'most-likely',
+    content: ['How to play Most Likely'],
+  },
+  {
+    title: 'bestartist',
+    imageClass: 'best-artist',
+    content: ['How to play Best artist'],
+  },
+  {
+    title: 'survey',
+    imageClass: 'survey',
+    content: ['How to play Survey'],
+  },
+  {
+    title: 'whoknowsyou',
+    imageClass: 'who-knows-you',
+    content: ['How to play Who knows you'],
+  },
+];
+
 export const Help = memo((props: Props) => {
   //array with all game modes & rules
   //TODO swap out with real database
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
-
-  const games = [
-    {
-      title: 'quiz',
-      imageClass: 'quiz',
-      content: [
-        '1. Every player gets the same question with 4 possible answers.',
-        '2. You have 20 seconds to pick the right answer.',
-        '3. The faster you answer correctly, the more points you get.',
-      ],
-    },
-    {
-      title: 'drawguess',
-      imageClass: 'draw-and-guess',
-      content: ['How to play Draw & Guess'],
-    },
-    {
-      title: 'mostlikely',
-      imageClass: 'most-likely',
-      content: ['How to play Most Likely'],
-    },
-    {
-      title: 'bestartist',
-      imageClass: 'best-artist',
-      content: ['How to play Best artist'],
-    },
-    {
-      title: 'survey',
-      imageClass: 'survey',
-      content: ['How to play Survey'],
-    },
-    {
-      title: 'whoknowsyou',
-      imageClass: 'who-knows-you',
-      content: ['How to play Who knows you'],
-    },
-  ];
 
   // Use the slice we created
   const { actions } = useHomepageSlice();
@@ -87,7 +87,7 @@ export const Help = memo((props: Props) => {
 
   useEffect(() => {
     if (gameModes.length < 2) dispatch(actions.setGameModes(games));
-  }, []);
+  }, [actions, dispatch, gameModes.length]);
 
   const gameTabVariants = {
     visible: i => ({
