@@ -16,7 +16,7 @@ export const initialState: HomepageState = {
 };
 
 const slice = createSlice({
-  name: 'Homepage',
+  name: 'home',
   initialState,
   reducers: {
     setModalOpen(state, action: PayloadAction<boolean>) {

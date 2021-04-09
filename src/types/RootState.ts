@@ -1,5 +1,6 @@
 import { LobbyState } from 'app/pages/Lobby/slice/types';
 import { HomepageState } from 'app/pages/Homepage/slice/types';
+import { ModalState } from 'app/components/MotionModal/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -8,6 +9,7 @@ import { HomepageState } from 'app/pages/Homepage/slice/types';
 */
 export interface RootState {
   lobby?: LobbyState;
-  Homepage?: HomepageState;
+  home?: HomepageState;
+  modal?: ModalState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

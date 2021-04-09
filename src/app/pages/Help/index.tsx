@@ -3,7 +3,7 @@
  * Help
  *
  */
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage/Loadable';
@@ -12,50 +12,13 @@ import { motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
-import { useHomepageSlice } from '../Homepage/slice';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
 import { Link, useHistory } from 'react-router-dom';
 import { variants } from 'styles/variants';
+import { useModalSlice } from 'app/components/MotionModal/slice';
 
 interface Props {}
-
-const games = [
-  {
-    title: 'quiz',
-    imageClass: 'quiz',
-    content: [
-      '1. Every player gets the same question with 4 possible answers.',
-      '2. You have 20 seconds to pick the right answer.',
-      '3. The faster you answer correctly, the more points you get.',
-    ],
-  },
-  {
-    title: 'drawguess',
-    imageClass: 'draw-and-guess',
-    content: ['How to play Draw & Guess'],
-  },
-  {
-    title: 'mostlikely',
-    imageClass: 'most-likely',
-    content: ['How to play Most Likely'],
-  },
-  {
-    title: 'bestartist',
-    imageClass: 'best-artist',
-    content: ['How to play Best artist'],
-  },
-  {
-    title: 'survey',
-    imageClass: 'survey',
-    content: ['How to play Survey'],
-  },
-  {
-    title: 'whoknowsyou',
-    imageClass: 'who-knows-you',
-    content: ['How to play Who knows you'],
-  },
-];
 
 export const Help = memo((props: Props) => {
   //array with all game modes & rules
@@ -65,7 +28,7 @@ export const Help = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   // Use the slice we created
-  const { actions } = useHomepageSlice();
+  const { actions: modalActions } = useModalSlice();
 
   let history = useHistory();
 
@@ -76,18 +39,16 @@ export const Help = memo((props: Props) => {
   const gameModes = useSelector(selectGameModes);
 
   const setModal = content => {
-    dispatch(actions.setModalContent(content));
-    dispatch(actions.setModalOpen(true));
+    dispatch(modalActions.setModalTitle(t(`gamemode.${content.title}`)));
+    dispatch(modalActions.setModalContent(content.content));
+    dispatch(modalActions.setModalImage(content.imageClass));
+    dispatch(modalActions.setModalOpen(true));
   };
 
   const onCloseBtnClicked = evt => {
     evt.preventDefault();
     history.goBack();
   };
-
-  useEffect(() => {
-    if (gameModes.length < 2) dispatch(actions.setGameModes(games));
-  }, [actions, dispatch, gameModes.length]);
 
   const gameTabVariants = {
     visible: i => ({
@@ -146,7 +107,13 @@ export const Help = memo((props: Props) => {
         initial="hidden"
         animate="visible"
       >
-        <CloseButton onClick={onCloseBtnClicked} />
+        <CloseButton
+          variants={variants.slideUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          onClick={onCloseBtnClicked}
+        />
         <ContentBlock
           variants={variants.slideUp}
           initial="hidden"

@@ -20,7 +20,6 @@ import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
 
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
-import { games } from './gamesModes';
 import { variants } from 'styles/variants';
 
 const codeTextImage = () => {
@@ -67,7 +66,6 @@ export function Homepage({ match }) {
   };
 
   useEffect(() => {
-    dispatch(homeActions.setGameModes(games));
     dispatch(lobbyActions.setJoinedGroup(false));
   }, [dispatch, homeActions, lobbyActions]);
 

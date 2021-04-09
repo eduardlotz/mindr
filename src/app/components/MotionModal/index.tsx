@@ -6,21 +6,20 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDispatch } from 'react-redux';
-import { useHomepageSlice } from '../../pages/Homepage/slice';
+import { useDispatch, useSelector } from 'react-redux';
 import { H2 } from 'app/components/styled/Headers';
 import { media } from 'styles/media';
 import { colors } from 'styles/colors';
+import { useModalSlice } from './slice';
+import { selectModal } from './slice/selectors';
 
-interface Props {
-  title: string;
-  content: any;
-  isOpen: boolean;
-}
+interface Props {}
 
 export function MotionModal(props: Props) {
   // Use the slice we created
-  const { actions } = useHomepageSlice();
+  const { actions } = useModalSlice();
+
+  const modal = useSelector(selectModal);
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
@@ -32,7 +31,7 @@ export function MotionModal(props: Props) {
   return (
     <>
       <AnimatePresence initial={false}>
-        {props.isOpen && (
+        {modal.isOpen && (
           <Background
             initial={{ opacity: 0 }}
             animate={{
@@ -58,7 +57,7 @@ export function MotionModal(props: Props) {
         )}
       </AnimatePresence>
       <AnimatePresence initial={false} exitBeforeEnter={true}>
-        {props.isOpen && (
+        {modal.isOpen && (
           <Body
             initial={{
               opacity: 0,
@@ -86,8 +85,8 @@ export function MotionModal(props: Props) {
             }}
           >
             <CloseButton onClick={closeModal}></CloseButton>
-            <H2>{props.title}</H2>
-            {props.content}
+            <H2>{modal.title}</H2>
+            {modal.content}
           </Body>
         )}
       </AnimatePresence>

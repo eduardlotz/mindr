@@ -18,18 +18,26 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Help } from './pages/Help/Loadable';
 import styled from 'styled-components/macro';
 import { Navbar } from './components/Navbar/Loadable';
-import { useSelector } from 'react-redux';
-import { selectModal } from './pages/Homepage/slice/selectors';
 import { MotionModal } from './components/MotionModal';
 import { Lobby } from './pages/Lobby/Loadable';
 import { Homepage } from './pages/Homepage/Loadable';
+import { useHomepageSlice } from './pages/Homepage/slice';
+import { useDispatch } from 'react-redux';
+import { games } from './pages/Homepage/gamesModes';
 
 export function App() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { i18n } = useTranslation();
   const location = useLocation();
 
-  // `selectors` are used to read the state.
-  const modal = useSelector(selectModal);
+  const { actions: homeActions } = useHomepageSlice();
+
+  // Used to dispatch slice actions
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(homeActions.setGameModes(games));
+  }, [dispatch, homeActions]);
 
   return (
     <>
@@ -45,11 +53,7 @@ export function App() {
       </Helmet>
 
       <MainContainer>
-        <MotionModal
-          isOpen={modal.isOpen}
-          title={modal.title}
-          content={modal.content}
-        />
+        <MotionModal />
         <Navbar />
         <AnimatePresence exitBeforeEnter>
           <Switch location={location} key={location.key}>
