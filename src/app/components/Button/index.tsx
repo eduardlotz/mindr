@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components/macro';
 import { colors } from 'styles/colors';
+import { media } from 'styles/media';
 
 export const Button = styled(motion.button)`
   display: flex;
@@ -9,13 +10,13 @@ export const Button = styled(motion.button)`
 
   height: 56px;
   width: 100%;
-  padding: 16px 72px;
+  padding: 16px;
   border-radius: 16px;
   border: none;
 
   font-family: 'Basier';
   font-style: normal;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 20px;
   line-height: 26px;
 
@@ -25,6 +26,7 @@ export const Button = styled(motion.button)`
 export const PrimaryButton = styled(Button)`
   color: ${colors.basic.white};
   background: ${colors.brand.blue};
+  width: 100%;
 
   &.icon-right {
     &:hover {
@@ -70,6 +72,12 @@ export const LinkButton = styled(motion.button)`
   cursor: pointer;
 
   color: ${colors.brand.blue};
+
+  margin: 16px 0;
+
+  ${media.medium`
+    margin: 0;
+  `}
 
   &:hover {
     text-decoration: underline;

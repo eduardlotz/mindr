@@ -30,3 +30,6 @@ export const selectIsStandardMode = createSelector([selectSlice], state => {
 export const selectActiveGamemodes = createSelector([selectSlice], state => {
   return state.lobby.activeGamemodes;
 });
+export const selectUsersInRoom = createSelector([selectSlice], state => {
+  return state.lobby.users;
+});

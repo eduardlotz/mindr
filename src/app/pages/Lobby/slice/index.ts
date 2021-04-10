@@ -2,7 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { lobbySaga } from './saga';
-import { LobbyState } from './types';
+import { LobbyState, User } from './types';
 
 export const initialState: LobbyState = {
   user: {
@@ -16,6 +16,7 @@ export const initialState: LobbyState = {
     activeGamemodes: [],
     gameMasterId: -1,
     isStandardMode: true,
+    users: [],
   },
 };
 
@@ -47,6 +48,9 @@ const slice = createSlice({
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
       state.lobby.isStandardMode = action.payload;
+    },
+    setUsersInRoom(state, action: PayloadAction<User[]>) {
+      state.lobby.users = action.payload;
     },
   },
 });

@@ -10,6 +10,7 @@ import { PrimaryButton } from '../Button';
 import Icon from '../Icon';
 import { colors } from 'styles/colors';
 import { useHistory } from 'react-router-dom';
+// import socket from '../../socketConnection';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -17,6 +18,12 @@ import {
   selectUsername,
   selectUserAvatar,
 } from 'app/pages/Lobby/slice/selectors';
+import io from 'socket.io-client';
+import { media } from 'styles/media';
+
+const ENDPOINT = 'http://localhost:5000';
+
+const socket = io(ENDPOINT);
 
 interface Props {}
 
@@ -31,7 +38,7 @@ export function JoinGroup(props: Props) {
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const groupCode = useSelector(selectGroupCode);
+  const room = useSelector(selectGroupCode);
   const username = useSelector(selectUsername);
   const selectedAvatar = useSelector(selectUserAvatar);
 
@@ -41,9 +48,14 @@ export function JoinGroup(props: Props) {
 
   const onSubmitJoinGroup = evt => {
     evt.preventDefault();
-    if (username.length > 0 && selectedAvatar.length > 0) {
-      history.push(`/lobby`);
-    }
+
+    socket.emit('join', { username, room, selectedAvatar }, (error: any) => {
+      if (error) {
+        console.error(error);
+      } else {
+        history.push(`/lobby`);
+      }
+    });
   };
 
   return (
@@ -51,7 +63,7 @@ export function JoinGroup(props: Props) {
       <GroupCode
         placeholder="1234"
         maxLength={4}
-        value={groupCode}
+        value={room}
         onChange={setGroupCode}
         required
       />
@@ -71,18 +83,30 @@ export function JoinGroup(props: Props) {
 
 const Form = styled.form`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  ${media.medium`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  `}
 `;
 
 const GroupCode = styled.input`
   padding: 16px;
+  width: 172px;
+  height: 72px;
 
-  width: 86px;
-  height: 58px;
-  left: 996px;
-  top: 270px;
+  margin: 0 0 16px 0;
 
-  margin-right: 16px;
+  ${media.medium`
+    margin: 0 16px 0 0;
+    height: 58px;
+    font-size: 20px;
+    line-height: 26px;
+  `}
 
   background: transparent;
   border: 2px solid ${colors.basic.lightgrey};
@@ -92,10 +116,10 @@ const GroupCode = styled.input`
   font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
+  font-size: 25px;
+  line-height: 32.57px;
   text-align: center;
-  letter-spacing: 0.4px;
+  letter-spacing: 10px;
 
   transition: border-color 0.25s ease-out;
 

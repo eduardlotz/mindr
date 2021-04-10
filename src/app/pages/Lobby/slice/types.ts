@@ -11,5 +11,13 @@ export interface LobbyState {
     activeGamemodes: number[];
     gameMasterId: number;
     isStandardMode: boolean;
-  }
+    users: Array<User>;
+  };
+}
+
+export interface User {
+  id: number;
+  name: string;
+  room: number;
+  avatar: string;
 }

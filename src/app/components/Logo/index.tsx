@@ -17,7 +17,6 @@ export function Logo(props: Props) {
     <Span>
       <svg
         width={props.size ? props.size : 140}
-        height="auto"
         viewBox="0 0 140 140"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +36,12 @@ export function Logo(props: Props) {
         <path
           d="M36.9404 96.2808C35.2006 111.508 57.5132 124.984 83.9475 114.183"
           stroke={props.color ? props.color : '#4A8CEF'}
-          stroke-width="8"
+          strokeWidth="8"
         />
         <path
           d="M68.7054 57.3853C67.21 69.7828 72.1245 80.2847 72.1245 80.2847C72.1245 80.2847 68.4389 85.2174 59.9535 82.359"
           stroke={props.color ? props.color : '#4A8CEF'}
-          stroke-width="8"
+          strokeWidth="8"
         />
       </svg>
 

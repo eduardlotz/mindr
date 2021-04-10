@@ -5,7 +5,6 @@
  */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHomepageSlice } from './slice';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -21,6 +20,10 @@ import { useLobbySlice } from '../Lobby/slice';
 
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
+
+import { modalActions } from 'app/components/MotionModal/slice';
+import { disconnectSocket, initiateSocket } from 'app/socketConnection';
+import { media } from 'styles/media';
 
 const codeTextImage = () => {
   <FlexColDiv>
@@ -41,8 +44,6 @@ export function Homepage({ match }) {
   const { t, i18n } = useTranslation();
 
   // Use the slice we created
-  const { actions: homeActions } = useHomepageSlice();
-
   const { actions: lobbyActions } = useLobbySlice();
 
   // Used to dispatch slice actions
@@ -60,14 +61,18 @@ export function Homepage({ match }) {
     dispatch(lobbyActions.setAvatarUrl(url));
   };
 
-  const setModal = content => {
-    dispatch(homeActions.setModalContent(content));
-    dispatch(homeActions.setModalOpen(true));
+  const openLinkInfoModal = () => {
+    dispatch(modalActions.setModalContent(groupCodeContent.content));
+    dispatch(modalActions.setModalTitle(groupCodeContent.title));
+    dispatch(modalActions.setModalOpen(true));
   };
 
   useEffect(() => {
-    dispatch(lobbyActions.setJoinedGroup(false));
-  }, [dispatch, homeActions, lobbyActions]);
+    initiateSocket('test room');
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
 
   const popUpVariants = {
     visible: i => ({
@@ -170,7 +175,7 @@ export function Homepage({ match }) {
         >
           <InlineBlock>
             <H2 className="margin-clear">{t('home.joingroupheader')}</H2>
-            <LinkButton onClick={() => setModal(groupCodeContent)}>
+            <LinkButton onClick={openLinkInfoModal}>
               {t('home.wherecode')}
             </LinkButton>
           </InlineBlock>
@@ -230,43 +235,64 @@ const UsernameInput = styled.input`
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
+  margin: 24px 0;
+
+  ${media.medium`
+    margin: 0;
+  `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 16px;
+
+  ${media.medium`
+    margin-bottom: 16px;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: row;
+  `}
 `;
 
 const AvatarSelectionContainer = styled(motion.div)`
   display: grid;
   max-width: 100%;
   width: 100%;
+  overflow-x: scroll;
 
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto 1fr;
-  grid-gap: 32px 48px;
+  grid-gap: 24px 24px;
+
+  padding: 24px;
+  margin-bottom: 40px;
 
   background-color: ${colors.basic.lightblue};
   border-radius: 16px;
 
-  margin-bottom: 40px;
-  padding: 32px 40px;
+  ${media.medium`
+    grid-gap: 32px 48px;
+    padding: 32px 40px;
+  `}
 `;
 
 const AvatarImg = styled(motion.img)`
   position: relative;
 
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
 
   border-radius: 50%;
   object-fit: contain;
   background-size: 100% 100%;
 
   cursor: pointer;
+  ${media.medium`
+    width: 48px;
+    height: 48px;
+  `}
 
   &.selected {
     box-shadow: 0px 8px 16px 0px rgba(12, 72, 163, 0.12);
@@ -277,7 +303,11 @@ const AvatarImg = styled(motion.img)`
 const FlexColDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 100%;
+
+  ${media.medium`
+    width: 80%;
+  `}
 `;
 
 const BigImage = styled(motion.img)`
@@ -324,7 +354,14 @@ const ContentBlock = styled(motion.div)`
 const InlineBlock = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+
+  ${media.medium`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  `}
 `;

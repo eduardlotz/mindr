@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage';
 import { H2, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
+import io from 'socket.io-client';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
@@ -17,7 +18,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useEffect } from 'react';
 import { useLobbySlice } from './slice';
-import { selectIsStandardMode } from './slice/selectors';
+import {
+  selectGroupCode,
+  selectIsStandardMode,
+  selectUserAvatar,
+  selectUsername,
+  selectUsersInRoom,
+} from './slice/selectors';
+
+const ENDPOINT = 'http://localhost:5000';
 
 interface Props {}
 
@@ -28,10 +37,37 @@ export function Lobby(props: Props) {
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
 
+  const room = useSelector(selectGroupCode);
+  const username = useSelector(selectUsername);
+  const selectedAvatar = useSelector(selectUserAvatar);
+  const usersInRoom = useSelector(selectUsersInRoom);
+
   const { actions: lobbyActions } = useLobbySlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const socket = io(ENDPOINT);
+
+    socket.emit('join', { username, room, selectedAvatar }, error => {
+      if (error) {
+        alert(error);
+      }
+    });
+  }, [room, selectedAvatar, username]);
+
+  useEffect(() => {
+    const socket = io(ENDPOINT);
+
+    socket.on('roomData', ({ users }) => {
+      dispatch(lobbyActions.setUsersInRoom(users));
+    });
+  }, [dispatch, lobbyActions]);
+
+  useEffect(() => {
+    dispatch(lobbyActions.setJoinedGroup(true));
+  }, [dispatch, lobbyActions]);
 
   const setToStandardMode = () => {
     dispatch(lobbyActions.setIsStandardMode(true));
@@ -40,11 +76,6 @@ export function Lobby(props: Props) {
   const setToDrinkingMode = () => {
     dispatch(lobbyActions.setIsStandardMode(false));
   };
-
-  useEffect(() => {
-    dispatch(lobbyActions.setJoinedGroup(true));
-  }, [dispatch, lobbyActions]);
-
   const gameTabVariants = {
     visible: i => ({
       opacity: 1,
@@ -150,6 +181,21 @@ export function Lobby(props: Props) {
           />
         </ModeSwitcher>
       </ContentBlock>
+      <ContentBlock>
+        {usersInRoom.map(user => {
+          return (
+            <FlexRowDiv
+              variants={variants.slideUp}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <UserAvatar src={user.avatar} />
+              <Username>{user.name}</Username>
+            </FlexRowDiv>
+          );
+        })}
+      </ContentBlock>
       <PrimaryFloatingButton
         variants={floatingBtnVariants}
         initial="hidden"
@@ -254,4 +300,32 @@ const GameModesContainer = styled.div`
   grid-row-gap: 24px;
   margin: 16px 0 40px 0;
   background-color: ${colors.basic.white};
+`;
+
+const UserAvatar = styled.img`
+  position: relative;
+
+  width: 48px;
+  height: 48px;
+
+  margin-right: 8px;
+
+  border-radius: 50%;
+  object-fit: contain;
+  background-size: 100% 100%;
+`;
+
+const Username = styled.span`
+  font-family: 'Basier';
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 26px;
+
+  color: ${colors.basic.black};
+`;
+
+const FlexRowDiv = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
