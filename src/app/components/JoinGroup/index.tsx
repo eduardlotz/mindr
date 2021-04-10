@@ -9,10 +9,14 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '../Button';
 import Icon from '../Icon';
 import { colors } from 'styles/colors';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGroupCode } from 'app/pages/Lobby/slice/selectors';
+import {
+  selectGroupCode,
+  selectUsername,
+  selectUserAvatar,
+} from 'app/pages/Lobby/slice/selectors';
 
 interface Props {}
 
@@ -22,17 +26,28 @@ export function JoinGroup(props: Props) {
 
   const { actions: lobbyActions } = useLobbySlice();
 
+  const history = useHistory();
+
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
   const groupCode = useSelector(selectGroupCode);
+  const username = useSelector(selectUsername);
+  const selectedAvatar = useSelector(selectUserAvatar);
 
   const setGroupCode = evt => {
     dispatch(lobbyActions.setGroupCode(evt.target.value));
   };
 
+  const onSubmitJoinGroup = evt => {
+    evt.preventDefault();
+    if (username.length > 0 && selectedAvatar.length > 0) {
+      history.push(`/lobby`);
+    }
+  };
+
   return (
-    <Form>
+    <Form onSubmit={onSubmitJoinGroup}>
       <GroupCode
         placeholder="1234"
         maxLength={4}
@@ -40,25 +55,19 @@ export function JoinGroup(props: Props) {
         onChange={setGroupCode}
         required
       />
-      <FullWidthLink to="/lobby">
-        <PrimaryButton type="submit" className="icon-right">
-          {t('home.joingroup')}
-          <Icon
-            name="circle-arrow-right"
-            fill={colors.basic.white}
-            height="24"
-            width="24"
-            style={{ marginLeft: '16px' }}
-          />
-        </PrimaryButton>
-      </FullWidthLink>
+      <PrimaryButton type="submit" className="icon-right">
+        {t('home.joingroup')}
+        <Icon
+          name="circle-arrow-right"
+          fill={colors.basic.white}
+          height="24"
+          width="24"
+          style={{ marginLeft: '16px' }}
+        />
+      </PrimaryButton>
     </Form>
   );
 }
-
-const FullWidthLink = styled(Link)`
-  width: 100%;
-`;
 
 const Form = styled.form`
   display: flex;
