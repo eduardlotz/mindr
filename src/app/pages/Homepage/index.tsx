@@ -13,7 +13,6 @@ import { colors } from 'styles/colors';
 import { LinkButton, SecondaryButton } from 'app/components/Button';
 import { JoinGroup } from 'app/components/JoinGroup';
 
-import groupCodeImage from '../../../assets/groupcode-help.jpg';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
@@ -22,22 +21,14 @@ import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
 
 import { modalActions } from 'app/components/MotionModal/slice';
-import { disconnectSocket, initiateSocket } from 'app/socketConnection';
 import { media } from 'styles/media';
-
-const codeTextImage = () => {
-  <FlexColDiv>
-    <P>
-      Ask your friends to tell you their code. It's in the upper right corner.
-    </P>
-    <BigImage src={groupCodeImage} />
-  </FlexColDiv>;
-};
-
-const groupCodeContent = {
-  title: 'Where is the code?',
-  content: codeTextImage,
-};
+import {
+  createRoom,
+  subscribeToUsersInRoom,
+  initiateSocket,
+  disconnectSocket,
+} from 'app/socketConnection';
+import { useHistory } from 'react-router';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,6 +43,33 @@ export function Homepage({ match }) {
   const username = useSelector(selectUsername);
   const selectedAvatar = useSelector(selectUserAvatar);
 
+  const history = useHistory();
+
+  const onCreateNewRoom = () => {
+    if (username.length > 0 && selectedAvatar.length > 0) {
+      createRoom(username, selectedAvatar);
+
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    }
+  };
+
+  useEffect(() => {
+    initiateSocket();
+
+    subscribeToUsersInRoom((err, data) => {
+      if (err) return;
+
+      dispatch(lobbyActions.setGroupCode(data.room));
+      dispatch(lobbyActions.setUsersInRoom(data.users));
+      console.log(`Room: ${data.room}`);
+    });
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [dispatch, lobbyActions]);
+
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(lobbyActions.setUsername(e.target.value));
@@ -62,17 +80,9 @@ export function Homepage({ match }) {
   };
 
   const openLinkInfoModal = () => {
-    dispatch(modalActions.setModalContent(groupCodeContent.content));
-    dispatch(modalActions.setModalTitle(groupCodeContent.title));
+    dispatch(modalActions.setModalTitle(t('home.wherecode')));
     dispatch(modalActions.setModalOpen(true));
   };
-
-  useEffect(() => {
-    initiateSocket('test room');
-    return () => {
-      disconnectSocket();
-    };
-  }, []);
 
   const popUpVariants = {
     visible: i => ({
@@ -189,7 +199,9 @@ export function Homepage({ match }) {
         >
           <div className="create-group">
             <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton>{t('home.creategroup')}</SecondaryButton>
+            <SecondaryButton onClick={onCreateNewRoom}>
+              {t('home.creategroup')}
+            </SecondaryButton>
           </div>
         </ContentBlock>
       </StartGameContainer>
@@ -310,14 +322,6 @@ const FlexColDiv = styled.div`
   `}
 `;
 
-const BigImage = styled(motion.img)`
-  width: auto;
-  height: 420px;
-
-  margin-top: 24px;
-  border-radius: 12px;
-`;
-
 const StartGameContainer = styled(motion.div)`
   width: 100%;
 
@@ -330,18 +334,6 @@ const StartGameContainer = styled(motion.div)`
   background-color: ${colors.basic.white};
 
   justify-content: center;
-`;
-
-const P = styled(motion.p)`
-  width: 100%;
-
-  font-family: 'Basier';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 26px;
-
-  color: ${colors.basic.textgrey};
 `;
 
 const ContentBlock = styled(motion.div)`

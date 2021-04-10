@@ -15,7 +15,8 @@
     "letsgo": "Let’s goooooo",
     "pickmode": "Wähle einen Spielmodus",
     "standardmode": "Standard",
-    "drinkingmode": "Trinkspiel"
+    "drinkingmode": "Trinkspiel",
+    "userlistheader": "Fehlt noch jemand?"
   },
   "help": {
     "whatismindr": "Was ist mindr?",

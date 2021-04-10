@@ -18,12 +18,8 @@ import {
   selectUsername,
   selectUserAvatar,
 } from 'app/pages/Lobby/slice/selectors';
-import io from 'socket.io-client';
 import { media } from 'styles/media';
-
-const ENDPOINT = 'http://localhost:5000';
-
-const socket = io(ENDPOINT);
+import { joinRoom } from 'app/socketConnection';
 
 interface Props {}
 
@@ -48,14 +44,9 @@ export function JoinGroup(props: Props) {
 
   const onSubmitJoinGroup = evt => {
     evt.preventDefault();
-
-    socket.emit('join', { username, room, selectedAvatar }, (error: any) => {
-      if (error) {
-        console.error(error);
-      } else {
-        history.push(`/lobby`);
-      }
-    });
+    joinRoom(username, room, selectedAvatar);
+    dispatch(lobbyActions.setJoinedGroup(true));
+    history.push('/lobby');
   };
 
   return (

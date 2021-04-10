@@ -29,6 +29,21 @@ export const H2 = styled(motion.h2)`
   }
 `;
 
+export const H3 = styled(motion.h3)`
+  margin: 0 0 16px 0;
+  font-family: 'Basier';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 34px;
+
+  color: #111111;
+
+  &.margin-clear {
+    margin: 0;
+  }
+`;
+
 export const H5 = styled(motion.h5)`
   margin: 0;
 

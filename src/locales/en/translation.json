@@ -14,7 +14,8 @@
     "letsgo": "Let’s goooooo",
     "pickmode": "Pick a game mode",
     "standardmode": "Standard mode",
-    "drinkingmode": "Drinking mode"
+    "drinkingmode": "Drinking mode",
+    "userlistheader": "Anyone else missing?"
   },
   "help": {
     "whatismindr": "What is mindr?",

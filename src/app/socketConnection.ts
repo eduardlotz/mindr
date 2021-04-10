@@ -2,22 +2,31 @@ import io from 'socket.io-client';
 
 let socket;
 
-export const initiateSocket = room => {
+export const initiateSocket = () => {
   socket = io('http://localhost:5000');
-  console.log(`Connecting socket...`);
-  if (socket && room) socket.emit('join', room);
 };
 export const disconnectSocket = () => {
   console.log('Disconnecting socket...');
   if (socket) socket.disconnect();
 };
-export const subscribeToChat = cb => {
+
+export const subscribeToUsersInRoom = cb => {
   if (!socket) return true;
-  socket.on('chat', msg => {
-    console.log('Websocket event received!');
-    return cb(null, msg);
+  socket.on('roomData', ({ room, users }) => {
+    return cb(null, { room, users });
   });
 };
-export const sendMessage = (room, message) => {
-  if (socket) socket.emit('chat', { message, room });
+
+export const joinRoom = (name: string, room: string, avatar: string) => {
+  if (socket)
+    socket.emit('join', { name, room, avatar }, error => {
+      if (error) alert(error);
+    });
+};
+
+export const createRoom = (username: string, avatar: string) => {
+  if (socket)
+    socket.emit('create_room', { username, avatar }, error => {
+      if (error) alert(error);
+    });
 };

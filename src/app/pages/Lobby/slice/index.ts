@@ -37,7 +37,7 @@ const slice = createSlice({
     setGroupCode(state, action: PayloadAction<string>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
-      state.user.groupCode = action.payload;
+      state.user.groupCode = action.payload.toUpperCase();
     },
     setJoinedGroup(state, action: PayloadAction<boolean>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires

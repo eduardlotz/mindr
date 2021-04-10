@@ -73,12 +73,12 @@ export function App() {
 const MainContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 800px;
   margin: 0 auto;
 
-  padding: 0 16px 40px 16px;
+  padding: 0 16px 100px 16px;
   ${media.medium`
-      padding: 0 0 60px 0;
+      padding: 0 0 120px 0;
   `}
 `;

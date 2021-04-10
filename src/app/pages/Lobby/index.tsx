@@ -7,9 +7,8 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage';
-import { H2, H5 } from 'app/components/styled/Headers';
+import { H2, H3, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
-import io from 'socket.io-client';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
@@ -18,15 +17,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useEffect } from 'react';
 import { useLobbySlice } from './slice';
+import { selectIsStandardMode, selectUsersInRoom } from './slice/selectors';
+import { media } from 'styles/media';
 import {
-  selectGroupCode,
-  selectIsStandardMode,
-  selectUserAvatar,
-  selectUsername,
-  selectUsersInRoom,
-} from './slice/selectors';
-
-const ENDPOINT = 'http://localhost:5000';
+  disconnectSocket,
+  initiateSocket,
+  subscribeToUsersInRoom,
+} from 'app/socketConnection';
 
 interface Props {}
 
@@ -37,9 +34,6 @@ export function Lobby(props: Props) {
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
 
-  const room = useSelector(selectGroupCode);
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
   const usersInRoom = useSelector(selectUsersInRoom);
 
   const { actions: lobbyActions } = useLobbySlice();
@@ -48,26 +42,18 @@ export function Lobby(props: Props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const socket = io(ENDPOINT);
+    initiateSocket();
 
-    socket.emit('join', { username, room, selectedAvatar }, error => {
-      if (error) {
-        alert(error);
-      }
+    subscribeToUsersInRoom((err, data) => {
+      if (err) return;
+      console.log(data);
+      dispatch(lobbyActions.setUsersInRoom(data.users));
     });
-  }, [room, selectedAvatar, username]);
 
-  useEffect(() => {
-    const socket = io(ENDPOINT);
-
-    socket.on('roomData', ({ users }) => {
-      dispatch(lobbyActions.setUsersInRoom(users));
-    });
-  }, [dispatch, lobbyActions]);
-
-  useEffect(() => {
-    dispatch(lobbyActions.setJoinedGroup(true));
-  }, [dispatch, lobbyActions]);
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
 
   const setToStandardMode = () => {
     dispatch(lobbyActions.setIsStandardMode(true));
@@ -182,19 +168,28 @@ export function Lobby(props: Props) {
         </ModeSwitcher>
       </ContentBlock>
       <ContentBlock>
-        {usersInRoom.map(user => {
-          return (
-            <FlexRowDiv
-              variants={variants.slideUp}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-            >
-              <UserAvatar src={user.avatar} />
-              <Username>{user.name}</Username>
-            </FlexRowDiv>
-          );
-        })}
+        <InlineBlock>
+          <H3>{t('lobby.userlistheader')}</H3>
+          <UsersCounter>
+            <UsersCount>{usersInRoom.length}</UsersCount>
+            <MaxUsersCount>/10</MaxUsersCount>
+          </UsersCounter>
+        </InlineBlock>
+        <UsersList>
+          {usersInRoom.map(user => {
+            return (
+              <JoinedUser
+                variants={variants.slideUp}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <UserAvatar src={user.avatar} />
+                <Username>{user.name}</Username>
+              </JoinedUser>
+            );
+          })}
+        </UsersList>
       </ContentBlock>
       <PrimaryFloatingButton
         variants={floatingBtnVariants}
@@ -317,15 +312,73 @@ const UserAvatar = styled.img`
 
 const Username = styled.span`
   font-family: 'Basier';
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 23px;
+  text-align: left;
 
   color: ${colors.basic.black};
 `;
 
-const FlexRowDiv = styled(motion.div)`
+const InlineBlock = styled(motion.div)`
+  width: 100%;
+  display: flex;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+const UsersCounter = styled(motion.span)`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+`;
+
+const UsersCount = styled(motion.span)`
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 42px;
+  text-align: center;
+  margin: 0 8px 0 0;
+
+  color: ${colors.brand.blue};
+`;
+
+const MaxUsersCount = styled(motion.span)`
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 21px;
+  text-align: center;
+  letter-spacing: 1px;
+  opacity: 0.3;
+
+  color: ${colors.brand.blue};
+`;
+
+const UsersList = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ${media.medium`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+  `}
+`;
+
+const JoinedUser = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0;
+  align-items: center;
+  justify-content: flex-start;
 `;
