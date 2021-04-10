@@ -120,7 +120,7 @@ const UserAvatar = styled.img`
 `;
 
 const Username = styled.span`
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-weight: bold;
   font-size: 20px;
   line-height: 26px;
@@ -149,7 +149,7 @@ const LanguageSwitcher = styled(motion.button)`
   border: none;
   background: transparent;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -168,7 +168,7 @@ const LanguageSwitcher = styled(motion.button)`
 `;
 
 const Language = styled.p`
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -198,7 +198,7 @@ const GroupCode = styled(motion.button)`
 
   background: ${colors.basic.white};
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-weight: bold;
   font-size: 22px;
   line-height: 29px;

@@ -10,7 +10,7 @@ export const variants = {
       transition: {
         type: 'spring',
         damping: 10,
-        mass: 0.3,
+        mass: 1,
         stiffness: 100,
         delayChildren: 1.5,
         staggerChildren: 0.2,
@@ -84,7 +84,7 @@ export const variants = {
       opacity: 1,
       transition: {
         delayChildren: 10,
-        staggerChildren: 0.2,
+        staggerChildren: 4,
       },
     },
     hidden: {

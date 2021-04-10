@@ -80,7 +80,7 @@ const GroupCode = styled.input`
   border-radius: 16px;
   color: ${colors.basic.almostblack};
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
   font-size: 20px;

@@ -46,7 +46,7 @@ const Span = styled.span`
 `;
 
 const Text = styled.span`
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 800;
   font-size: 26px;

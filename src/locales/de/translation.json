@@ -20,7 +20,8 @@
   "help": {
     "whatismindr": "Was ist mindr?",
     "explainmindr": "Mindr ist eine Sammlung von verschiedenen Party- und Gelegenheitsspielen, die du online mit deinen Freunden spielen kannst. Du kannst jeden Spielmodus nach deinen Wünschen aktivieren und deaktivieren und zwischen dem Standard- oder Trinkspielmodus wählen.",
-    "whatgames": "Welche Spiele können wir spielen?"
+    "whatgames": "Welche Spiele können wir spielen?",
+    "whatgameshint": "Klick auf einen Spielmodus um die Regeln anzuzeigen."
   },
   "gamemode": {
     "quiz": "Quiz",

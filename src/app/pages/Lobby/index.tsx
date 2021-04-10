@@ -204,7 +204,7 @@ const ModeTab = styled(motion.button)`
   align-items: center;
   justify-content: center;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-weight: bold;
   font-size: 20px;
   line-height: 26px;

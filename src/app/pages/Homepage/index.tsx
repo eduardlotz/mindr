@@ -76,9 +76,9 @@ export function Homepage({ match }) {
       transition: {
         type: 'spring',
         damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-        delay: 0.1 + i * 0.02,
+        mass: 0.5,
+        stiffness: 70,
+        delay: i * 0.02,
       },
     }),
     hidden: { opacity: 0, scale: 0.9 },
@@ -206,7 +206,7 @@ const UsernameInput = styled.input`
   border-radius: 16px;
   color: ${colors.basic.almostblack};
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
@@ -305,7 +305,7 @@ const StartGameContainer = styled(motion.div)`
 const P = styled(motion.p)`
   width: 100%;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 500;
   font-size: 20px;

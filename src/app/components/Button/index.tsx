@@ -13,7 +13,7 @@ export const Button = styled(motion.button)`
   border-radius: 16px;
   border: none;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
@@ -49,7 +49,7 @@ export const SecondaryButton = styled(Button)`
   border: 2px solid ${colors.basic.lightgrey};
   color: ${colors.basic.almostblack};
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
@@ -57,7 +57,7 @@ export const SecondaryButton = styled(Button)`
 `;
 
 export const LinkButton = styled(motion.button)`
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;

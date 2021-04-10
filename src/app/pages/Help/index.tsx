@@ -216,7 +216,7 @@ const Small = styled.small`
   display: flex;
   align-items: center;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -246,7 +246,7 @@ const ContentBlock = styled(motion.div)`
 const P = styled(motion.p)`
   width: 100%;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 500;
   font-size: 20px;

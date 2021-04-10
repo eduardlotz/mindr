@@ -5,7 +5,7 @@ export const H1 = styled(motion.h1)`
   width: 100%;
   margin: 0 0 8px 0;
 
-  font-family: HK Grotesk, sans-serif;
+  font-family: Basier, sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 38px;
@@ -16,7 +16,7 @@ export const H1 = styled(motion.h1)`
 
 export const H2 = styled(motion.h2)`
   margin: 0 0 16px 0;
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 800;
   font-size: 32px;
@@ -32,7 +32,7 @@ export const H2 = styled(motion.h2)`
 export const H5 = styled(motion.h5)`
   margin: 0;
 
-  font-family: HK Grotesk;
+  font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
