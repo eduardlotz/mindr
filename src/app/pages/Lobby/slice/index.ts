@@ -14,7 +14,6 @@ export const initialState: LobbyState = {
   lobby: {
     groupCode: '',
     activeGamemodes: [],
-    gameMasterId: -1,
     isStandardMode: true,
     users: [
       {

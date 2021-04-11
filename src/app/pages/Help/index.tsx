@@ -8,6 +8,7 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage/Loadable';
 import { H1, H5 } from 'app/components/styled/Headers';
+import { GameModeCard } from 'app/components/styled/GameModeCard';
 import { motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -139,7 +140,7 @@ export const Help = memo((props: Props) => {
           >
             {gameModes.map((mode, i) => {
               return (
-                <GameModeTab
+                <GameModeCard
                   custom={i}
                   initial="hidden"
                   animate="visible"
@@ -149,9 +150,11 @@ export const Help = memo((props: Props) => {
                   onClick={() => setModal(mode)}
                   whileHover={'hover'}
                 >
-                  <GameImage name={mode.imageClass} />
-                  <H5>{t(`gamemode.${mode.title}`)}</H5>
-                </GameModeTab>
+                  <GameImage size={'64px'} name={mode.imageClass} />
+                  <H5 style={{ marginLeft: '16px' }}>
+                    {t(`gamemode.${mode.title}`)}
+                  </H5>
+                </GameModeCard>
               );
             })}
           </HowToContainer>
@@ -191,26 +194,6 @@ const Small = styled.small`
   color: ${colors.basic.darkgrey};
 `;
 
-const GameModeTab = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 16px 32px;
-  margin-bottom: 16px;
-  height: auto;
-
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: border-color 0.25s ease-out;
-
-  ${media.medium`
-    margin: 0;
-  `}
-`;
-
 const ContentBlock = styled(motion.div)`
   width: 100%;
 `;
@@ -228,15 +211,16 @@ const P = styled(motion.p)`
 `;
 const HowToContainer = styled(motion.div)`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 16px;
 
   ${media.medium`
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 24px;
-    grid-row-gap: 24px;
+    grid-gap: 24px;
   `}
+
   margin: 16px 0 40px 0;
   background-color: ${colors.basic.white};
 `;

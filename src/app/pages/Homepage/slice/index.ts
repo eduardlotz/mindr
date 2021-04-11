@@ -10,9 +10,16 @@ export const initialState: HomepageState = {
     title: '',
     imageClass: '',
     content: [],
-    mode: 'gameMode',
   },
-  gameModes: [{ title: '', imageClass: '', rules: [] }],
+  gameModes: [
+    {
+      title: '',
+      imageClass: '',
+      rules: [],
+      isActive: false,
+      isAvailable: false,
+    },
+  ],
 };
 
 const slice = createSlice({
@@ -33,6 +40,11 @@ const slice = createSlice({
     },
     setGameModes(state, action: PayloadAction<any>) {
       state.gameModes = action.payload;
+    },
+    toggleGameModeIsActive(state, action: PayloadAction<number>) {
+      state.gameModes[action.payload].isActive = !state.gameModes[
+        action.payload
+      ].isActive;
     },
   },
 });

@@ -18,6 +18,8 @@ import { selectGameModes } from '../Homepage/slice/selectors';
 import { useLobbySlice } from './slice';
 import { selectIsStandardMode, selectUsersInRoom } from './slice/selectors';
 import { media } from 'styles/media';
+import { useHomepageSlice } from '../Homepage/slice';
+import { GameModeCard } from 'app/components/styled/GameModeCard';
 
 interface Props {}
 
@@ -31,6 +33,7 @@ export function Lobby(props: Props) {
   const usersInRoom = useSelector(selectUsersInRoom);
 
   const { actions: lobbyActions } = useLobbySlice();
+  const { actions: homeActions } = useHomepageSlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
@@ -42,8 +45,13 @@ export function Lobby(props: Props) {
   const setToDrinkingMode = () => {
     dispatch(lobbyActions.setIsStandardMode(false));
   };
+
+  const handleGameModeClick = (mode, id) => {
+    if (mode.isAvailable) dispatch(homeActions.toggleGameModeIsActive(id));
+  };
+
   const gameTabVariants = {
-    visible: i => ({
+    active: i => ({
       opacity: 1,
       scale: 1,
       transition: {
@@ -52,9 +60,12 @@ export function Lobby(props: Props) {
       },
     }),
     hidden: { opacity: 0, scale: 0.9 },
-    hover: {
-      boxShadow: '0px 14px 26px rgba(0, 0, 0, 0.07)',
-      borderColor: colors.basic.white,
+    inactive: {
+      transition: {
+        type: 'spring',
+      },
+      opacity: 0.8,
+      scale: 1,
     },
   };
 
@@ -105,16 +116,19 @@ export function Lobby(props: Props) {
           {gameModes.map((mode, i) => {
             return (
               <AnimatePresence key={`gamemode_${i}`}>
-                <GameModeTab
+                <GameModeCard
                   custom={i}
                   initial="hidden"
-                  animate="visible"
+                  className={mode.isAvailable ? '' : 'disabled'}
+                  animate={mode.isActive ? 'active' : 'inactive'}
                   variants={gameTabVariants}
-                  whileHover="hover"
+                  onClick={() => handleGameModeClick(mode, i)}
                 >
                   <GameImage size="92px" name={mode.imageClass} />
-                  <H5>{t(`gamemode.${mode.title}`)}</H5>
-                </GameModeTab>
+                  <H5 style={{ marginLeft: '16px' }}>
+                    {t(`gamemode.${mode.title}`)}
+                  </H5>
+                </GameModeCard>
               </AnimatePresence>
             );
           })}
@@ -154,7 +168,7 @@ export function Lobby(props: Props) {
         exit="exit"
       >
         <InlineBlock>
-          <H3>{t('lobby.userlistheader')}</H3>
+          <H3 style={{ maxWidth: '50%' }}>{t('lobby.userlistheader')}</H3>
           <UsersCounter>
             <UsersCount>{usersInRoom.length}</UsersCount>
             <MaxUsersCount>/10</MaxUsersCount>
@@ -208,7 +222,6 @@ const ModeTabActiveIndicator = styled(motion.span)`
 const ModeSwitcher = styled(motion.div)`
   position: relative;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 16px;
@@ -254,20 +267,6 @@ const ModeTab = styled(motion.button)`
   }
 `;
 
-const GameModeTab = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 32px;
-  height: auto;
-
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: border-color 0.25s ease-out;
-`;
-
 const ContentBlock = styled(motion.div)`
   width: 100%;
 `;
@@ -275,9 +274,15 @@ const ContentBlock = styled(motion.div)`
 const GameModesContainer = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 16px;
+
+  ${media.medium`
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 24px;
+  `}
+
   margin: 16px 0 40px 0;
   background-color: ${colors.basic.white};
 `;

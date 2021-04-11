@@ -138,7 +138,7 @@ const Container = styled(motion.div)`
 
   margin: 0 auto;
   background-color: rgba(255, 255, 255, 0.95);
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 800px;
   display: flex;
   align-items: center;

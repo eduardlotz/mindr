@@ -9,7 +9,6 @@ export interface LobbyState {
   lobby: {
     groupCode: string;
     activeGamemodes: number[];
-    gameMasterId: number;
     isStandardMode: boolean;
     users: Array<User>;
   };

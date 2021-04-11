@@ -41,16 +41,19 @@ export function JoinGroup(props: Props) {
   const avatar = useSelector(selectUserAvatar);
 
   //Emits the join event and if successful redirects to lobby
-  const handleClick = () => {
-    socket.emit('join', { name, room, avatar }, error => {
-      if (error) {
-        console.log(error);
-        return;
-      }
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    if (name.length > 0 && avatar.length > 0) {
+      socket.emit('join', { name, room, avatar }, error => {
+        if (error) {
+          console.log(error);
+          return;
+        }
 
-      dispatch(lobbyActions.setJoinedGroup(true));
-      history.push('/lobby');
-    });
+        dispatch(lobbyActions.setJoinedGroup(true));
+        history.push('/lobby');
+      });
+    }
   };
 
   const setGroupCode = evt => {
@@ -65,7 +68,7 @@ export function JoinGroup(props: Props) {
   // };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <GroupCode
         placeholder="1234"
         maxLength={4}
@@ -73,7 +76,7 @@ export function JoinGroup(props: Props) {
         onChange={setGroupCode}
         required
       />
-      <PrimaryButton onClick={handleClick} type="button" className="icon-right">
+      <PrimaryButton type="submit" className="icon-right">
         {t('home.joingroup')}
         <Icon
           name="circle-arrow-right"

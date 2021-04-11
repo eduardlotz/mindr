@@ -77,7 +77,7 @@ const MainContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
 
-  padding: 80px 16px 100px 16px;
+  padding: 140px 0 100px 0;
   ${media.medium`
       padding: 120px 0;
   `}

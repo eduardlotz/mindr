@@ -5,13 +5,14 @@ export interface HomepageState {
     title: string;
     imageClass: string;
     content: Array<string>;
-    mode: string;
   };
   gameModes: [
     {
       title: string;
       imageClass: string;
       rules: Array<string>;
+      isActive: boolean;
+      isAvailable: boolean;
     },
   ];
 }
