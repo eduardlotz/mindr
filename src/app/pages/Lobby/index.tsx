@@ -15,15 +15,9 @@ import Icon from 'app/components/Icon';
 import { PrimaryFloatingButton } from 'app/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
-import { useEffect } from 'react';
 import { useLobbySlice } from './slice';
 import { selectIsStandardMode, selectUsersInRoom } from './slice/selectors';
 import { media } from 'styles/media';
-import {
-  disconnectSocket,
-  initiateSocket,
-  subscribeToUsersInRoom,
-} from 'app/socketConnection';
 
 interface Props {}
 
@@ -40,20 +34,6 @@ export function Lobby(props: Props) {
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    initiateSocket();
-
-    subscribeToUsersInRoom((err, data) => {
-      if (err) return;
-      console.log(data);
-      dispatch(lobbyActions.setUsersInRoom(data.users));
-    });
-
-    return () => {
-      disconnectSocket();
-    };
-  }, []);
 
   const setToStandardMode = () => {
     dispatch(lobbyActions.setIsStandardMode(true));
@@ -167,7 +147,12 @@ export function Lobby(props: Props) {
           />
         </ModeSwitcher>
       </ContentBlock>
-      <ContentBlock>
+      <ContentBlock
+        variants={variants.slideUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
         <InlineBlock>
           <H3>{t('lobby.userlistheader')}</H3>
           <UsersCounter>

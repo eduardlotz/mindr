@@ -48,7 +48,14 @@ export function Logo(props: Props) {
       {props.iconOnly ? (
         <></>
       ) : (
-        <Text style={{ color: props.color }}>mindr</Text>
+        <Text
+          style={{
+            color: props.color,
+            fontSize: (props.size ? props.size * 0.325 : 26) + 'px',
+          }}
+        >
+          mindr
+        </Text>
       )}
     </Span>
   );
@@ -65,6 +72,5 @@ const Text = styled.span`
   font-family: 'Basier';
   font-style: normal;
   font-weight: 800;
-  font-size: 26px;
   line-height: 34px;
 `;

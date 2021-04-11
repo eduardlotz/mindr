@@ -3,7 +3,7 @@
  * Homepage
  *
  */
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
@@ -22,17 +22,18 @@ import { variants } from 'styles/variants';
 
 import { modalActions } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
-import {
-  createRoom,
-  subscribeToUsersInRoom,
-  initiateSocket,
-  disconnectSocket,
-} from 'app/socketConnection';
+
+import { SocketContext } from 'app/socketContext';
 import { useHistory } from 'react-router';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
+
+  // used to dispatch socket actions
+  const socket = useContext(SocketContext);
+
+  const history = useHistory();
 
   // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
@@ -40,35 +41,22 @@ export function Homepage({ match }) {
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
+  const name = useSelector(selectUsername);
+  const avatar = useSelector(selectUserAvatar);
 
-  const history = useHistory();
-
-  const onCreateNewRoom = () => {
-    if (username.length > 0 && selectedAvatar.length > 0) {
-      createRoom(username, selectedAvatar);
-
-      dispatch(lobbyActions.setJoinedGroup(true));
-      history.push('/lobby');
-    }
-  };
+  //Checks to see if there's a user already present
 
   useEffect(() => {
-    initiateSocket();
-
-    subscribeToUsersInRoom((err, data) => {
-      if (err) return;
-
-      dispatch(lobbyActions.setGroupCode(data.room));
-      dispatch(lobbyActions.setUsersInRoom(data.users));
-      console.log(`Room: ${data.room}`);
+    socket.on('users', users => {
+      dispatch(lobbyActions.setUsersInRoom(users));
     });
+  });
 
-    return () => {
-      disconnectSocket();
-    };
-  }, [dispatch, lobbyActions]);
+  useEffect(() => {
+    socket.on('room', room => {
+      dispatch(lobbyActions.setGroupCode(room));
+    });
+  });
 
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +72,20 @@ export function Homepage({ match }) {
     dispatch(modalActions.setModalOpen(true));
   };
 
+  //Emits the login event and if successful redirects to chat and saves user data
+  const handleCreateRoom = () => {
+    socket.emit('create_room', { name, avatar }, error => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    });
+  };
+
+  // staggered pop up animation for avatars
   const popUpVariants = {
     visible: i => ({
       opacity: 1,
@@ -136,13 +138,13 @@ export function Homepage({ match }) {
             <H2>{t('home.pickusername')}</H2>
             <UsernameInput
               placeholder={t('home.yourname')}
-              value={username}
+              value={name}
               onChange={setUsername}
               maxLength={20}
             />
           </FlexColDiv>
-          {selectedAvatar ? (
-            <BigAvatar src={selectedAvatar} />
+          {avatar ? (
+            <BigAvatar src={avatar} />
           ) : (
             <BigAvatar src={undefinedAvatar} />
           )}
@@ -153,17 +155,17 @@ export function Homepage({ match }) {
           animate="visible"
           exit="exit"
         >
-          {avatars.map((avatar, i) => {
+          {avatars.map((entry, i) => {
             return (
               <AvatarImg
-                src={avatar}
+                src={entry}
                 variants={popUpVariants}
                 key={i}
                 custom={i}
                 initial="hidden"
                 animate="visible"
-                onClick={() => setAvatar(avatar)}
-                className={selectedAvatar === avatar ? 'selected' : ''}
+                onClick={() => setAvatar(entry)}
+                className={avatar === entry ? 'selected' : ''}
               />
             );
           })}
@@ -199,7 +201,7 @@ export function Homepage({ match }) {
         >
           <div className="create-group">
             <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton onClick={onCreateNewRoom}>
+            <SecondaryButton onClick={handleCreateRoom}>
               {t('home.creategroup')}
             </SecondaryButton>
           </div>

@@ -36,7 +36,7 @@ export function Navbar(props: Props) {
   };
 
   return (
-    <Container layout>
+    <Container>
       {joinedGroup ? (
         <FlexRowDiv
           variants={variants.slideUp}
@@ -55,7 +55,7 @@ export function Navbar(props: Props) {
             animate="visible"
             exit="exit"
           >
-            <Logo color={colors.brand.blue} size={80} iconOnly={joinedGroup} />
+            <Logo color={colors.brand.blue} size={40} iconOnly={joinedGroup} />
           </MotionDiv>
         </Link>
       )}
@@ -129,11 +129,21 @@ const Username = styled.span`
 `;
 
 const Container = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 5000;
+
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.95);
   width: 100%;
+  max-width: 800px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 0 40px 0;
+  padding: 24px 0;
 `;
 
 const FlexRowDiv = styled(motion.div)`
@@ -202,6 +212,8 @@ const GroupCode = styled(motion.button)`
   font-weight: bold;
   font-size: 22px;
   line-height: 29px;
+  letter-spacing: 8px;
+  text-align: center;
 
   cursor: pointer;
 

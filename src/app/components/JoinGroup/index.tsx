@@ -4,22 +4,22 @@
  *
  */
 import * as React from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '../Button';
 import Icon from '../Icon';
 import { colors } from 'styles/colors';
 import { useHistory } from 'react-router-dom';
-// import socket from '../../socketConnection';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectGroupCode,
-  selectUsername,
   selectUserAvatar,
+  selectUsername,
 } from 'app/pages/Lobby/slice/selectors';
 import { media } from 'styles/media';
-import { joinRoom } from 'app/socketConnection';
+import { SocketContext } from 'app/socketContext';
 
 interface Props {}
 
@@ -34,23 +34,38 @@ export function JoinGroup(props: Props) {
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
+  const socket = useContext(SocketContext);
+
   const room = useSelector(selectGroupCode);
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
+  const name = useSelector(selectUsername);
+  const avatar = useSelector(selectUserAvatar);
+
+  //Emits the join event and if successful redirects to lobby
+  const handleClick = () => {
+    socket.emit('join', { name, room, avatar }, error => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    });
+  };
 
   const setGroupCode = evt => {
     dispatch(lobbyActions.setGroupCode(evt.target.value));
   };
 
-  const onSubmitJoinGroup = evt => {
-    evt.preventDefault();
-    joinRoom(username, room, selectedAvatar);
-    dispatch(lobbyActions.setJoinedGroup(true));
-    history.push('/lobby');
-  };
+  // const onSubmitJoinGroup = evt => {
+  //   evt.preventDefault();
+  //   joinRoom(name, room, selectedAvatar);
+  //   dispatch(lobbyActions.setJoinedGroup(true));
+  //   history.push('/lobby');
+  // };
 
   return (
-    <Form onSubmit={onSubmitJoinGroup}>
+    <Form>
       <GroupCode
         placeholder="1234"
         maxLength={4}
@@ -58,7 +73,7 @@ export function JoinGroup(props: Props) {
         onChange={setGroupCode}
         required
       />
-      <PrimaryButton type="submit" className="icon-right">
+      <PrimaryButton onClick={handleClick} type="button" className="icon-right">
         {t('home.joingroup')}
         <Icon
           name="circle-arrow-right"

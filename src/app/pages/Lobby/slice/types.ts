@@ -2,8 +2,8 @@
 export interface LobbyState {
   user: {
     name: string;
-    avatarUrl: string;
-    groupCode: string;
+    avatar: string;
+    room: string;
     joinedGroup: boolean;
   };
   lobby: {
@@ -16,8 +16,8 @@ export interface LobbyState {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
-  room: number;
+  room: string;
   avatar: string;
 }
