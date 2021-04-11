@@ -4,7 +4,15 @@ import io from 'socket.io-client';
 const SocketContext = React.createContext();
 
 const SocketProvider = ({ children }) => {
-  const ENDPOINT = 'localhost:5000';
+  let ENDPOINT;
+
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    // dev code
+    ENDPOINT = 'localhost:5000';
+  } else {
+    // production code
+    ENDPOINT = 'https://mindr-server.herokuapp.com/';
+  }
 
   const socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
   return (
