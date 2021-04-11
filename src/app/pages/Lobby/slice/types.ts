@@ -2,8 +2,8 @@
 export interface LobbyState {
   user: {
     name: string;
-    avatarUrl: string;
-    groupCode: string;
+    avatar: string;
+    room: string;
     joinedGroup: boolean;
   };
   lobby: {
@@ -11,5 +11,13 @@ export interface LobbyState {
     activeGamemodes: number[];
     gameMasterId: number;
     isStandardMode: boolean;
-  }
+    users: Array<User>;
+  };
+}
+
+export interface User {
+  id: string;
+  name: string;
+  room: string;
+  avatar: string;
 }

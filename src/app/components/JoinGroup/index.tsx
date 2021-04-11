@@ -4,6 +4,7 @@
  *
  */
 import * as React from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '../Button';
@@ -14,9 +15,11 @@ import { useLobbySlice } from 'app/pages/Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectGroupCode,
-  selectUsername,
   selectUserAvatar,
+  selectUsername,
 } from 'app/pages/Lobby/slice/selectors';
+import { media } from 'styles/media';
+import { SocketContext } from 'app/socketContext';
 
 interface Props {}
 
@@ -31,31 +34,46 @@ export function JoinGroup(props: Props) {
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const groupCode = useSelector(selectGroupCode);
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
+  const socket = useContext(SocketContext);
+
+  const room = useSelector(selectGroupCode);
+  const name = useSelector(selectUsername);
+  const avatar = useSelector(selectUserAvatar);
+
+  //Emits the join event and if successful redirects to lobby
+  const handleClick = () => {
+    socket.emit('join', { name, room, avatar }, error => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    });
+  };
 
   const setGroupCode = evt => {
     dispatch(lobbyActions.setGroupCode(evt.target.value));
   };
 
-  const onSubmitJoinGroup = evt => {
-    evt.preventDefault();
-    if (username.length > 0 && selectedAvatar.length > 0) {
-      history.push(`/lobby`);
-    }
-  };
+  // const onSubmitJoinGroup = evt => {
+  //   evt.preventDefault();
+  //   joinRoom(name, room, selectedAvatar);
+  //   dispatch(lobbyActions.setJoinedGroup(true));
+  //   history.push('/lobby');
+  // };
 
   return (
-    <Form onSubmit={onSubmitJoinGroup}>
+    <Form>
       <GroupCode
         placeholder="1234"
         maxLength={4}
-        value={groupCode}
+        value={room}
         onChange={setGroupCode}
         required
       />
-      <PrimaryButton type="submit" className="icon-right">
+      <PrimaryButton onClick={handleClick} type="button" className="icon-right">
         {t('home.joingroup')}
         <Icon
           name="circle-arrow-right"
@@ -71,18 +89,30 @@ export function JoinGroup(props: Props) {
 
 const Form = styled.form`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  ${media.medium`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  `}
 `;
 
 const GroupCode = styled.input`
   padding: 16px;
+  width: 172px;
+  height: 72px;
 
-  width: 86px;
-  height: 58px;
-  left: 996px;
-  top: 270px;
+  margin: 0 0 16px 0;
 
-  margin-right: 16px;
+  ${media.medium`
+    margin: 0 16px 0 0;
+    height: 58px;
+    font-size: 20px;
+    line-height: 26px;
+  `}
 
   background: transparent;
   border: 2px solid ${colors.basic.lightgrey};
@@ -92,10 +122,10 @@ const GroupCode = styled.input`
   font-family: 'Basier';
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
-  line-height: 26px;
+  font-size: 25px;
+  line-height: 32.57px;
   text-align: center;
-  letter-spacing: 0.4px;
+  letter-spacing: 10px;
 
   transition: border-color 0.25s ease-out;
 

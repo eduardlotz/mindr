@@ -2,13 +2,13 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { lobbySaga } from './saga';
-import { LobbyState } from './types';
+import { LobbyState, User } from './types';
 
 export const initialState: LobbyState = {
   user: {
     name: '',
-    avatarUrl: '',
-    groupCode: '',
+    avatar: '',
+    room: '',
     joinedGroup: false,
   },
   lobby: {
@@ -16,6 +16,14 @@ export const initialState: LobbyState = {
     activeGamemodes: [],
     gameMasterId: -1,
     isStandardMode: true,
+    users: [
+      {
+        id: '',
+        name: '',
+        avatar: '',
+        room: '',
+      },
+    ],
   },
 };
 
@@ -31,12 +39,12 @@ const slice = createSlice({
     setAvatarUrl(state, action: PayloadAction<string>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
-      state.user.avatarUrl = action.payload;
+      state.user.avatar = action.payload;
     },
     setGroupCode(state, action: PayloadAction<string>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
-      state.user.groupCode = action.payload;
+      state.user.room = action.payload.toUpperCase();
     },
     setJoinedGroup(state, action: PayloadAction<boolean>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
@@ -47,6 +55,9 @@ const slice = createSlice({
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
       state.lobby.isStandardMode = action.payload;
+    },
+    setUsersInRoom(state, action: PayloadAction<User[]>) {
+      state.lobby.users = action.payload;
     },
   },
 });

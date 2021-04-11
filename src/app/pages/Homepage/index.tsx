@@ -3,9 +3,8 @@
  * Homepage
  *
  */
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHomepageSlice } from './slice';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -14,7 +13,6 @@ import { colors } from 'styles/colors';
 import { LinkButton, SecondaryButton } from 'app/components/Button';
 import { JoinGroup } from 'app/components/JoinGroup';
 
-import groupCodeImage from '../../../assets/groupcode-help.jpg';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
@@ -22,34 +20,43 @@ import { useLobbySlice } from '../Lobby/slice';
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
 
-const codeTextImage = () => {
-  <FlexColDiv>
-    <P>
-      Ask your friends to tell you their code. It's in the upper right corner.
-    </P>
-    <BigImage src={groupCodeImage} />
-  </FlexColDiv>;
-};
+import { modalActions } from 'app/components/MotionModal/slice';
+import { media } from 'styles/media';
 
-const groupCodeContent = {
-  title: 'Where is the code?',
-  content: codeTextImage,
-};
+import { SocketContext } from 'app/socketContext';
+import { useHistory } from 'react-router';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
-  // Use the slice we created
-  const { actions: homeActions } = useHomepageSlice();
+  // used to dispatch socket actions
+  const socket = useContext(SocketContext);
 
+  const history = useHistory();
+
+  // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
+  const name = useSelector(selectUsername);
+  const avatar = useSelector(selectUserAvatar);
+
+  //Checks to see if there's a user already present
+
+  useEffect(() => {
+    socket.on('users', users => {
+      dispatch(lobbyActions.setUsersInRoom(users));
+    });
+  });
+
+  useEffect(() => {
+    socket.on('room', room => {
+      dispatch(lobbyActions.setGroupCode(room));
+    });
+  });
 
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,15 +67,25 @@ export function Homepage({ match }) {
     dispatch(lobbyActions.setAvatarUrl(url));
   };
 
-  const setModal = content => {
-    dispatch(homeActions.setModalContent(content));
-    dispatch(homeActions.setModalOpen(true));
+  const openLinkInfoModal = () => {
+    dispatch(modalActions.setModalTitle(t('home.wherecode')));
+    dispatch(modalActions.setModalOpen(true));
   };
 
-  useEffect(() => {
-    dispatch(lobbyActions.setJoinedGroup(false));
-  }, [dispatch, homeActions, lobbyActions]);
+  //Emits the login event and if successful redirects to chat and saves user data
+  const handleCreateRoom = () => {
+    socket.emit('create_room', { name, avatar }, error => {
+      if (error) {
+        console.log(error);
+        return;
+      }
 
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    });
+  };
+
+  // staggered pop up animation for avatars
   const popUpVariants = {
     visible: i => ({
       opacity: 1,
@@ -121,13 +138,13 @@ export function Homepage({ match }) {
             <H2>{t('home.pickusername')}</H2>
             <UsernameInput
               placeholder={t('home.yourname')}
-              value={username}
+              value={name}
               onChange={setUsername}
               maxLength={20}
             />
           </FlexColDiv>
-          {selectedAvatar ? (
-            <BigAvatar src={selectedAvatar} />
+          {avatar ? (
+            <BigAvatar src={avatar} />
           ) : (
             <BigAvatar src={undefinedAvatar} />
           )}
@@ -138,17 +155,17 @@ export function Homepage({ match }) {
           animate="visible"
           exit="exit"
         >
-          {avatars.map((avatar, i) => {
+          {avatars.map((entry, i) => {
             return (
               <AvatarImg
-                src={avatar}
+                src={entry}
                 variants={popUpVariants}
                 key={i}
                 custom={i}
                 initial="hidden"
                 animate="visible"
-                onClick={() => setAvatar(avatar)}
-                className={selectedAvatar === avatar ? 'selected' : ''}
+                onClick={() => setAvatar(entry)}
+                className={avatar === entry ? 'selected' : ''}
               />
             );
           })}
@@ -170,7 +187,7 @@ export function Homepage({ match }) {
         >
           <InlineBlock>
             <H2 className="margin-clear">{t('home.joingroupheader')}</H2>
-            <LinkButton onClick={() => setModal(groupCodeContent)}>
+            <LinkButton onClick={openLinkInfoModal}>
               {t('home.wherecode')}
             </LinkButton>
           </InlineBlock>
@@ -184,7 +201,9 @@ export function Homepage({ match }) {
         >
           <div className="create-group">
             <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton>{t('home.creategroup')}</SecondaryButton>
+            <SecondaryButton onClick={handleCreateRoom}>
+              {t('home.creategroup')}
+            </SecondaryButton>
           </div>
         </ContentBlock>
       </StartGameContainer>
@@ -230,43 +249,64 @@ const UsernameInput = styled.input`
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
+  margin: 24px 0;
+
+  ${media.medium`
+    margin: 0;
+  `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 16px;
+
+  ${media.medium`
+    margin-bottom: 16px;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: row;
+  `}
 `;
 
 const AvatarSelectionContainer = styled(motion.div)`
   display: grid;
   max-width: 100%;
   width: 100%;
+  overflow-x: scroll;
 
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto 1fr;
-  grid-gap: 32px 48px;
+  grid-gap: 24px 24px;
+
+  padding: 24px;
+  margin-bottom: 40px;
 
   background-color: ${colors.basic.lightblue};
   border-radius: 16px;
 
-  margin-bottom: 40px;
-  padding: 32px 40px;
+  ${media.medium`
+    grid-gap: 32px 48px;
+    padding: 32px 40px;
+  `}
 `;
 
 const AvatarImg = styled(motion.img)`
   position: relative;
 
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
 
   border-radius: 50%;
   object-fit: contain;
   background-size: 100% 100%;
 
   cursor: pointer;
+  ${media.medium`
+    width: 48px;
+    height: 48px;
+  `}
 
   &.selected {
     box-shadow: 0px 8px 16px 0px rgba(12, 72, 163, 0.12);
@@ -277,15 +317,11 @@ const AvatarImg = styled(motion.img)`
 const FlexColDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
-`;
+  width: 100%;
 
-const BigImage = styled(motion.img)`
-  width: auto;
-  height: 420px;
-
-  margin-top: 24px;
-  border-radius: 12px;
+  ${media.medium`
+    width: 80%;
+  `}
 `;
 
 const StartGameContainer = styled(motion.div)`
@@ -302,18 +338,6 @@ const StartGameContainer = styled(motion.div)`
   justify-content: center;
 `;
 
-const P = styled(motion.p)`
-  width: 100%;
-
-  font-family: 'Basier';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 26px;
-
-  color: ${colors.basic.textgrey};
-`;
-
 const ContentBlock = styled(motion.div)`
   width: 100%;
   &:first-child {
@@ -324,7 +348,14 @@ const ContentBlock = styled(motion.div)`
 const InlineBlock = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+
+  ${media.medium`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  `}
 `;

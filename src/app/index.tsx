@@ -24,6 +24,7 @@ import { Homepage } from './pages/Homepage/Loadable';
 import { useHomepageSlice } from './pages/Homepage/slice';
 import { useDispatch } from 'react-redux';
 import { games } from './pages/Homepage/gamesModes';
+import { media } from 'styles/media';
 
 export function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,8 +73,12 @@ export function App() {
 const MainContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 800px;
   margin: 0 auto;
-  padding-bottom: 80px;
+
+  padding: 80px 16px 100px 16px;
+  ${media.medium`
+      padding: 120px 0;
+  `}
 `;

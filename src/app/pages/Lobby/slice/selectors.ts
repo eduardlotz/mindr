@@ -12,11 +12,11 @@ export const selectUsername = createSelector([selectSlice], state => {
 });
 
 export const selectUserAvatar = createSelector([selectSlice], state => {
-  return state.user.avatarUrl;
+  return state.user.avatar;
 });
 
 export const selectGroupCode = createSelector([selectSlice], state => {
-  return state.user.groupCode;
+  return state.user.room;
 });
 
 export const selectJoinedGroup = createSelector([selectSlice], state => {
@@ -29,4 +29,7 @@ export const selectIsStandardMode = createSelector([selectSlice], state => {
 
 export const selectActiveGamemodes = createSelector([selectSlice], state => {
   return state.lobby.activeGamemodes;
+});
+export const selectUsersInRoom = createSelector([selectSlice], state => {
+  return state.lobby.users;
 });

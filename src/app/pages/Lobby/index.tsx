@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage';
-import { H2, H5 } from 'app/components/styled/Headers';
+import { H2, H3, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
@@ -15,9 +15,9 @@ import Icon from 'app/components/Icon';
 import { PrimaryFloatingButton } from 'app/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
-import { useEffect } from 'react';
 import { useLobbySlice } from './slice';
-import { selectIsStandardMode } from './slice/selectors';
+import { selectIsStandardMode, selectUsersInRoom } from './slice/selectors';
+import { media } from 'styles/media';
 
 interface Props {}
 
@@ -27,6 +27,8 @@ export function Lobby(props: Props) {
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
+
+  const usersInRoom = useSelector(selectUsersInRoom);
 
   const { actions: lobbyActions } = useLobbySlice();
 
@@ -40,11 +42,6 @@ export function Lobby(props: Props) {
   const setToDrinkingMode = () => {
     dispatch(lobbyActions.setIsStandardMode(false));
   };
-
-  useEffect(() => {
-    dispatch(lobbyActions.setJoinedGroup(true));
-  }, [dispatch, lobbyActions]);
-
   const gameTabVariants = {
     visible: i => ({
       opacity: 1,
@@ -150,6 +147,35 @@ export function Lobby(props: Props) {
           />
         </ModeSwitcher>
       </ContentBlock>
+      <ContentBlock
+        variants={variants.slideUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <InlineBlock>
+          <H3>{t('lobby.userlistheader')}</H3>
+          <UsersCounter>
+            <UsersCount>{usersInRoom.length}</UsersCount>
+            <MaxUsersCount>/10</MaxUsersCount>
+          </UsersCounter>
+        </InlineBlock>
+        <UsersList>
+          {usersInRoom.map(user => {
+            return (
+              <JoinedUser
+                variants={variants.slideUp}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <UserAvatar src={user.avatar} />
+                <Username>{user.name}</Username>
+              </JoinedUser>
+            );
+          })}
+        </UsersList>
+      </ContentBlock>
       <PrimaryFloatingButton
         variants={floatingBtnVariants}
         initial="hidden"
@@ -254,4 +280,90 @@ const GameModesContainer = styled.div`
   grid-row-gap: 24px;
   margin: 16px 0 40px 0;
   background-color: ${colors.basic.white};
+`;
+
+const UserAvatar = styled.img`
+  position: relative;
+
+  width: 48px;
+  height: 48px;
+
+  margin-right: 8px;
+
+  border-radius: 50%;
+  object-fit: contain;
+  background-size: 100% 100%;
+`;
+
+const Username = styled.span`
+  font-family: 'Basier';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 23px;
+  text-align: left;
+
+  color: ${colors.basic.black};
+`;
+
+const InlineBlock = styled(motion.div)`
+  width: 100%;
+  display: flex;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+const UsersCounter = styled(motion.span)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UsersCount = styled(motion.span)`
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 42px;
+  text-align: center;
+  margin: 0 8px 0 0;
+
+  color: ${colors.brand.blue};
+`;
+
+const MaxUsersCount = styled(motion.span)`
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 21px;
+  text-align: center;
+  letter-spacing: 1px;
+  opacity: 0.3;
+
+  color: ${colors.brand.blue};
+`;
+
+const UsersList = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ${media.medium`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+  `}
+`;
+
+const JoinedUser = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0;
+  align-items: center;
+  justify-content: flex-start;
 `;
