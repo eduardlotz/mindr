@@ -6,13 +6,13 @@ export interface HomepageState {
     imageClass: string;
     content: Array<string>;
   };
-  gameModes: [
-    {
-      title: string;
-      imageClass: string;
-      rules: Array<string>;
-      isActive: boolean;
-      isAvailable: boolean;
-    },
-  ];
+  gameModes: [iGameMode];
+}
+
+export interface iGameMode {
+  title: string;
+  imageClass: string;
+  rules: Array<string>;
+  isActive: boolean;
+  isAvailable: boolean;
 }

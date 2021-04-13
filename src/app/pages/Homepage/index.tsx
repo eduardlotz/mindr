@@ -25,6 +25,7 @@ import { media } from 'styles/media';
 
 import { SocketContext } from 'app/socketContext';
 import { useHistory } from 'react-router';
+import { Navbar } from 'app/components/Navbar/Loadable';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -122,6 +123,7 @@ export function Homepage({ match }) {
 
   return (
     <>
+      <Navbar />
       <UserCreationContainer
         variants={variants.container}
         initial="hidden"

@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage';
-import { H2, H3, H5 } from 'app/components/styled/Headers';
+import { H2, H3, H5, Highlighted } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
@@ -16,10 +16,13 @@ import { PrimaryFloatingButton } from 'app/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useLobbySlice } from './slice';
-import { selectIsStandardMode, selectUsersInRoom } from './slice/selectors';
+import {
+  selectGroupCode,
+  selectIsStandardMode,
+  selectUsersInRoom,
+} from './slice/selectors';
 import { media } from 'styles/media';
-import { useHomepageSlice } from '../Homepage/slice';
-import { GameModeCard } from 'app/components/styled/GameModeCard';
+import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 
 interface Props {}
 
@@ -29,11 +32,11 @@ export function Lobby(props: Props) {
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
+  const room = useSelector(selectGroupCode);
 
   const usersInRoom = useSelector(selectUsersInRoom);
 
   const { actions: lobbyActions } = useLobbySlice();
-  const { actions: homeActions } = useHomepageSlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
@@ -44,29 +47,6 @@ export function Lobby(props: Props) {
 
   const setToDrinkingMode = () => {
     dispatch(lobbyActions.setIsStandardMode(false));
-  };
-
-  const handleGameModeClick = (mode, id) => {
-    if (mode.isAvailable) dispatch(homeActions.toggleGameModeIsActive(id));
-  };
-
-  const gameTabVariants = {
-    active: i => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        delay: 0.1 + i * 0.06,
-      },
-    }),
-    hidden: { opacity: 0, scale: 0.9 },
-    inactive: {
-      transition: {
-        type: 'spring',
-      },
-      opacity: 0.8,
-      scale: 1,
-    },
   };
 
   const floatingBtnVariants = {
@@ -104,63 +84,7 @@ export function Lobby(props: Props) {
   };
 
   return (
-    <>
-      <ContentBlock
-        variants={variants.slideUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <H2>{t('lobby.pickgames')}</H2>
-        <GameModesContainer>
-          {gameModes.map((mode, i) => {
-            return (
-              <AnimatePresence key={`gamemode_${i}`}>
-                <GameModeCard
-                  custom={i}
-                  initial="hidden"
-                  className={mode.isAvailable ? '' : 'disabled'}
-                  animate={mode.isActive ? 'active' : 'inactive'}
-                  variants={gameTabVariants}
-                  onClick={() => handleGameModeClick(mode, i)}
-                >
-                  <GameImage size="92px" name={mode.imageClass} />
-                  <H5 style={{ marginLeft: '16px' }}>
-                    {t(`gamemode.${mode.title}`)}
-                  </H5>
-                </GameModeCard>
-              </AnimatePresence>
-            );
-          })}
-        </GameModesContainer>
-      </ContentBlock>
-      <ContentBlock
-        variants={variants.slideUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <H2>{t('lobby.pickmode')}</H2>
-        <ModeSwitcher>
-          <ModeTab
-            onClick={setToStandardMode}
-            className={isStandardMode ? 'is-active' : ''}
-          >
-            {t('lobby.standardmode')}
-          </ModeTab>
-          <ModeTab
-            onClick={setToDrinkingMode}
-            className={!isStandardMode ? 'is-active' : ''}
-          >
-            {t('lobby.drinkingmode')}
-          </ModeTab>
-          <ModeTabActiveIndicator
-            variants={variants.modeTab}
-            initial="standard"
-            animate={isStandardMode ? 'standard' : 'drinking'}
-          />
-        </ModeSwitcher>
-      </ContentBlock>
+    <LobbyContainer>
       <ContentBlock
         variants={variants.slideUp}
         initial="hidden"
@@ -168,7 +92,9 @@ export function Lobby(props: Props) {
         exit="exit"
       >
         <InlineBlock>
-          <H3 style={{ maxWidth: '50%' }}>{t('lobby.userlistheader')}</H3>
+          <H3 style={{ maxWidth: '50%', margin: 0 }}>
+            {t('room.room')} <Highlighted>{room}</Highlighted>
+          </H3>
           <UsersCounter>
             <UsersCount>{usersInRoom.length}</UsersCount>
             <MaxUsersCount>/10</MaxUsersCount>
@@ -190,13 +116,56 @@ export function Lobby(props: Props) {
           })}
         </UsersList>
       </ContentBlock>
+      <ContentBlock
+        variants={variants.slideUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <H2>{t('room.pickgames')}</H2>
+        <GameModesContainer>
+          {gameModes.map((mode, i) => (
+            <AnimatePresence key={`gamemode_${i}`}>
+              <GameSelectCard mode={mode} index={i} />
+            </AnimatePresence>
+          ))}
+        </GameModesContainer>
+      </ContentBlock>
+      <ContentBlock
+        variants={variants.slideUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <H2>{t('room.pickmode')}</H2>
+        <ModeSwitcher>
+          <ModeTab
+            onClick={setToStandardMode}
+            className={isStandardMode ? 'is-active' : ''}
+          >
+            {t('room.standardmode')}
+          </ModeTab>
+          <ModeTab
+            onClick={setToDrinkingMode}
+            className={!isStandardMode ? 'is-active' : ''}
+          >
+            {t('room.drinkingmode')}
+          </ModeTab>
+          <ModeTabActiveIndicator
+            variants={variants.modeTab}
+            initial="standard"
+            animate={isStandardMode ? 'standard' : 'drinking'}
+          />
+        </ModeSwitcher>
+      </ContentBlock>
+
       <PrimaryFloatingButton
         variants={floatingBtnVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        {t('lobby.letsgo')}
+        {t('room.letsgo')}
         <Icon
           name="circle-arrow-right"
           fill="white"
@@ -205,9 +174,18 @@ export function Lobby(props: Props) {
           style={{ marginLeft: '16px' }}
         />
       </PrimaryFloatingButton>
-    </>
+    </LobbyContainer>
   );
 }
+
+const LobbyContainer = styled(motion.div)`
+  width: 100%;
+  padding: 40px 0 80px;
+
+  ${media.medium`
+    padding: 64px 0 80px;
+  `}
+`;
 
 const ModeTabActiveIndicator = styled(motion.span)`
   position: absolute;
@@ -269,6 +247,7 @@ const ModeTab = styled(motion.button)`
 
 const ContentBlock = styled(motion.div)`
   width: 100%;
+  margin-bottom: 40px;
 `;
 
 const GameModesContainer = styled.div`
@@ -318,7 +297,7 @@ const InlineBlock = styled(motion.div)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 `;
 
 const UsersCounter = styled(motion.span)`
@@ -336,7 +315,7 @@ const UsersCount = styled(motion.span)`
   text-align: center;
   margin: 0 8px 0 0;
 
-  color: ${colors.brand.blue};
+  color: ${colors.basic.black};
 `;
 
 const MaxUsersCount = styled(motion.span)`
@@ -348,7 +327,7 @@ const MaxUsersCount = styled(motion.span)`
   letter-spacing: 1px;
   opacity: 0.3;
 
-  color: ${colors.brand.blue};
+  color: ${colors.basic.darkgrey};
 `;
 
 const UsersList = styled(motion.div)`

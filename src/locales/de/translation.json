@@ -10,13 +10,15 @@
     "joingroupheader": "Willst du jemandem beitreten?",
     "creategroupheader": "Eine neue Gruppe erstellen"
   },
-  "lobby": {
+  "room": {
     "pickgames": "Wähle die Spiele, die du spielen möchtest",
     "letsgo": "Let’s goooooo",
     "pickmode": "Wähle einen Spielmodus",
     "standardmode": "Standard",
     "drinkingmode": "Trinkspiel",
-    "userlistheader": "Fehlt noch jemand?"
+    "userlistheader": "Fehlt noch jemand?",
+    "room": "Raum",
+    "indevelopment": "In Entwicklung"
   },
   "help": {
     "whatismindr": "Was ist mindr?",

@@ -8,7 +8,6 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { GameImage } from 'app/components/GameImage/Loadable';
 import { H1, H5 } from 'app/components/styled/Headers';
-import { GameModeCard } from 'app/components/styled/GameModeCard';
 import { motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { variants } from 'styles/variants';
 import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
+import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 
 interface Props {}
 
@@ -138,25 +138,9 @@ export const Help = memo((props: Props) => {
             initial="hidden"
             animate="visible"
           >
-            {gameModes.map((mode, i) => {
-              return (
-                <GameModeCard
-                  custom={i}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={`gamemode_${i}`}
-                  variants={gameTabVariants}
-                  onClick={() => setModal(mode)}
-                  whileHover={'hover'}
-                >
-                  <GameImage size={'64px'} name={mode.imageClass} />
-                  <H5 style={{ marginLeft: '16px' }}>
-                    {t(`gamemode.${mode.title}`)}
-                  </H5>
-                </GameModeCard>
-              );
-            })}
+            {/* {gameModes.map((mode, i) => {
+              return <GameSelectCard mode={mode} index={i} />;
+            })} */}
           </HowToContainer>
         </ContentBlock>
       </InfoContainer>
@@ -234,7 +218,10 @@ const InfoContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
 
-  margin: 0;
+  margin-top: 40px;
+  ${media.medium`
+    margin-top: 64px;
+  `}
 `;
 
 const PrimaryFloatingButton = styled(PrimaryButton)`

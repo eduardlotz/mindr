@@ -9,13 +9,15 @@
     "joingroupheader": "Want to join someone?",
     "creategroupheader": "Create a new group"
   },
-  "lobby": {
+  "room": {
     "pickgames": "Pick the games you want to play",
     "letsgo": "Let’s goooooo",
     "pickmode": "Pick a game mode",
     "standardmode": "Standard mode",
     "drinkingmode": "Drinking mode",
-    "userlistheader": "Anyone else missing?"
+    "userlistheader": "Anyone else missing?",
+    "room": "Room",
+    "indevelopment": "In development"
   },
   "help": {
     "whatismindr": "What is mindr?",

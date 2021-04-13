@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Help } from './pages/Help/Loadable';
 import styled from 'styled-components/macro';
-import { Navbar } from './components/Navbar/Loadable';
 import { MotionModal } from './components/MotionModal';
 import { Lobby } from './pages/Lobby/Loadable';
 import { Homepage } from './pages/Homepage/Loadable';
@@ -32,7 +31,6 @@ export function App() {
   const location = useLocation();
 
   const { actions: homeActions } = useHomepageSlice();
-
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
@@ -55,7 +53,6 @@ export function App() {
 
       <MainContainer>
         <MotionModal />
-        <Navbar />
         <AnimatePresence exitBeforeEnter>
           <Switch location={location} key={location.key}>
             <Route exact path="/" component={Homepage} />
@@ -77,8 +74,8 @@ const MainContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
 
-  padding: 140px 0 100px 0;
+  padding-bottom: 80px;
   ${media.medium`
-      padding: 120px 0;
+      padding-bottom: 120px;
   `}
 `;
