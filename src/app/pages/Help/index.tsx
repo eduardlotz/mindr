@@ -6,19 +6,16 @@
 import React, { memo } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { GameImage } from 'app/components/GameImage/Loadable';
-import { H1, H5 } from 'app/components/styled/Headers';
+import { H1 } from 'app/components/styled/Headers';
 import { motion } from 'framer-motion';
 import { colors } from 'styles/colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectGameModes } from '../Homepage/slice/selectors';
+// import { useDispatch } from 'react-redux';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
 import { Link } from 'react-router-dom';
 import { variants } from 'styles/variants';
-import { useModalSlice } from 'app/components/MotionModal/slice';
+// import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
-import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 
 interface Props {}
 
@@ -30,36 +27,17 @@ export const Help = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   // Use the slice we created
-  const { actions: modalActions } = useModalSlice();
+  // const { actions: modalActions } = useModalSlice();
 
   // Used to dispatch slice actions
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  // `selectors` are used to read the state.
-  const gameModes = useSelector(selectGameModes);
-
-  const setModal = content => {
-    dispatch(modalActions.setModalTitle(t(`gamemode.${content.title}`)));
-    dispatch(modalActions.setModalContent(content.content));
-    dispatch(modalActions.setModalImage(content.imageClass));
-    dispatch(modalActions.setModalOpen(true));
-  };
-
-  const gameTabVariants = {
-    visible: i => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        delay: 0.1 + i * 0.06,
-      },
-    }),
-    hidden: { opacity: 0, scale: 0.9 },
-    hover: {
-      boxShadow: '0px 14px 26px rgba(0, 0, 0, 0.07)',
-      borderColor: colors.basic.white,
-    },
-  };
+  // const setModal = content => {
+  //   dispatch(modalActions.setModalTitle(t(`gamemode.${content.title}`)));
+  //   dispatch(modalActions.setModalContent(content.content));
+  //   dispatch(modalActions.setModalImage(content.imageClass));
+  //   dispatch(modalActions.setModalOpen(true));
+  // };
 
   const floatingBtnVariants = {
     hidden: {

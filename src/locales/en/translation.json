@@ -12,12 +12,18 @@
   "room": {
     "pickgames": "Pick the games you want to play",
     "letsgo": "Let’s goooooo",
-    "pickmode": "Pick a game mode",
+    "settings": "Pick the mode & game length",
     "standardmode": "Standard mode",
     "drinkingmode": "Drinking mode",
     "userlistheader": "Anyone else missing?",
     "room": "Room",
-    "indevelopment": "In development"
+    "indevelopment": "In development",
+    "length": {
+      "short": "short",
+      "normal": "normal",
+      "long": "long"
+    },
+    "min-user-info": "As soon as you are a group of four you are ready to go"
   },
   "help": {
     "whatismindr": "What is mindr?",

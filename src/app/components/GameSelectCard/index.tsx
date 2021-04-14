@@ -46,11 +46,11 @@ export function GameSelectCard(props: Props) {
         type: 'spring',
         delay: 0.1 + i * 0.06,
       },
+      transitionEnd: {
+        opacity: 'unset',
+      },
     }),
     hidden: { opacity: 0, scale: 0.9 },
-    hover: {
-      scale: 1.04,
-    },
   };
 
   return (
@@ -75,8 +75,18 @@ export function GameSelectCard(props: Props) {
       {!props.mode.isAvailable && (
         <NotAvailableBanner>{t('room.indevelopment')}</NotAvailableBanner>
       )}
-      <GameImage size="92px" name={props.mode.imageClass} />
-      <H5 style={{ marginLeft: '16px' }}>
+      <GameImage
+        color={props.mode.isActive ? colors.brand.purple : colors.basic.black}
+        size="92px"
+        name={props.mode.imageClass}
+        opacity={props.mode.isAvailable ? '1' : '0.2'}
+      />
+      <H5
+        className={getGameModeCardState(props.mode)}
+        style={{
+          opacity: props.mode.isAvailable ? '1' : '0.2',
+        }}
+      >
         {t(`gamemode.${props.mode.title}`)}
       </H5>
     </CardContainer>
@@ -87,27 +97,25 @@ const RightCornerIcon = styled(Icon)`
   position: absolute;
   top: 16px;
   right: 16px;
+  z-index: 10;
 `;
 
 const CardContainer = styled(motion.div)`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start;
   padding: 24px 16px;
   height: auto;
-  flex-direction: row;
   position: relative;
 
   ${media.medium`
     padding: 16px 32px;
-    flex-direction: column;
-    justify-content: center;
   `}
 
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
-  border-radius: 12px;
+  background: ${colors.basic.white};
+  border: none;
   transition: border-color 0.25s ease-out;
   cursor: pointer;
 
@@ -116,9 +124,48 @@ const CardContainer = styled(motion.div)`
     opacity: 0.2;
   }
 
+  &:before {
+    content: '';
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    margin: 0 auto;
+
+    width: 100%;
+    height: 100%;
+
+    background: white;
+    border-radius: 16px;
+
+    transition: 0.24s ease-in-out;
+    transition-property: transform background-color;
+  }
   //"80" after color hex => opacity = 0.5
+
+  &:hover:not(.active):not(.disabled) {
+    &:before {
+      transform: scale(0.95);
+      transform-origin: center;
+    }
+  }
   &.active {
-    border-color: ${colors.brand.purple}80;
+    &:before {
+      z-index: 1;
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0 auto;
+      background: #faf9fa;
+    }
   }
 `;
 
@@ -128,6 +175,7 @@ const NotAvailableBanner = styled(motion.div)`
   left: 0;
   bottom: 0;
   right: 0;
+  z-index: 15;
 
   transform: translateY(-50%);
 
@@ -136,7 +184,7 @@ const NotAvailableBanner = styled(motion.div)`
   width: 150px;
   height: 49px;
 
-  background-color: ${colors.basic.lightpurple};
+  background-color: ${colors.tab.bgColor};
   border-radius: 12px;
 
   font-style: normal;

@@ -33,3 +33,6 @@ export const selectActiveGamemodes = createSelector([selectSlice], state => {
 export const selectUsersInRoom = createSelector([selectSlice], state => {
   return state.lobby.users;
 });
+export const selectGameLength = createSelector([selectSlice], state => {
+  return state.lobby.gameLength;
+});

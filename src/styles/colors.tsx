@@ -21,8 +21,8 @@ export const colors = {
     borderFocus: '#72767C',
   },
   tab: {
-    bgColor: '#F6F9FE',
-    textColor: '#6292DA',
+    bgColor: '#F8F7FD',
+    textColor: '#7F69D4',
   },
 };
 

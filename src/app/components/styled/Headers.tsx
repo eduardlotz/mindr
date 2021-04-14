@@ -54,7 +54,13 @@ export const H5 = styled(motion.h5)`
   font-size: 20px;
   line-height: 26px;
 
+  z-index: 10;
+
   color: #111111;
+
+  &.highlighted {
+    color: ${colors.brand.purple};
+  }
 `;
 
 export const Highlighted = styled(motion.span)`
