@@ -38,5 +38,12 @@
     "bestartist": "Best Artist",
     "survey": "Survey",
     "whoknowsyou": "Who knows you"
+  },
+  "error": {
+    "usernameTaken": "Username is already taken",
+    "roomInvalid": "Room does not exist",
+    "avatarRequired": "Pick an avatar",
+    "usernameRequired": "Enter an username",
+    "roomRequired": "Enter the room you want to join"
   }
 }

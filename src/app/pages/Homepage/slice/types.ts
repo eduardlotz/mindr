@@ -7,6 +7,11 @@ export interface HomepageState {
     content: Array<string>;
   };
   gameModes: [iGameMode];
+  errors: {
+    username: iInputError;
+    room: iInputError;
+    avatar: iInputError;
+  };
 }
 
 export interface iGameMode {
@@ -15,4 +20,9 @@ export interface iGameMode {
   rules: Array<string>;
   isActive: boolean;
   isAvailable: boolean;
+}
+
+export interface iInputError {
+  message: string;
+  isHidden: boolean;
 }

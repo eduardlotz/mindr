@@ -55,19 +55,12 @@ export function Navbar(props: Props) {
             EN
           </Language>
         </LanguageSwitcher>
-        <Link to="/help">
-          <MotionDiv
-            whileHover={{ scale: 1.1, rotate: -5 }}
-            whileTap={{ scale: 1.3 }}
-          >
-            <Icon
-              name="circle-help"
-              fill={colors.basic.lightgreyish}
-              height="32"
-              width="32"
-            />
-          </MotionDiv>
-        </Link>
+        <MotionDiv
+          whileHover={{ scale: 1.1, rotate: -5 }}
+          whileTap={{ scale: 1.3 }}
+        >
+          <Icon name="sun" fill={colors.brand.purple} height="24" width="24" />
+        </MotionDiv>
       </FlexRowDiv>
     </Container>
   );
@@ -109,7 +102,7 @@ const LanguageSwitcher = styled(motion.button)`
 
   cursor: pointer;
 
-  color: ${colors.basic.lightgreyish};
+  color: #dfd9f4;
 
   &:focus {
     border: none;
@@ -126,10 +119,10 @@ const Language = styled.p`
   display: flex;
   align-items: center;
 
-  color: ${colors.basic.lightgreyish};
+  color: #dfd9f4;
 
   &.is-active {
-    color: ${colors.brand.blue};
+    color: ${colors.brand.purple};
   }
 
   &:first-child {

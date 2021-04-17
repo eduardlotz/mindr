@@ -27,13 +27,30 @@ export const PrimaryButton = styled(Button)`
   color: ${colors.basic.white};
   background: ${colors.brand.purple};
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
 
   &.icon-right {
+    & > svg {
+      display: none;
+    }
+
     &:hover {
       & > svg {
         margin-left: 32px;
       }
     }
+
+    @media (min-width: 400px) {
+      & > svg {
+        display: flex;
+      }
+    }
+  }
+
+  &:disabled {
+    background-color: ${colors.btn.bgDisabled};
+    color: ${colors.btn.textDisabled};
   }
 `;
 
@@ -44,8 +61,8 @@ export const SecondaryButton = styled(Button)`
 
   height: 56px;
   width: 100%;
-  padding: 16px 72px;
   border-radius: 16px;
+  padding: 16px;
 
   background: transparent;
   border: 2px solid ${colors.basic.lightgrey};
@@ -56,6 +73,10 @@ export const SecondaryButton = styled(Button)`
   font-weight: bold;
   font-size: 20px;
   line-height: 26px;
+
+  ${media.medium`
+    padding: 16px 72px;
+  `}
 `;
 
 export const LinkButton = styled(motion.button)`
@@ -71,7 +92,7 @@ export const LinkButton = styled(motion.button)`
 
   cursor: pointer;
 
-  color: ${colors.brand.blue};
+  color: ${colors.brand.purple};
 
   margin: 16px 0;
 

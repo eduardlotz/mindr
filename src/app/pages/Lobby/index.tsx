@@ -53,6 +53,8 @@ export function Lobby(props: Props) {
     dispatch(lobbyActions.setIsStandardMode(false));
   };
 
+  const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
+
   const floatingBtnVariants = {
     hidden: {
       y: 80,
@@ -104,7 +106,7 @@ export function Lobby(props: Props) {
         animate="visible"
         exit="exit"
       >
-        <InlineBlock>
+        <InlineBlock style={{ margin: 0 }}>
           <H3 style={{ maxWidth: '50%', margin: 0 }}>
             {t('room.room')} <Highlighted>{room}</Highlighted>
           </H3>
@@ -210,13 +212,14 @@ export function Lobby(props: Props) {
         initial="hidden"
         animate="visible"
         exit="exit"
+        disabled={!isRoomReady()}
       >
         {t('room.letsgo')}
         <Icon
           name="circle-arrow-right"
-          fill="white"
           height="24"
           width="24"
+          fill="currentColor"
           style={{ marginLeft: '16px' }}
         />
       </PrimaryFloatingButton>
@@ -366,7 +369,7 @@ const InfoLine = styled.p`
   text-align: left;
   margin: 0 0 16px 0;
 
-  color: ${colors.basic.black};
+  color: ${colors.basic.textgrey};
 `;
 
 const InlineBlock = styled(motion.div)`

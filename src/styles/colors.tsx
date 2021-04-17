@@ -19,10 +19,15 @@ export const colors = {
   },
   input: {
     borderFocus: '#72767C',
+    error: '#f32e2e',
   },
   tab: {
     bgColor: '#F8F7FD',
     textColor: '#7F69D4',
+  },
+  btn: {
+    bgDisabled: '#eeeeee',
+    textDisabled: '#DBDBDB',
   },
 };
 
