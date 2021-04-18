@@ -10,13 +10,21 @@
     "joingroupheader": "Willst du jemandem beitreten?",
     "creategroupheader": "Eine neue Gruppe erstellen"
   },
-  "lobby": {
+  "room": {
     "pickgames": "Wähle die Spiele, die du spielen möchtest",
     "letsgo": "Let’s goooooo",
-    "pickmode": "Wähle einen Spielmodus",
+    "settings": "Wähle den Spielmodus und die Länge",
     "standardmode": "Standard",
     "drinkingmode": "Trinkspiel",
-    "userlistheader": "Fehlt noch jemand?"
+    "userlistheader": "Fehlt noch jemand?",
+    "room": "Raum",
+    "indevelopment": "In Entwicklung",
+    "length": {
+      "short": "Kurz",
+      "normal": "Normal",
+      "long": "Lang"
+    },
+    "min-user-info": "Sobald ihr zu viert seid, kann es losgehen"
   },
   "help": {
     "whatismindr": "Was ist mindr?",
@@ -31,5 +39,12 @@
     "bestartist": "Größter Künstler",
     "survey": "Umfrage",
     "whoknowsyou": "Wer kennt dich"
+  },
+  "error": {
+    "usernameTaken": "Der Name ist schon vergeben",
+    "roomInvalid": "Der Raum existiert nicht",
+    "avatarRequired": "Wähle einen Avatar aus",
+    "usernameRequired": "Gib einen Namen ein",
+    "roomRequired": "Gib den Raum ein, dem du beitreten möchtest."
   }
 }

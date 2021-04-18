@@ -20,6 +20,20 @@ export const initialState: HomepageState = {
       isAvailable: false,
     },
   ],
+  errors: {
+    username: {
+      message: '',
+      isHidden: true,
+    },
+    room: {
+      message: '',
+      isHidden: true,
+    },
+    avatar: {
+      message: '',
+      isHidden: true,
+    },
+  },
 };
 
 const slice = createSlice({
@@ -40,6 +54,27 @@ const slice = createSlice({
     },
     setGameModes(state, action: PayloadAction<any>) {
       state.gameModes = action.payload;
+    },
+    setUsernameError(state, action: PayloadAction<string>) {
+      state.errors.username.message = action.payload;
+      state.errors.username.isHidden = false;
+    },
+    setRoomError(state, action: PayloadAction<string>) {
+      state.errors.room.message = action.payload;
+      state.errors.room.isHidden = false;
+    },
+    setAvatarError(state, action: PayloadAction<string>) {
+      state.errors.avatar.message = action.payload;
+      state.errors.avatar.isHidden = false;
+    },
+    setUsernameErrorHidden(state, action: PayloadAction<boolean>) {
+      state.errors.username.isHidden = action.payload;
+    },
+    setRoomErrorHidden(state, action: PayloadAction<boolean>) {
+      state.errors.room.isHidden = action.payload;
+    },
+    setAvatarErrorHidden(state, action: PayloadAction<boolean>) {
+      state.errors.avatar.isHidden = action.payload;
     },
     toggleGameModeIsActive(state, action: PayloadAction<number>) {
       state.gameModes[action.payload].isActive = !state.gameModes[

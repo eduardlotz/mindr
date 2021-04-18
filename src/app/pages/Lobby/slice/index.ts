@@ -15,6 +15,7 @@ export const initialState: LobbyState = {
     groupCode: '',
     activeGamemodes: [],
     isStandardMode: true,
+    gameLength: 'normal',
     users: [
       {
         id: '',
@@ -57,6 +58,9 @@ const slice = createSlice({
     },
     setUsersInRoom(state, action: PayloadAction<User[]>) {
       state.lobby.users = action.payload;
+    },
+    setGameLength(state, action: PayloadAction<string>) {
+      state.lobby.gameLength = action.payload;
     },
   },
 });

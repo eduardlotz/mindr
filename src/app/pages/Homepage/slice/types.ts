@@ -6,13 +6,23 @@ export interface HomepageState {
     imageClass: string;
     content: Array<string>;
   };
-  gameModes: [
-    {
-      title: string;
-      imageClass: string;
-      rules: Array<string>;
-      isActive: boolean;
-      isAvailable: boolean;
-    },
-  ];
+  gameModes: [iGameMode];
+  errors: {
+    username: iInputError;
+    room: iInputError;
+    avatar: iInputError;
+  };
+}
+
+export interface iGameMode {
+  title: string;
+  imageClass: string;
+  rules: Array<string>;
+  isActive: boolean;
+  isAvailable: boolean;
+}
+
+export interface iInputError {
+  message: string;
+  isHidden: boolean;
 }

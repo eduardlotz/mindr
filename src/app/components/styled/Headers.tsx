@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components/macro';
+import { colors } from 'styles/colors';
 
 export const H1 = styled(motion.h1)`
   width: 100%;
@@ -53,5 +54,15 @@ export const H5 = styled(motion.h5)`
   font-size: 20px;
   line-height: 26px;
 
+  z-index: 10;
+
   color: #111111;
+
+  &.highlighted {
+    color: ${colors.brand.purple};
+  }
+`;
+
+export const Highlighted = styled(motion.span)`
+  color: ${colors.brand.purple};
 `;

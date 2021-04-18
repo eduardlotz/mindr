@@ -20,6 +20,9 @@ import {
 } from 'app/pages/Lobby/slice/selectors';
 import { media } from 'styles/media';
 import { SocketContext } from 'app/socketContext';
+import { useHomepageSlice } from 'app/pages/Homepage/slice';
+import { selectRoomError } from 'app/pages/Homepage/slice/selectors';
+import { motion } from 'framer-motion';
 
 interface Props {}
 
@@ -28,6 +31,7 @@ export function JoinGroup(props: Props) {
   const { t, i18n } = useTranslation();
 
   const { actions: lobbyActions } = useLobbySlice();
+  const { actions: homeActions } = useHomepageSlice();
 
   const history = useHistory();
 
@@ -39,95 +43,112 @@ export function JoinGroup(props: Props) {
   const room = useSelector(selectGroupCode);
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
+  const roomError = useSelector(selectRoomError);
 
   //Emits the join event and if successful redirects to lobby
   const handleSubmit = evt => {
     evt.preventDefault();
-    if (name.length > 0 && avatar.length > 0) {
-      socket.emit('join', { name, room, avatar }, error => {
-        if (error) {
-          console.log(error);
-          return;
-        }
 
-        dispatch(lobbyActions.setJoinedGroup(true));
-        history.push('/lobby');
-      });
-    }
+    socket.emit('join', { name, room, avatar }, errors => {
+      if (errors) {
+        for (let error of errors) {
+          if (error.type === 'username') {
+            dispatch(homeActions.setUsernameError(t('error.' + error.message)));
+          }
+          if (error.type === 'room') {
+            dispatch(homeActions.setRoomError(t('error.' + error.message)));
+          }
+          if (error.type === 'avatar') {
+            dispatch(homeActions.setAvatarError(t('error.' + error.message)));
+          }
+        }
+        return;
+      }
+
+      dispatch(lobbyActions.setJoinedGroup(true));
+      history.push('/lobby');
+    });
   };
 
   const setGroupCode = evt => {
     dispatch(lobbyActions.setGroupCode(evt.target.value));
+    dispatch(homeActions.setRoomErrorHidden(true));
   };
 
-  // const onSubmitJoinGroup = evt => {
-  //   evt.preventDefault();
-  //   joinRoom(name, room, selectedAvatar);
-  //   dispatch(lobbyActions.setJoinedGroup(true));
-  //   history.push('/lobby');
-  // };
-
   return (
-    <Form onSubmit={handleSubmit}>
-      <GroupCode
-        placeholder="1234"
-        maxLength={4}
-        value={room}
-        onChange={setGroupCode}
-        required
-      />
-      <PrimaryButton type="submit" className="icon-right">
-        {t('home.joingroup')}
-        <Icon
-          name="circle-arrow-right"
-          fill={colors.basic.white}
-          height="24"
-          width="24"
-          style={{ marginLeft: '16px' }}
+    <FlexColDiv>
+      <Form onSubmit={handleSubmit}>
+        <GroupCode
+          placeholder="1234"
+          maxLength={4}
+          value={room}
+          onChange={setGroupCode}
+          className={roomError.isHidden ? '' : 'has-error'}
         />
-      </PrimaryButton>
-    </Form>
+        <PrimaryButton type="submit" className="icon-right">
+          {t('home.joingroup')}
+          <Icon
+            name="circle-arrow-right"
+            fill={colors.basic.white}
+            height="24"
+            width="24"
+            style={{ marginLeft: '16px' }}
+          />
+        </PrimaryButton>
+      </Form>
+      {!roomError.isHidden && <InputError>{roomError.message}</InputError>}
+    </FlexColDiv>
   );
 }
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+`;
 
-  ${media.medium`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  `}
+const FlexColDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const InputError = styled(motion.small)`
+  margin: 0;
+
+  font-size: 14px;
+  font-family: 'Basier';
+  font-weight: normal;
+  text-align: left;
+
+  color: ${colors.input.error};
 `;
 
 const GroupCode = styled.input`
   padding: 16px;
-  width: 172px;
-  height: 72px;
-
-  margin: 0 0 16px 0;
+  height: 58px;
+  width: 130px;
+  margin: 0 16px 0 0;
 
   ${media.medium`
-    margin: 0 16px 0 0;
-    height: 58px;
-    font-size: 20px;
-    line-height: 26px;
+    width: 172px;
   `}
+
+  font-size: 20px;
+  font-family: 'Basier';
+  font-style: normal;
+  font-weight: bold;
+  text-align: center;
+  line-height: 26px;
 
   background: transparent;
   border: 2px solid ${colors.basic.lightgrey};
   border-radius: 16px;
   color: ${colors.basic.almostblack};
 
-  font-family: 'Basier';
-  font-style: normal;
-  font-weight: bold;
-  font-size: 25px;
-  line-height: 32.57px;
-  text-align: center;
   letter-spacing: 10px;
 
   transition: border-color 0.25s ease-out;
@@ -140,5 +161,9 @@ const GroupCode = styled.input`
 
   &::placeholder {
     color: #b6b6b6;
+  }
+
+  &.has-error {
+    border-color: ${colors.input.error};
   }
 `;

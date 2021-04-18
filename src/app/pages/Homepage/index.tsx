@@ -16,6 +16,7 @@ import { JoinGroup } from 'app/components/JoinGroup';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
+import { useHomepageSlice } from '../Homepage/slice';
 
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
@@ -25,6 +26,8 @@ import { media } from 'styles/media';
 
 import { SocketContext } from 'app/socketContext';
 import { useHistory } from 'react-router';
+import { Navbar } from 'app/components/Navbar/Loadable';
+import { selectUsernameError, selectAvatarError } from './slice/selectors';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,12 +40,16 @@ export function Homepage({ match }) {
 
   // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
+  const { actions: homeActions } = useHomepageSlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
+
+  const nameError = useSelector(selectUsernameError);
+  const avatarError = useSelector(selectAvatarError);
 
   //Checks to see if there's a user already present
 
@@ -61,10 +68,12 @@ export function Homepage({ match }) {
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(lobbyActions.setUsername(e.target.value));
+    dispatch(homeActions.setUsernameErrorHidden(true));
   };
 
   const setAvatar = url => {
     dispatch(lobbyActions.setAvatarUrl(url));
+    dispatch(homeActions.setAvatarErrorHidden(true));
   };
 
   const openLinkInfoModal = () => {
@@ -74,9 +83,19 @@ export function Homepage({ match }) {
 
   //Emits the login event and if successful redirects to chat and saves user data
   const handleCreateRoom = () => {
-    socket.emit('create_room', { name, avatar }, error => {
-      if (error) {
-        console.log(error);
+    socket.emit('create_room', { name, avatar }, errors => {
+      if (errors) {
+        for (let error of errors) {
+          if (error.type === 'username') {
+            dispatch(homeActions.setUsernameError(t('error.' + error.message)));
+          }
+          if (error.type === 'room') {
+            dispatch(homeActions.setRoomError(t('error.' + error.message)));
+          }
+          if (error.type === 'avatar') {
+            dispatch(homeActions.setAvatarError(t('error.' + error.message)));
+          }
+        }
         return;
       }
 
@@ -122,6 +141,7 @@ export function Homepage({ match }) {
 
   return (
     <>
+      <Navbar />
       <UserCreationContainer
         variants={variants.container}
         initial="hidden"
@@ -141,7 +161,11 @@ export function Homepage({ match }) {
               value={name}
               onChange={setUsername}
               maxLength={20}
+              className={nameError.isHidden ? '' : 'has-error'}
             />
+            {!nameError.isHidden && (
+              <InputError>{nameError.message}</InputError>
+            )}
           </FlexColDiv>
           {avatar ? (
             <BigAvatar src={avatar} />
@@ -154,6 +178,7 @@ export function Homepage({ match }) {
           initial="hidden"
           animate="visible"
           exit="exit"
+          className={avatarError.isHidden ? '' : 'has-error'}
         >
           {avatars.map((entry, i) => {
             return (
@@ -170,6 +195,9 @@ export function Homepage({ match }) {
             );
           })}
         </AvatarSelectionContainer>
+        {!avatarError.isHidden && (
+          <InputError>{avatarError.message}</InputError>
+        )}
       </UserCreationContainer>
 
       {/* Bottom Panel for joining or creating a group */}
@@ -211,7 +239,9 @@ export function Homepage({ match }) {
   );
 }
 
-const UserCreationContainer = styled(motion.div)``;
+const UserCreationContainer = styled(motion.div)`
+  margin-bottom: 40px;
+`;
 
 const UsernameInput = styled.input`
   height: 58px;
@@ -244,6 +274,21 @@ const UsernameInput = styled.input`
   &::placeholder {
     color: #b6b6b6;
   }
+
+  &.has-error {
+    border-color: ${colors.input.error};
+  }
+`;
+
+const InputError = styled(motion.small)`
+  margin: 0;
+
+  font-size: 14px;
+  font-family: 'Basier';
+  font-weight: normal;
+  text-align: left;
+
+  color: #f32e2e;
 `;
 
 const BigAvatar = styled(motion.img)`
@@ -281,15 +326,19 @@ const AvatarSelectionContainer = styled(motion.div)`
   grid-gap: 24px 24px;
 
   padding: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 8px;
 
-  background-color: ${colors.basic.lightblue};
+  background: #faf9fa;
   border-radius: 16px;
 
   ${media.medium`
     grid-gap: 32px 48px;
     padding: 32px 40px;
   `}
+
+  &.has-error {
+    border: 2px solid ${colors.input.error};
+  }
 `;
 
 const AvatarImg = styled(motion.img)`
@@ -309,8 +358,7 @@ const AvatarImg = styled(motion.img)`
   `}
 
   &.selected {
-    box-shadow: 0px 8px 16px 0px rgba(12, 72, 163, 0.12);
-    opacity: 0.8;
+    border: 3px solid ${colors.brand.purple};
   }
 `;
 

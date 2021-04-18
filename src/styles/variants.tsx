@@ -99,8 +99,8 @@ export const variants = {
     },
   },
   modeTab: {
-    standard: {
-      left: '16px',
+    left: {
+      left: '14px',
       right: 'auto',
       transition: {
         type: 'spring',
@@ -109,8 +109,18 @@ export const variants = {
         stiffness: 100,
       },
     },
-    drinking: {
-      right: '16px',
+    center: {
+      left: 'auto',
+      right: 'auto',
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.3,
+        stiffness: 100,
+      },
+    },
+    right: {
+      right: '14px',
       left: 'auto',
       transition: {
         type: 'spring',
