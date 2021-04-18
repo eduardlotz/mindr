@@ -187,6 +187,7 @@ const NotAvailableBanner = styled(motion.div)`
   background-color: ${colors.tab.bgColor};
   border-radius: 12px;
 
+  font-family: 'Basier';
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

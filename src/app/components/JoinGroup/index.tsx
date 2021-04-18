@@ -75,13 +75,6 @@ export function JoinGroup(props: Props) {
     dispatch(homeActions.setRoomErrorHidden(true));
   };
 
-  // const onSubmitJoinGroup = evt => {
-  //   evt.preventDefault();
-  //   joinRoom(name, room, selectedAvatar);
-  //   dispatch(lobbyActions.setJoinedGroup(true));
-  //   history.push('/lobby');
-  // };
-
   return (
     <FlexColDiv>
       <Form onSubmit={handleSubmit}>

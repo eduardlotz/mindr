@@ -390,6 +390,7 @@ const UsersCounter = styled(motion.span)`
 `;
 
 const UsersCount = styled(motion.span)`
+  font-family: 'Basier';
   font-size: 32px;
   font-style: normal;
   font-weight: 800;
@@ -401,6 +402,7 @@ const UsersCount = styled(motion.span)`
 `;
 
 const MaxUsersCount = styled(motion.span)`
+  font-family: 'Basier';
   font-size: 16px;
   font-style: normal;
   font-weight: 800;
