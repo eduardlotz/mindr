@@ -23,7 +23,9 @@
       "normal": "normal",
       "long": "long"
     },
-    "min-user-info": "As soon as you are a group of four you are ready to go"
+    "min-user-info": "As soon as you are a group of four you are ready to go",
+    "activeGames": "Active games",
+    "notavailableGames": "Not available yet"
   },
   "help": {
     "whatismindr": "What is mindr?",

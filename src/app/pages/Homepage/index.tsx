@@ -100,6 +100,7 @@ export function Homepage({ match }) {
       }
 
       dispatch(lobbyActions.setJoinedGroup(true));
+      dispatch(lobbyActions.setIsCreator(true));
       history.push('/lobby');
     });
   };

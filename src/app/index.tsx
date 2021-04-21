@@ -23,7 +23,11 @@ import { Homepage } from './pages/Homepage/Loadable';
 import { useHomepageSlice } from './pages/Homepage/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { games } from './pages/Homepage/gamesModes';
-import { selectJoinedGroup } from './pages/Lobby/slice/selectors';
+import {
+  selectJoinedGroup,
+  selectIsCreator,
+} from './pages/Lobby/slice/selectors';
+import { JoinedRoom } from './pages/JoinedRoom';
 
 export function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,6 +40,7 @@ export function App() {
   const dispatch = useDispatch();
 
   const joinedGroup = useSelector(selectJoinedGroup);
+  const isCreator = useSelector(selectIsCreator);
 
   React.useEffect(() => {
     dispatch(homeActions.setGameModes(games));
@@ -60,7 +65,11 @@ export function App() {
           <Switch location={location} key={location.key}>
             <Route exact path="/" component={Homepage} />
             {joinedGroup ? (
-              <Route exact path="/lobby" component={Lobby} />
+              isCreator ? (
+                <Route exact path="/lobby" component={Lobby} />
+              ) : (
+                <Route exact path="/lobby" component={JoinedRoom} />
+              )
             ) : (
               <Redirect to="/" />
             )}

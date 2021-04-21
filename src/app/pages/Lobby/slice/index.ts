@@ -10,6 +10,9 @@ export const initialState: LobbyState = {
     avatar: '',
     room: '',
     joinedGroup: false,
+    isCreator: false,
+    sips: 0,
+    points: 0,
   },
   lobby: {
     groupCode: '',
@@ -22,6 +25,9 @@ export const initialState: LobbyState = {
         name: '',
         avatar: '',
         room: '',
+        points: 0,
+        sips: 0,
+        isCreator: false,
       },
     ],
   },
@@ -50,6 +56,11 @@ const slice = createSlice({
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
       state.user.joinedGroup = action.payload;
+    },
+    setIsCreator(state, action: PayloadAction<boolean>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.user.isCreator = action.payload;
     },
     setIsStandardMode(state, action: PayloadAction<boolean>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
