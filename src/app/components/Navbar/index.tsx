@@ -37,7 +37,7 @@ export function Navbar(props: Props) {
           animate="visible"
           exit="exit"
         >
-          <Logo color={colors.brand.blue} size={40} />
+          <Logo color={colors.brand.purple} size={40} />
         </MotionDiv>
       </Link>
 

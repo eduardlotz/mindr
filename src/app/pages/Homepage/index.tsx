@@ -60,7 +60,7 @@ export function Homepage({ match }) {
   });
 
   useEffect(() => {
-    socket.on('room', room => {
+    socket.on('joined_room', (room: string) => {
       dispatch(lobbyActions.setGroupCode(room));
     });
   });
