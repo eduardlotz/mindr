@@ -23,6 +23,10 @@ export const selectJoinedGroup = createSelector([selectSlice], state => {
   return state.user.joinedGroup;
 });
 
+export const selectIsCreator = createSelector([selectSlice], state => {
+  return state.user.isCreator;
+});
+
 export const selectIsStandardMode = createSelector([selectSlice], state => {
   return state.lobby.isStandardMode;
 });

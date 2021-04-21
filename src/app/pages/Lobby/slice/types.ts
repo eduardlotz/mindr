@@ -5,6 +5,9 @@ export interface LobbyState {
     avatar: string;
     room: string;
     joinedGroup: boolean;
+    isCreator: boolean;
+    points: number;
+    sips: number;
   };
   lobby: {
     groupCode: string;
@@ -20,4 +23,7 @@ export interface User {
   name: string;
   room: string;
   avatar: string;
+  isCreator: boolean;
+  points: number;
+  sips: number;
 }

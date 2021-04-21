@@ -127,6 +127,14 @@ export function Lobby(props: Props) {
                   exit="exit"
                 >
                   <UserAvatar src={user.avatar} />
+                  {user.isCreator && (
+                    <Icon
+                      name="star"
+                      height="24"
+                      width="24"
+                      style={{ marginRight: '8px' }}
+                    />
+                  )}
                   <Username>{user.name}</Username>
                 </JoinedUser>
               </AnimatePresence>
