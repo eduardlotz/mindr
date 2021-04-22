@@ -333,7 +333,7 @@ const GameModesContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: 16px;
+  grid-gap: 16px;
 
   ${media.medium`
     grid-template-columns: repeat(3, 1fr);

@@ -6,14 +6,13 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { H2, H3, Highlighted } from 'app/components/styled/Headers';
-import { AnimatePresence, motion } from 'framer-motion';
+import { H2, H3, H5, Highlighted } from 'app/components/styled/Headers';
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
 import { useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
-import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 import { media } from 'styles/media';
 import {
   selectIsStandardMode,
@@ -21,6 +20,7 @@ import {
   selectGameLength,
   selectUsersInRoom,
 } from '../Lobby/slice/selectors';
+import { GameImage } from 'app/components/GameImage';
 
 interface Props {}
 
@@ -33,6 +33,21 @@ export function JoinedRoom(props: Props) {
   const room = useSelector(selectGroupCode);
   const gameLength = useSelector(selectGameLength);
   const usersInRoom = useSelector(selectUsersInRoom);
+
+  const gameVariants = {
+    active: i => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        delay: 0.1 + i * 0.06,
+      },
+      transitionEnd: {
+        opacity: 'unset',
+      },
+    }),
+    hidden: { opacity: 0, scale: 0.9 },
+  };
 
   return (
     <LobbyContainer>
@@ -90,7 +105,23 @@ export function JoinedRoom(props: Props) {
             (mode, i) =>
               mode.isActive && (
                 <AnimatePresence key={`gamemode_${i}`}>
-                  <GameSelectCard mode={mode} index={i} />
+                  <AnimateSharedLayout>
+                    <CardContainer
+                      key={'game_select_card_' + i}
+                      custom={i}
+                      initial="hidden"
+                      animate={'active'}
+                      variants={gameVariants}
+                      layout
+                    >
+                      <GameImage
+                        color={colors.basic.black}
+                        size="92px"
+                        name={mode.imageClass}
+                      />
+                      <H5>{t(`gamemode.${mode.title}`)}</H5>
+                    </CardContainer>
+                  </AnimateSharedLayout>
                 </AnimatePresence>
               ),
           )}
@@ -101,14 +132,22 @@ export function JoinedRoom(props: Props) {
         initial="hidden"
         animate="visible"
         exit="exit"
+        layout
       >
         <H2>{t('room.notavailableGames')}</H2>
         <GameModesContainer>
           {gameModes.map(
             (mode, i) =>
-              !mode.isAvailable && (
-                <AnimatePresence key={`gamemode_${i}`}>
-                  <GameSelectCard mode={mode} index={i} />
+              (!mode.isAvailable || !mode.isActive) && (
+                <AnimatePresence key={`inactive_game_${i}`}>
+                  <InActiveGame
+                    custom={i}
+                    initial="hidden"
+                    animate={'active'}
+                    variants={gameVariants}
+                  >
+                    <H5 className="disabled">{t(`gamemode.${mode.title}`)}</H5>
+                  </InActiveGame>
                 </AnimatePresence>
               ),
           )}
@@ -123,15 +162,17 @@ export function JoinedRoom(props: Props) {
         <SettingsCard>
           <SettingsHeader>{t('room.gamemode')}</SettingsHeader>
           <SettingsText>
-            {isStandardMode ? t('room.standarmode') : t('room.drinkingmode')}
+            {isStandardMode ? t('room.standardmode') : t('room.drinkingmode')}
           </SettingsText>
         </SettingsCard>
 
         <SettingsCard>
-          <SettingsHeader>{t('room.gamelength')}</SettingsHeader>
+          <SettingsHeader>{t('room.gameduration')}</SettingsHeader>
           <SettingsText>{gameLength}</SettingsText>
         </SettingsCard>
       </DoubleContentBlock>
+
+      <BottomInfoText>{t('room.bottomInfoText')}</BottomInfoText>
     </LobbyContainer>
   );
 }
@@ -158,7 +199,7 @@ const SettingsHeader = styled(motion.h5)`
   line-height: 29px;
 
   text-align: center;
-  margin: 0 0 0 24px;
+  margin: 0 0 24px 0;
 
   color: #111111;
 `;
@@ -192,7 +233,7 @@ const GameModesContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: 16px;
+  grid-gap: 16px;
 
   ${media.medium`
      grid-template-columns: repeat(3, 1fr);
@@ -302,4 +343,47 @@ const JoinedUser = styled(motion.div)`
   padding: 0;
   align-items: center;
   justify-content: flex-start;
+`;
+
+const CardContainer = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  height: auto;
+  border-radius: 16px;
+
+  ${media.medium`
+    padding: 16px 32px;
+  `}
+
+  background: #faf9fa;
+`;
+
+const InActiveGame = styled(motion.div)`
+  width: 100%;
+  background: ${colors.basic.white};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  height: auto;
+  border-radius: 16px;
+  border: 2px solid ${colors.basic.lightgrey};
+`;
+
+const BottomInfoText = styled.h4`
+  font-family: 'Basier';
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+
+  margin: 0 auto;
+  text-align: center;
+  padding: 0;
+
+  color: ${colors.basic.black};
 `;

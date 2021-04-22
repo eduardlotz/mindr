@@ -65,6 +65,19 @@ export function Homepage({ match }) {
     });
   });
 
+  useEffect(() => {
+    socket.on('pick_game', (id: number) => {
+      dispatch(homeActions.enableGame(id));
+    });
+  });
+
+  useEffect(() => {
+    socket.on('remove_game', (id: number) => {
+      console.log(`deactivate game with id: ${id}`);
+      dispatch(homeActions.disableGame(id));
+    });
+  });
+
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(lobbyActions.setUsername(e.target.value));

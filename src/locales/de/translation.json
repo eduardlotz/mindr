@@ -25,8 +25,11 @@
       "long": "Lang"
     },
     "min-user-info": "Sobald ihr zu viert seid, kann es losgehen",
+    "gameduration": "Spieldauer",
+    "gamemode": "Spielmodus",
     "activeGames": "Aktivierte Spiele",
-    "notavailableGames": "Noch nicht verfügbar"
+    "notavailableGames": "Noch nicht verfügbar",
+    "bottomInfoText": "Es geht los wenn es los geht.."
   },
   "help": {
     "whatismindr": "Was ist mindr?",

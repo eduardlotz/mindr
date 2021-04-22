@@ -76,10 +76,11 @@ const slice = createSlice({
     setAvatarErrorHidden(state, action: PayloadAction<boolean>) {
       state.errors.avatar.isHidden = action.payload;
     },
-    toggleGameModeIsActive(state, action: PayloadAction<number>) {
-      state.gameModes[action.payload].isActive = !state.gameModes[
-        action.payload
-      ].isActive;
+    enableGame(state, action: PayloadAction<number>) {
+      state.gameModes[action.payload].isActive = true;
+    },
+    disableGame(state, action: PayloadAction<number>) {
+      state.gameModes[action.payload].isActive = false;
     },
   },
 });
