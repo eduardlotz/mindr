@@ -425,7 +425,7 @@ const MaxUsersCount = styled(motion.span)`
 const UsersList = styled(motion.div)`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 8px;
   grid-row-gap: 16px;
 
