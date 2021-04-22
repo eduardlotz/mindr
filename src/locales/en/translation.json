@@ -18,6 +18,7 @@
     "userlistheader": "Anyone else missing?",
     "room": "Room",
     "indevelopment": "In development",
+    "gameduration": "Game duration",
     "length": {
       "short": "short",
       "normal": "normal",
@@ -25,7 +26,9 @@
     },
     "min-user-info": "As soon as you are a group of four you are ready to go",
     "activeGames": "Active games",
-    "notavailableGames": "Not available yet"
+    "gamemode": "Game mode",
+    "notavailableGames": "Not available yet",
+    "bottomInfoText": "It starts when it starts..."
   },
   "help": {
     "whatismindr": "What is mindr?",

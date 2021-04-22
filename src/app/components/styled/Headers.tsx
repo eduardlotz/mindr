@@ -61,6 +61,10 @@ export const H5 = styled(motion.h5)`
   &.highlighted {
     color: ${colors.brand.purple};
   }
+
+  &.disabled {
+    opacity: 0.2;
+  }
 `;
 
 export const Highlighted = styled(motion.span)`

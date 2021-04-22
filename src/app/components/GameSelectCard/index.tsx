@@ -10,11 +10,10 @@ import { colors } from 'styles/colors';
 import { GameImage } from '../GameImage/Loadable';
 import { H5 } from '../styled/Headers';
 import { motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
 import { media } from 'styles/media';
 import { iGameMode } from 'app/pages/Homepage/slice/types';
-import { useHomepageSlice } from 'app/pages/Homepage/slice';
 import Icon from '../Icon';
+import { SocketContext } from 'app/socketContext';
 
 interface Props {
   mode: iGameMode;
@@ -25,9 +24,7 @@ export function GameSelectCard(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
-  const dispatch = useDispatch();
-
-  const { actions: homeActions } = useHomepageSlice();
+  const socket = React.useContext(SocketContext);
 
   const getGameModeCardState = mode => {
     if (!mode.isAvailable) return 'disabled';
@@ -35,7 +32,23 @@ export function GameSelectCard(props: Props) {
   };
 
   const handleGameModeClick = (mode, id) => {
-    if (mode.isAvailable) dispatch(homeActions.toggleGameModeIsActive(id));
+    if (mode.isAvailable) {
+      if (mode.isActive) {
+        socket.emit('remove_game', { id }, errors => {
+          if (errors) {
+            console.error(errors);
+            return;
+          }
+        });
+      } else {
+        socket.emit('pick_game', { id }, errors => {
+          if (errors) {
+            console.error(errors);
+            return;
+          }
+        });
+      }
+    }
   };
 
   const variants = {
