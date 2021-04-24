@@ -6,7 +6,6 @@
 import * as React from 'react';
 import styled, { useTheme } from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { colors } from 'styles/colors';
 import { GameImage } from '../GameImage/Loadable';
 import { H5 } from '../styled/Headers';
 import { motion } from 'framer-motion';

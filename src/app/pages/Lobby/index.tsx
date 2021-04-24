@@ -8,7 +8,6 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { H2, H3, Highlighted } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
-import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
 import { PrimaryFloatingButton } from 'app/components/Button';

@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { H2 } from 'app/components/styled/Headers';
 import { media } from 'styles/media';
-import { colors } from 'styles/colors';
 import { useModalSlice } from './slice';
 import { selectModal } from './slice/selectors';
 import Icon from '../Icon';
