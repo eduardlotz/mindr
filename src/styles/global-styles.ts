@@ -56,6 +56,10 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Basier Circle', Helvetica, Arial, sans-serif;
+    background: ${props => props.theme.mainBg};
+
+    transition: 0.25s ease-out;
+    transition-property: background-color;
   }
 
   #root {

@@ -186,7 +186,7 @@ const SettingsCard = styled(motion.div)`
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: #f8f7fd;
+  background: ${props => props.theme.container};
   border-radius: 16px;
   padding: 24px;
 `;
@@ -201,7 +201,7 @@ const SettingsHeader = styled(motion.h5)`
   text-align: center;
   margin: 0 0 24px 0;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
 `;
 
 const SettingsText = styled(motion.h4)`
@@ -214,7 +214,7 @@ const SettingsText = styled(motion.h4)`
 
   margin: 0;
 
-  color: #7f69d4;
+  color: ${props => props.theme.primary};
 `;
 
 const ContentBlock = styled(motion.div)`
@@ -241,7 +241,7 @@ const GameModesContainer = styled.div`
    `}
 
   margin: 16px 0 40px 0;
-  background-color: ${colors.basic.white};
+  background-color: transparent;
 `;
 
 const UserAvatar = styled.img`
@@ -265,7 +265,7 @@ const Username = styled.span`
   line-height: 23px;
   text-align: left;
 
-  color: ${colors.basic.black};
+  color: ${props => props.theme.mainContrastText};
 `;
 
 const InfoLine = styled.p`
@@ -277,7 +277,7 @@ const InfoLine = styled.p`
   text-align: left;
   margin: 0 0 16px 0;
 
-  color: ${colors.basic.textgrey};
+  color: ${props => props.theme.mainSubtleText};
 `;
 
 const InlineBlock = styled(motion.div)`
@@ -306,7 +306,7 @@ const UsersCount = styled(motion.span)`
   text-align: center;
   margin: 0 8px 0 0;
 
-  color: ${colors.basic.black};
+  color: ${props => props.theme.mainContrastText};
 `;
 
 const MaxUsersCount = styled(motion.span)`
@@ -319,7 +319,7 @@ const MaxUsersCount = styled(motion.span)`
   letter-spacing: 1px;
   opacity: 0.3;
 
-  color: ${colors.basic.darkgrey};
+  color: ${props => props.theme.primaryLight};
 `;
 
 const UsersList = styled(motion.div)`
@@ -359,7 +359,7 @@ const CardContainer = styled(motion.div)`
     padding: 16px 32px;
   `}
 
-  background: #faf9fa;
+  background: ${props => props.theme.container};
 `;
 
 const InActiveGame = styled(motion.div)`
@@ -371,7 +371,7 @@ const InActiveGame = styled(motion.div)`
   padding: 16px;
   height: auto;
   border-radius: 16px;
-  border: 2px solid ${colors.basic.lightgrey};
+  border: 2px solid ${props => props.theme.lightgrey};
 `;
 
 const BottomInfoText = styled.h4`
@@ -385,5 +385,5 @@ const BottomInfoText = styled.h4`
   text-align: center;
   padding: 0;
 
-  color: ${colors.basic.black};
+  color: ${props => props.theme.mainContrastText};
 `;

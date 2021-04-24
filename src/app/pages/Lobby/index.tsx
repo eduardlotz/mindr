@@ -262,8 +262,8 @@ const ModeSwitcher = styled(motion.div)`
   width: 100%;
   height: 90px;
 
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
+  background: transparent;
+  border: 2px solid ${props => props.theme.lightgrey};
   box-sizing: border-box;
   border-radius: 18px;
 
@@ -293,7 +293,7 @@ const ModeTab = styled(motion.button)`
   height: 100%;
   width: 100%;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
   background: none;
   border-radius: 16px;
   border: none;
@@ -301,7 +301,7 @@ const ModeTab = styled(motion.button)`
   transition: color 0.24s ease-in-out;
 
   &.is-active {
-    color: ${colors.tab.textColor};
+    color: ${props => props.theme.primaryContrast};
   }
 
   &:focus {
@@ -316,7 +316,7 @@ const ModeTabActiveIndicator = styled(motion.span)`
   width: 48%;
 
   border-radius: 16px;
-  background-color: ${colors.tab.bgColor};
+  background-color: ${props => props.theme.primary};
 
   &.short {
     width: 32%;
@@ -341,7 +341,7 @@ const GameModesContainer = styled.div`
   `}
 
   margin: 16px 0 40px 0;
-  background-color: ${colors.basic.white};
+  background-color: transparent;
 `;
 
 const UserAvatar = styled.img`
@@ -365,7 +365,7 @@ const Username = styled.span`
   line-height: 23px;
   text-align: left;
 
-  color: ${colors.basic.black};
+  color: ${props => props.theme.mainContrastText};
 `;
 
 const InfoLine = styled.p`
@@ -377,7 +377,7 @@ const InfoLine = styled.p`
   text-align: left;
   margin: 0 0 16px 0;
 
-  color: ${colors.basic.textgrey};
+  color: ${props => props.theme.mainSubtleText};
 `;
 
 const InlineBlock = styled(motion.div)`
@@ -406,7 +406,7 @@ const UsersCount = styled(motion.span)`
   text-align: center;
   margin: 0 8px 0 0;
 
-  color: ${colors.basic.black};
+  color: ${props => props.theme.mainContrastText};
 `;
 
 const MaxUsersCount = styled(motion.span)`
@@ -419,7 +419,7 @@ const MaxUsersCount = styled(motion.span)`
   letter-spacing: 1px;
   opacity: 0.3;
 
-  color: ${colors.basic.darkgrey};
+  color: ${props => props.theme.primaryLight};
 `;
 
 const UsersList = styled(motion.div)`

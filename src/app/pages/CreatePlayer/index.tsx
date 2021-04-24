@@ -222,6 +222,8 @@ const BigAvatar = styled.img`
   height: 100%;
   width: 116px;
   margin: 40px 0 0 0;
+  background-color: ${props => props.theme.mainBg};
+  border-radius: 50%;
 `;
 
 const BigAvatarEmpty = styled(motion.div)`
@@ -231,7 +233,7 @@ const BigAvatarEmpty = styled(motion.div)`
 
   border-radius: 50%;
 
-  background-color: ${colors.basic.lightgrey};
+  background-color: ${props => props.theme.mainBg};
 `;
 
 const UserContainer = styled(motion.div)`

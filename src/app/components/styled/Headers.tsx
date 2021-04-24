@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components/macro';
-import { colors } from 'styles/colors';
 
 export const H1 = styled(motion.h1)`
   width: 100%;
@@ -12,7 +11,7 @@ export const H1 = styled(motion.h1)`
   font-size: 38px;
   line-height: 50px;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
 `;
 
 export const H2 = styled(motion.h2)`
@@ -23,7 +22,7 @@ export const H2 = styled(motion.h2)`
   font-size: 32px;
   line-height: 42px;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
 
   &.margin-clear {
     margin: 0;
@@ -38,7 +37,7 @@ export const H3 = styled(motion.h3)`
   font-size: 26px;
   line-height: 34px;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
 
   &.margin-clear {
     margin: 0;
@@ -56,10 +55,10 @@ export const H5 = styled(motion.h5)`
 
   z-index: 10;
 
-  color: #111111;
+  color: ${props => props.theme.mainContrastText};
 
   &.highlighted {
-    color: ${colors.brand.purple};
+    color: ${props => props.theme.primary};
   }
 
   &.disabled {
@@ -68,5 +67,5 @@ export const H5 = styled(motion.h5)`
 `;
 
 export const Highlighted = styled(motion.span)`
-  color: ${colors.brand.purple};
+  color: ${props => props.theme.primary};
 `;

@@ -26,8 +26,8 @@ export const colors = {
     textColor: '#7F69D4',
   },
   btn: {
-    bgDisabled: '#eeeeee',
-    textDisabled: '#DBDBDB',
+    bgDisabled: '#111111',
+    textDisabled: '#111111',
   },
 };
 

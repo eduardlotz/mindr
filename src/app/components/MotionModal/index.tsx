@@ -12,6 +12,7 @@ import { media } from 'styles/media';
 import { colors } from 'styles/colors';
 import { useModalSlice } from './slice';
 import { selectModal } from './slice/selectors';
+import Icon from '../Icon';
 
 interface Props {}
 
@@ -84,7 +85,9 @@ export function MotionModal(props: Props) {
               },
             }}
           >
-            <CloseButton onClick={closeModal}></CloseButton>
+            <CloseButton onClick={closeModal}>
+              <Icon name="close" width="24" />
+            </CloseButton>
             <H2>{modal.title}</H2>
             {modal.content}
           </Body>
@@ -105,14 +108,13 @@ const CloseButton = styled(motion.button)`
   border: none;
 
   display: flex;
-  object-fit: contain;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  align-items: center;
+  justify-content: center;
 
   cursor: pointer;
 
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.0662 8.99469C16.3591 8.70179 16.3591 8.22692 16.0662 7.93403C15.7733 7.64113 15.2985 7.64113 15.0056 7.93403L12.0004 10.9392L8.99518 7.93403C8.70229 7.64113 8.22742 7.64113 7.93452 7.93403C7.64163 8.22692 7.64163 8.70179 7.93452 8.99469L10.9397 11.9999L7.93451 15.0051C7.64162 15.298 7.64162 15.7729 7.93451 16.0658C8.22741 16.3586 8.70228 16.3586 8.99517 16.0658L12.0004 13.0605L15.0056 16.0658C15.2985 16.3586 15.7734 16.3586 16.0663 16.0658C16.3591 15.7729 16.3591 15.298 16.0663 15.0051L13.061 11.9999L16.0662 8.99469Z' fill='%23111111'/%3E%3C/svg%3E%0A");
+  background-color: ${props => props.theme.container};
+  color: ${props => props.theme.containerContrast};
 `;
 
 const Body = styled(motion.div)`
@@ -138,7 +140,7 @@ const Body = styled(motion.div)`
 
   padding: 24px 40px;
 
-  background: ${colors.basic.white};
+  background: ${props => props.theme.mainBg};
   border-radius: 12px;
 
   z-index: 9000;
@@ -152,7 +154,7 @@ const Background = styled(motion.div)`
   height: 100vh;
   width: 100%;
 
-  background-color: ${colors.basic.almostblack};
+  background-color: ${props => props.theme.container};
   opacity: 0;
 
   z-index: 8000;

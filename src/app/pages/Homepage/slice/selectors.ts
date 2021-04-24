@@ -6,6 +6,7 @@ import { initialState } from '.';
 const selectSlice = (state: RootState) => state.home || initialState;
 
 export const selectHomepage = createSelector([selectSlice], state => state);
+export const selectTheme = createSelector([selectSlice], state => state.theme);
 export const selectModal = createSelector([selectSlice], state => state.modal);
 export const selectUsernameError = createSelector(
   [selectSlice],

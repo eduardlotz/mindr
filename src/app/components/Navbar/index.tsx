@@ -3,21 +3,24 @@
  * Navbar
  *
  */
+
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import { colors } from 'styles/colors';
+import styled, { useTheme } from 'styled-components/macro';
 import { variants } from 'styles/variants';
-import Icon from '../Icon';
+import { HelpLink } from '../HelpLink';
 import { Logo } from '../Logo';
+import { ThemeSwitcher } from '../ThemeSwitcher';
 
 interface Props {}
 
 export function Navbar(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
+
+  const theme = useTheme();
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'de' : 'en');
@@ -30,6 +33,8 @@ export function Navbar(props: Props) {
       animate="visible"
       exit="exit"
     >
+      <HelpLink />
+
       <Link to="/">
         <MotionDiv
           variants={variants.popUp}
@@ -37,7 +42,7 @@ export function Navbar(props: Props) {
           animate="visible"
           exit="exit"
         >
-          <Logo color={colors.brand.purple} size={40} />
+          <Logo color={theme.primary} size={64} />
         </MotionDiv>
       </Link>
 
@@ -55,12 +60,7 @@ export function Navbar(props: Props) {
             EN
           </Language>
         </LanguageSwitcher>
-        <MotionDiv
-          whileHover={{ scale: 1.1, rotate: -5 }}
-          whileTap={{ scale: 1.3 }}
-        >
-          <Icon name="sun" fill={colors.brand.purple} height="24" width="24" />
-        </MotionDiv>
+        <ThemeSwitcher />
       </FlexRowDiv>
     </Container>
   );
@@ -70,7 +70,6 @@ const MotionDiv = styled(motion.div)``;
 
 const Container = styled(motion.div)`
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.95);
   width: calc(100% - 32px);
   max-width: 800px;
   display: flex;
@@ -90,7 +89,9 @@ const LanguageSwitcher = styled(motion.button)`
   flex-direction: row;
   margin-right: 16px;
   border: none;
-  background: transparent;
+  background: ${props => props.theme.primaryFaded};
+  padding: 8px;
+  border-radius: 10px;
 
   font-family: 'Basier';
   font-style: normal;
@@ -102,7 +103,10 @@ const LanguageSwitcher = styled(motion.button)`
 
   cursor: pointer;
 
-  color: #dfd9f4;
+  color: ${props => props.theme.primaryLight};
+
+  transition: 0.25s ease-out;
+  transition-property: color;
 
   &:focus {
     border: none;
@@ -119,10 +123,13 @@ const Language = styled.p`
   display: flex;
   align-items: center;
 
-  color: #dfd9f4;
+  color: ${props => props.theme.primaryLight};
+
+  transition: 0.25s ease-out;
+  transition-property: color;
 
   &.is-active {
-    color: ${colors.brand.purple};
+    color: ${props => props.theme.primary};
   }
 
   &:first-child {

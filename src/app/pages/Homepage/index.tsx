@@ -9,7 +9,6 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { H2 } from 'app/components/styled/Headers';
-import { colors } from 'styles/colors';
 import { LinkButton, SecondaryButton } from 'app/components/Button';
 import { JoinGroup } from 'app/components/JoinGroup';
 
@@ -265,9 +264,9 @@ const UsernameInput = styled.input`
   margin-right: 16px;
 
   background: transparent;
-  border: 2px solid ${colors.basic.lightgrey};
+  border: 2px solid ${props => props.theme.lightgrey};
   border-radius: 16px;
-  color: ${colors.basic.almostblack};
+  color: ${props => props.theme.mainContrastText};
 
   font-family: 'Basier';
   font-style: normal;
@@ -277,20 +276,21 @@ const UsernameInput = styled.input`
   text-align: left;
   letter-spacing: 0.4px;
 
-  transition: border-color 0.25s ease-out;
+  transition: 0.25s ease-out;
+  transition-property: border-color color;
 
   &:focus,
   &:hover {
     outline: none;
-    border-color: ${colors.input.borderFocus};
+    border-color: ${props => props.theme.primary};
   }
 
   &::placeholder {
-    color: #b6b6b6;
+    color: ${props => props.theme.grey};
   }
 
   &.has-error {
-    border-color: ${colors.input.error};
+    border-color: ${props => props.theme.error};
   }
 `;
 
@@ -302,13 +302,15 @@ const InputError = styled(motion.small)`
   font-weight: normal;
   text-align: left;
 
-  color: #f32e2e;
+  color: ${props => props.theme.error};
 `;
 
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
   margin: 24px 0;
+  background-color: transparent;
+  border-radius: 50%;
 
   ${media.medium`
     margin: 0;
@@ -342,8 +344,11 @@ const AvatarSelectionContainer = styled(motion.div)`
   padding: 24px;
   margin-bottom: 8px;
 
-  background: #faf9fa;
+  background: ${props => props.theme.container};
   border-radius: 16px;
+
+  transition: 0.25s ease-out;
+  transition-property: background-color;
 
   ${media.medium`
     grid-gap: 32px 48px;
@@ -351,7 +356,7 @@ const AvatarSelectionContainer = styled(motion.div)`
   `}
 
   &.has-error {
-    border: 2px solid ${colors.input.error};
+    border: 2px solid ${props => props.theme.error};
   }
 `;
 
@@ -364,6 +369,8 @@ const AvatarImg = styled(motion.img)`
   border-radius: 50%;
   object-fit: contain;
   background-size: 100% 100%;
+  transition: 0.25s ease-out;
+  transition-property: border;
 
   cursor: pointer;
   ${media.medium`
@@ -372,7 +379,7 @@ const AvatarImg = styled(motion.img)`
   `}
 
   &.selected {
-    border: 3px solid ${colors.brand.purple};
+    border: 3px solid ${props => props.theme.primary};
   }
 `;
 
@@ -395,7 +402,6 @@ const StartGameContainer = styled(motion.div)`
   padding: 0;
   display: flex;
   flex-direction: column;
-  background-color: ${colors.basic.white};
 
   justify-content: center;
 `;

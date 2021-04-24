@@ -25,7 +25,6 @@ import { configureAppStore } from 'store/configureStore';
 import reportWebVitals from 'reportWebVitals';
 
 import { BrowserRouter } from 'react-router-dom';
-
 // Initialize languages
 import './locales/i18n';
 import { SocketProvider } from 'app/socketContext';

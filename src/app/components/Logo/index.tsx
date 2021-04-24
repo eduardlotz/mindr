@@ -5,6 +5,7 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
+import lightTheme from 'styles/lightTheme';
 
 interface Props {
   size?: number;
@@ -25,22 +26,22 @@ export function Logo(props: Props) {
           rx="9.41131"
           ry="10.5591"
           transform="matrix(0.988302 0.145397 -0.140706 0.991089 39.1546 40.7777)"
-          fill={props.color ? props.color : '#4A8CEF'}
+          fill={props.color ? props.color : lightTheme.primary}
         />
         <ellipse
           rx="9.41102"
           ry="10.5594"
           transform="matrix(0.987047 0.154189 -0.149206 0.989769 100.942 46.0195)"
-          fill={props.color ? props.color : '#4A8CEF'}
+          fill={props.color ? props.color : lightTheme.primary}
         />
         <path
           d="M36.9404 96.2808C35.2006 111.508 57.5132 124.984 83.9475 114.183"
-          stroke={props.color ? props.color : '#4A8CEF'}
+          stroke={props.color ? props.color : lightTheme.primary}
           strokeWidth="8"
         />
         <path
           d="M68.7054 57.3853C67.21 69.7828 72.1245 80.2847 72.1245 80.2847C72.1245 80.2847 68.4389 85.2174 59.9535 82.359"
-          stroke={props.color ? props.color : '#4A8CEF'}
+          stroke={props.color ? props.color : lightTheme.primary}
           strokeWidth="8"
         />
       </svg>
@@ -51,7 +52,7 @@ export function Logo(props: Props) {
         <Text
           style={{
             color: props.color,
-            fontSize: (props.size ? props.size * 0.325 : 26) + 'px',
+            fontSize: (props.size ? props.size * 0.375 : 26) + 'px',
           }}
         >
           mindr

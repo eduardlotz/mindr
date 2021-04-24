@@ -4,7 +4,7 @@
  *
  */
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { useTheme } from 'styled-components/macro';
 import { media } from 'styles/media';
 
 interface Props {
@@ -15,6 +15,7 @@ interface Props {
 }
 
 export function GameImage(props: Props) {
+  const theme = useTheme();
   return (
     <Image
       className={props.name}
@@ -22,7 +23,7 @@ export function GameImage(props: Props) {
         height: props.size ? props.size : '128px',
         opacity: props.opacity ? props.opacity : '1',
       }}
-      color={props.color ? props.color : '#111111'}
+      color={props.color ? props.color : theme.containerContrast}
     ></Image>
   );
 }

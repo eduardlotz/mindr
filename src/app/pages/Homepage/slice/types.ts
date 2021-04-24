@@ -12,6 +12,7 @@ export interface HomepageState {
     room: iInputError;
     avatar: iInputError;
   };
+  theme: string;
 }
 
 export interface iGameMode {

@@ -51,7 +51,7 @@ export function StickyBottomActions(props: Props) {
       animate="visible"
       exit="exit"
     >
-      <SecondaryButton style={{ width: '40%', marginRight: "16px" }}>
+      <SecondaryButton style={{ width: '40%', marginRight: '16px' }}>
         {t('home.backtohome')}
       </SecondaryButton>
       <PrimaryButton

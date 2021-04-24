@@ -4,7 +4,7 @@
  *
  */
 import * as React from 'react';
-import styled from 'styled-components/macro';
+import styled, { useTheme } from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { colors } from 'styles/colors';
 import { GameImage } from '../GameImage/Loadable';
@@ -23,6 +23,8 @@ interface Props {
 export function GameSelectCard(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
+
+  const theme = useTheme();
 
   const socket = React.useContext(SocketContext);
 
@@ -82,14 +84,14 @@ export function GameSelectCard(props: Props) {
           width="24"
           height="24"
           name={props.mode.isActive ? 'circle-checked' : 'circle-unchecked'}
-          fill={colors.brand.purple}
+          fill={theme.containerContrast}
         />
       )}
       {!props.mode.isAvailable && (
         <NotAvailableBanner>{t('room.indevelopment')}</NotAvailableBanner>
       )}
       <GameImage
-        color={props.mode.isActive ? colors.brand.purple : colors.basic.black}
+        color={theme.containerContrast}
         size="92px"
         name={props.mode.imageClass}
         opacity={props.mode.isAvailable ? '1' : '0.2'}
@@ -127,7 +129,7 @@ const CardContainer = styled(motion.div)`
     padding: 16px 32px;
   `}
 
-  background: ${colors.basic.white};
+  background: transparent;
   border: none;
   transition: border-color 0.25s ease-out;
   cursor: pointer;
@@ -151,7 +153,7 @@ const CardContainer = styled(motion.div)`
     width: 100%;
     height: 100%;
 
-    background: white;
+    background: ${props => props.theme.mainBg};
     border-radius: 16px;
 
     transition: 0.24s ease-in-out;
@@ -177,7 +179,7 @@ const CardContainer = styled(motion.div)`
       right: 0;
       bottom: 0;
       margin: 0 auto;
-      background: #faf9fa;
+      background: ${props => props.theme.container};
     }
   }
 `;
@@ -197,7 +199,7 @@ const NotAvailableBanner = styled(motion.div)`
   width: 150px;
   height: 49px;
 
-  background-color: ${colors.tab.bgColor};
+  background-color: ${props => props.theme.primaryFaded};
   border-radius: 12px;
 
   font-family: 'Basier';
@@ -210,5 +212,5 @@ const NotAvailableBanner = styled(motion.div)`
   display: flex;
   align-items: center;
 
-  color: ${colors.brand.purple};
+  color: ${props => props.theme.primary};
 `;

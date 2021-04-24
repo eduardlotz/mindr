@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components/macro';
-import { colors } from 'styles/colors';
 import { media } from 'styles/media';
 
 export const Button = styled(motion.button)`
@@ -24,11 +23,14 @@ export const Button = styled(motion.button)`
 `;
 
 export const PrimaryButton = styled(Button)`
-  color: ${colors.basic.white};
-  background: ${colors.brand.purple};
+  color: ${props => props.theme.primaryContrast};
+  background: ${props => props.theme.primary};
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
+
+  transition: 0.25s ease-out;
+  transition-property: background-color color;
 
   &.icon-right {
     & > svg {
@@ -49,8 +51,8 @@ export const PrimaryButton = styled(Button)`
   }
 
   &:disabled {
-    background-color: ${colors.btn.bgDisabled};
-    color: ${colors.btn.textDisabled};
+    background-color: ${props => props.theme.mutedBg};
+    color: ${props => props.theme.mutedContrast};
   }
 `;
 
@@ -65,8 +67,11 @@ export const SecondaryButton = styled(Button)`
   padding: 16px;
 
   background: transparent;
-  border: 2px solid ${colors.basic.lightgrey};
-  color: ${colors.basic.almostblack};
+  border: 2px solid ${props => props.theme.mainSubtleText};
+  color: ${props => props.theme.mainContrastText};
+
+  transition: 0.25s ease-out;
+  transition-property: color border-color;
 
   font-family: 'Basier';
   font-style: normal;
@@ -92,7 +97,10 @@ export const LinkButton = styled(motion.button)`
 
   cursor: pointer;
 
-  color: ${colors.brand.purple};
+  color: ${props => props.theme.primary};
+
+  transition: 0.25s ease-out;
+  transition-property: color;
 
   margin: 16px 0;
 
@@ -114,8 +122,10 @@ export const PrimaryFloatingButton = styled(PrimaryButton)`
   margin: 0 auto;
   max-width: 800px;
   width: calc(100% - 32px);
-  box-shadow: 0px 2.0370371341705322px 2.6888887882232666px 0px
-      rgba(37, 67, 115, 0.0196),
-    0px 9.629630088806152px 10.51111125946045px 0px rgba(37, 67, 115, 0.0304),
-    0px 25px 33px 0px rgba(37, 67, 115, 0.05);
+  &:not(:disabled) {
+    box-shadow: ${props => props.theme.btnShadow};
+  }
+
+  transition: 0.25s ease-out;
+  transition-property: box-shadow;
 `;

@@ -34,12 +34,18 @@ export const initialState: HomepageState = {
       isHidden: true,
     },
   },
+  theme: 'light',
 };
 
 const slice = createSlice({
   name: 'home',
   initialState,
   reducers: {
+    setTheme(state, action: PayloadAction<string>) {
+      // Here we say lets change the username in my Homepage state when changeUsername actions fires
+      // Type-safe: It will expect `string` when firing the action. ✅
+      state.theme = action.payload;
+    },
     setModalOpen(state, action: PayloadAction<boolean>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅

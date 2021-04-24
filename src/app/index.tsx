@@ -16,10 +16,11 @@ import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Help } from './pages/Help/Loadable';
-import styled from 'styled-components/macro';
+import styled, { ThemeProvider } from 'styled-components/macro';
 import { MotionModal } from './components/MotionModal';
 import { Lobby } from './pages/Lobby/Loadable';
 import { Homepage } from './pages/Homepage/Loadable';
+
 import { useHomepageSlice } from './pages/Homepage/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { games } from './pages/Homepage/gamesModes';
@@ -28,6 +29,10 @@ import {
   selectIsCreator,
 } from './pages/Lobby/slice/selectors';
 import { JoinedRoom } from './pages/JoinedRoom';
+import { getLocalStorage, setLocalStorage } from 'helpers/localstorage';
+import { selectTheme } from './pages/Homepage/slice/selectors';
+import lightTheme from 'styles/lightTheme';
+import darkTheme from 'styles/darkTheme';
 
 export function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,8 +47,22 @@ export function App() {
   const joinedGroup = useSelector(selectJoinedGroup);
   const isCreator = useSelector(selectIsCreator);
 
+  const currentTheme = useSelector(selectTheme);
+
+  const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+
   React.useEffect(() => {
     dispatch(homeActions.setGameModes(games));
+  }, [dispatch, homeActions]);
+
+  React.useEffect(() => {
+    let selectedTheme = getLocalStorage('theme');
+
+    if (!selectedTheme) {
+      selectedTheme = 'light';
+      setLocalStorage('theme', 'light');
+    }
+    dispatch(homeActions.setTheme(selectedTheme));
   }, [dispatch, homeActions]);
 
   return (
@@ -58,27 +77,28 @@ export function App() {
           content="mindr is an online party game made for social distancing"
         />
       </Helmet>
-
-      <MainContainer>
-        <MotionModal />
-        <AnimatePresence exitBeforeEnter>
-          <Switch location={location} key={location.key}>
-            <Route exact path="/" component={Homepage} />
-            {joinedGroup ? (
-              isCreator ? (
-                <Route exact path="/lobby" component={Lobby} />
+      <ThemeProvider theme={theme}>
+        <MainContainer>
+          <MotionModal />
+          <AnimatePresence exitBeforeEnter>
+            <Switch location={location} key={location.key}>
+              <Route exact path="/" component={Homepage} />
+              {joinedGroup ? (
+                isCreator ? (
+                  <Route exact path="/lobby" component={Lobby} />
+                ) : (
+                  <Route exact path="/lobby" component={JoinedRoom} />
+                )
               ) : (
-                <Route exact path="/lobby" component={JoinedRoom} />
-              )
-            ) : (
-              <Redirect to="/" />
-            )}
-            <Route exact path="/help" component={Help} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </AnimatePresence>
-      </MainContainer>
-      <GlobalStyle />
+                <Redirect to="/" />
+              )}
+              <Route exact path="/help" component={Help} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </AnimatePresence>
+        </MainContainer>
+        <GlobalStyle />
+      </ThemeProvider>
     </>
   );
 }
@@ -89,6 +109,7 @@ const MainContainer = styled(motion.div)`
   width: calc(100% - 32px);
   max-width: 800px;
   margin: 0 auto;
+  background: transparent;
 
   padding-bottom: 20px;
 `;

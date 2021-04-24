@@ -124,7 +124,7 @@ const InputError = styled(motion.small)`
   font-weight: normal;
   text-align: left;
 
-  color: ${colors.input.error};
+  color: ${props => props.theme.error};
 `;
 
 const GroupCode = styled.input`
@@ -145,9 +145,9 @@ const GroupCode = styled.input`
   line-height: 26px;
 
   background: transparent;
-  border: 2px solid ${colors.basic.lightgrey};
+  border: 2px solid ${props => props.theme.lightgrey};
   border-radius: 16px;
-  color: ${colors.basic.almostblack};
+  color: ${props => props.theme.mainContrastText};
 
   letter-spacing: 10px;
 
@@ -156,14 +156,14 @@ const GroupCode = styled.input`
   &:focus,
   &:hover {
     outline: none;
-    border-color: ${colors.input.borderFocus};
+    border-color: ${props => props.theme.primaryContrast};
   }
 
   &::placeholder {
-    color: #b6b6b6;
+    color: ${props => props.theme.lightgrey};
   }
 
   &.has-error {
-    border-color: ${colors.input.error};
+    border-color: ${props => props.theme.error};
   }
 `;
