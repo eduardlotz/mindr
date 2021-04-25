@@ -84,8 +84,10 @@ const slice = createSlice({
     },
     enableGame(state, action: PayloadAction<number>) {
       state.gameModes[action.payload].isActive = true;
+      console.log('reduxstore-- enable game :' + action.payload);
     },
     disableGame(state, action: PayloadAction<number>) {
+      console.log('reduxstore-- disable game :' + action.payload);
       state.gameModes[action.payload].isActive = false;
     },
   },

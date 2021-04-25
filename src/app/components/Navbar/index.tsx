@@ -49,14 +49,29 @@ export function Navbar(props: Props) {
       <FlexRowDiv>
         <LanguageSwitcher
           onClick={toggleLanguage}
-          whileHover={{ scale: 1.1, rotate: -5 }}
-          whileTap={{ scale: 1.3 }}
+          variants={variants.iconButtonVariants}
+          initial="rest"
+          whileTap="pressed"
+          whileHover="hover"
+          data-tip={t('home.toggleLanguage')}
+          data-effect="solid"
+          data-arrow-color="transparent"
         >
-          <Language className={i18n.language === 'de' ? 'is-active' : ''}>
+          <Language
+            className={i18n.language === 'de' ? 'is-active' : ''}
+            initial="rest"
+            whileTap="pressed"
+            whileHover="hover"
+          >
             DE
           </Language>
           /
-          <Language className={i18n.language === 'en' ? 'is-active' : ''}>
+          <Language
+            className={i18n.language === 'en' ? 'is-active' : ''}
+            initial="rest"
+            whileTap="pressed"
+            whileHover="hover"
+          >
             EN
           </Language>
         </LanguageSwitcher>
@@ -70,7 +85,7 @@ const MotionDiv = styled(motion.div)``;
 
 const Container = styled(motion.div)`
   margin: 0 auto;
-  width: calc(100% - 32px);
+  width: 100%;
   max-width: 800px;
   display: flex;
   align-items: center;
@@ -89,7 +104,7 @@ const LanguageSwitcher = styled(motion.button)`
   flex-direction: row;
   margin-right: 16px;
   border: none;
-  background: ${props => props.theme.primaryFaded};
+  background: ${props => props.theme.container};
   padding: 8px;
   border-radius: 10px;
 
@@ -103,7 +118,7 @@ const LanguageSwitcher = styled(motion.button)`
 
   cursor: pointer;
 
-  color: ${props => props.theme.primaryLight};
+  color: ${props => props.theme.containerSubtleText};
 
   transition: 0.25s ease-out;
   transition-property: color;
@@ -114,7 +129,7 @@ const LanguageSwitcher = styled(motion.button)`
   }
 `;
 
-const Language = styled.p`
+const Language = styled(motion.p)`
   font-family: 'Basier';
   font-style: normal;
   font-weight: 600;
@@ -123,13 +138,13 @@ const Language = styled.p`
   display: flex;
   align-items: center;
 
-  color: ${props => props.theme.primaryLight};
+  color: ${props => props.theme.containerSubtleText};
 
   transition: 0.25s ease-out;
   transition-property: color;
 
   &.is-active {
-    color: ${props => props.theme.primary};
+    color: ${props => props.theme.containerContrast};
   }
 
   &:first-child {

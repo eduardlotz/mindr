@@ -6,7 +6,7 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { H2, H3, H5, Highlighted } from 'app/components/styled/Headers';
+import { H2, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
@@ -16,11 +16,11 @@ import { selectGameModes } from '../Homepage/slice/selectors';
 import { media } from 'styles/media';
 import {
   selectIsStandardMode,
-  selectGroupCode,
   selectGameLength,
   selectUsersInRoom,
 } from '../Lobby/slice/selectors';
 import { GameImage } from 'app/components/GameImage';
+import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 
 interface Props {}
 
@@ -30,7 +30,6 @@ export function JoinedRoom(props: Props) {
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
-  const room = useSelector(selectGroupCode);
   const gameLength = useSelector(selectGameLength);
   const usersInRoom = useSelector(selectUsersInRoom);
 
@@ -51,6 +50,7 @@ export function JoinedRoom(props: Props) {
 
   return (
     <LobbyContainer>
+      <RoomTopBar />
       <ContentBlock
         variants={variants.slideUp}
         initial="hidden"
@@ -58,15 +58,12 @@ export function JoinedRoom(props: Props) {
         exit="exit"
       >
         <InlineBlock style={{ margin: 0 }}>
-          <H3 style={{ maxWidth: '50%', margin: 0 }}>
-            {t('room.room')} <Highlighted>{room}</Highlighted>
-          </H3>
+          <InfoLine>{t('room.min-user-info')}</InfoLine>
           <UsersCounter>
             <UsersCount>{usersInRoom.length}</UsersCount>
             <MaxUsersCount>/10</MaxUsersCount>
           </UsersCounter>
         </InlineBlock>
-        <InfoLine>{t('room.min-user-info')}</InfoLine>
         <UsersList>
           {usersInRoom.map(user => {
             return (
@@ -364,7 +361,7 @@ const CardContainer = styled(motion.div)`
 
 const InActiveGame = styled(motion.div)`
   width: 100%;
-  background: ${colors.basic.white};
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;

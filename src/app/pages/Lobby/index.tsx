@@ -6,7 +6,7 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { H2, H3, Highlighted } from 'app/components/styled/Headers';
+import { H2 } from 'app/components/styled/Headers';
 import { AnimatePresence, motion } from 'framer-motion';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
@@ -15,13 +15,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useLobbySlice } from './slice';
 import {
-  selectGroupCode,
   selectIsStandardMode,
   selectUsersInRoom,
   selectGameLength,
 } from './slice/selectors';
 import { media } from 'styles/media';
 import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
+import { SocketContext } from 'app/socketContext';
+import { useEffect } from 'react';
+import { useHomepageSlice } from '../Homepage/slice';
+import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 
 interface Props {}
 
@@ -31,11 +34,13 @@ export function Lobby(props: Props) {
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
-  const room = useSelector(selectGroupCode);
   const gameLength = useSelector(selectGameLength);
   const usersInRoom = useSelector(selectUsersInRoom);
 
+  const { actions: homeActions } = useHomepageSlice();
   const { actions: lobbyActions } = useLobbySlice();
+
+  const socket = React.useContext(SocketContext);
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
@@ -53,6 +58,20 @@ export function Lobby(props: Props) {
   };
 
   const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
+
+  useEffect(() => {
+    socket.on('pick_game', (id: number) => {
+      console.log(`socket-- pick game with id: ${id}`);
+      dispatch(homeActions.enableGame(id));
+    });
+  });
+
+  useEffect(() => {
+    socket.on('remove_game', (id: number) => {
+      console.log(`socket--  remove game with id: ${id}`);
+      dispatch(homeActions.disableGame(id));
+    });
+  });
 
   const floatingBtnVariants = {
     hidden: {
@@ -97,8 +116,29 @@ export function Lobby(props: Props) {
     return position as string;
   };
 
+  const handleGameModeClick = (mode, id) => {
+    if (mode.isAvailable) {
+      if (mode.isActive) {
+        socket.emit('remove_game', { id }, errors => {
+          if (errors) {
+            console.error(errors);
+            return;
+          }
+        });
+      } else {
+        socket.emit('pick_game', { id }, errors => {
+          if (errors) {
+            console.error(errors);
+            return;
+          }
+        });
+      }
+    }
+  };
+
   return (
     <LobbyContainer>
+      <RoomTopBar />
       <ContentBlock
         variants={variants.slideUp}
         initial="hidden"
@@ -106,15 +146,12 @@ export function Lobby(props: Props) {
         exit="exit"
       >
         <InlineBlock style={{ margin: 0 }}>
-          <H3 style={{ maxWidth: '50%', margin: 0 }}>
-            {t('room.room')} <Highlighted>{room}</Highlighted>
-          </H3>
+          <InfoLine>{t('room.min-user-info')}</InfoLine>
           <UsersCounter>
             <UsersCount>{usersInRoom.length}</UsersCount>
             <MaxUsersCount>/10</MaxUsersCount>
           </UsersCounter>
         </InlineBlock>
-        <InfoLine>{t('room.min-user-info')}</InfoLine>
         <UsersList>
           {usersInRoom.map(user => {
             return (
@@ -150,8 +187,13 @@ export function Lobby(props: Props) {
         <H2>{t('room.pickgames')}</H2>
         <GameModesContainer>
           {gameModes.map((mode, i) => (
-            <AnimatePresence key={`gamemode_${i}`}>
-              <GameSelectCard mode={mode} index={i} />
+            <AnimatePresence>
+              <GameSelectCard
+                key={`gameselectcard_${i}`}
+                mode={mode}
+                index={i}
+                onClick={() => handleGameModeClick(mode, i)}
+              />
             </AnimatePresence>
           ))}
         </GameModesContainer>
@@ -164,6 +206,7 @@ export function Lobby(props: Props) {
       >
         <H2>{t('room.settings')}</H2>
         <OptionsContainer>
+          {/* TODO refactor using layout it by framer  */}
           <ModeSwitcher>
             <ModeTab
               onClick={setToStandardMode}
@@ -236,7 +279,7 @@ export function Lobby(props: Props) {
 
 const LobbyContainer = styled(motion.div)`
   width: 100%;
-  padding: 32px 0 80px;
+  padding: 24px 0 80px;
 `;
 
 const OptionsContainer = styled(motion.div)`

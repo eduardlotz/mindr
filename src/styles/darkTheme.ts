@@ -2,6 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 const theme: DefaultTheme = {
   black: '#111111',
+  darkgrey: '#3d3d3d',
   grey: '#ABABAB',
   lightgrey: '#6F6F6F',
   white: '#ffffff',
@@ -11,6 +12,7 @@ const theme: DefaultTheme = {
   mainContrastText: '#f5f5f5',
   container: '#1E1F21',
   containerContrast: '#ffffff',
+  containerSubtleText: '#707174',
 
   primary: '#3877B2',
   primaryContrast: '#ffffff',
@@ -18,8 +20,8 @@ const theme: DefaultTheme = {
   primaryFaded: '#1E232A',
   primaryLight: '#3C4759',
 
-  mutedBg: '#E1EBF9',
-  mutedContrast: '#BFD4F2',
+  mutedBg: '#2A3547',
+  mutedContrast: '#465872',
 
   error: '#f32e2e',
   errorDark: '#f32e2e',

@@ -23,6 +23,7 @@ import { SocketContext } from 'app/socketContext';
 import { useHomepageSlice } from 'app/pages/Homepage/slice';
 import { selectRoomError } from 'app/pages/Homepage/slice/selectors';
 import { motion } from 'framer-motion';
+import { variants } from 'styles/variants';
 
 interface Props {}
 
@@ -85,7 +86,14 @@ export function JoinGroup(props: Props) {
           onChange={setGroupCode}
           className={roomError.isHidden ? '' : 'has-error'}
         />
-        <PrimaryButton type="submit" className="icon-right">
+        <PrimaryButton
+          type="submit"
+          className="icon-right"
+          variants={variants.buttonVariants}
+          initial="rest"
+          whileHover="hover"
+          whileTap="pressed"
+        >
           {t('home.joingroup')}
           <Icon
             name="circle-arrow-right"
@@ -156,7 +164,7 @@ const GroupCode = styled.input`
   &:focus,
   &:hover {
     outline: none;
-    border-color: ${props => props.theme.primaryContrast};
+    border-color: ${props => props.theme.primary};
   }
 
   &::placeholder {

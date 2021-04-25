@@ -2,15 +2,17 @@ import { DefaultTheme } from 'styled-components';
 
 const theme: DefaultTheme = {
   black: '#111111',
+  darkgrey: '#3d3d3d',
   grey: '#DEDEDE',
   lightgrey: '#E5E5E8',
   white: '#ffffff',
 
   mainBg: '#ffffff',
-  mainSubtleText: '#c7c7c7',
+  mainSubtleText: '#B7B7B7',
   mainContrastText: '#212121',
   container: '#faf9fa',
   containerContrast: '#000000',
+  containerSubtleText: '#707174',
 
   primary: '#3877B2',
   primaryContrast: '#ffffff',

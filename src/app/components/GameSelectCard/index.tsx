@@ -10,46 +10,34 @@ import { GameImage } from '../GameImage/Loadable';
 import { H5 } from '../styled/Headers';
 import { motion } from 'framer-motion';
 import { media } from 'styles/media';
-import { iGameMode } from 'app/pages/Homepage/slice/types';
 import Icon from '../Icon';
-import { SocketContext } from 'app/socketContext';
+import { useSelector } from 'react-redux';
+import { selectTheme } from 'app/pages/Homepage/slice/selectors';
 
-interface Props {
-  mode: iGameMode;
-  index: number;
-}
+// interface Props {
+//   mode: iGameMode;
+//   index: number;
+//   onClick: fun;
+// }
 
-export function GameSelectCard(props: Props) {
+export const GameSelectCard = ({ mode, index, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
   const theme = useTheme();
 
-  const socket = React.useContext(SocketContext);
+  const currentTheme = useSelector(selectTheme);
 
   const getGameModeCardState = mode => {
     if (!mode.isAvailable) return 'disabled';
     return mode.isActive ? 'active' : '';
   };
 
-  const handleGameModeClick = (mode, id) => {
+  const getImageColor = () => {
     if (mode.isAvailable) {
-      if (mode.isActive) {
-        socket.emit('remove_game', { id }, errors => {
-          if (errors) {
-            console.error(errors);
-            return;
-          }
-        });
-      } else {
-        socket.emit('pick_game', { id }, errors => {
-          if (errors) {
-            console.error(errors);
-            return;
-          }
-        });
-      }
+      return currentTheme === 'light' ? '1.0' : '0.8';
     }
+    return '0.2';
   };
 
   const variants = {
@@ -69,43 +57,43 @@ export function GameSelectCard(props: Props) {
 
   return (
     <CardContainer
-      key={'game_select_card_' + props.index}
-      custom={props.index}
+      key={'game_select_card_' + index}
+      custom={index}
       initial="hidden"
-      className={getGameModeCardState(props.mode)}
+      className={getGameModeCardState(mode)}
       animate={'active'}
       variants={variants}
-      whileHover={props.mode.isAvailable ? 'hover' : ''}
-      onClick={() => handleGameModeClick(props.mode, props.index)}
+      whileHover={mode.isAvailable ? 'hover' : ''}
+      onClick={onClick}
     >
-      {props.mode.isAvailable && (
+      {mode.isAvailable && (
         <RightCornerIcon
           width="24"
           height="24"
-          name={props.mode.isActive ? 'circle-checked' : 'circle-unchecked'}
-          fill={theme.containerContrast}
+          name={mode.isActive ? 'circle-checked' : 'circle-unchecked'}
+          fill={theme.primary}
         />
       )}
-      {!props.mode.isAvailable && (
+      {!mode.isAvailable && (
         <NotAvailableBanner>{t('room.indevelopment')}</NotAvailableBanner>
       )}
       <GameImage
         color={theme.containerContrast}
         size="92px"
-        name={props.mode.imageClass}
-        opacity={props.mode.isAvailable ? '1' : '0.2'}
+        name={mode.imageClass}
+        opacity={getImageColor()}
       />
       <H5
-        className={getGameModeCardState(props.mode)}
+        className={getGameModeCardState(mode)}
         style={{
-          opacity: props.mode.isAvailable ? '1' : '0.2',
+          opacity: mode.isAvailable ? '1' : '0.2',
         }}
       >
-        {t(`gamemode.${props.mode.title}`)}
+        {t(`gamemode.${mode.title}`)}
       </H5>
     </CardContainer>
   );
-}
+};
 
 const RightCornerIcon = styled(Icon)`
   position: absolute;
@@ -160,9 +148,9 @@ const CardContainer = styled(motion.div)`
   }
   //"80" after color hex => opacity = 0.5
 
-  &:hover:not(.active):not(.disabled) {
+  &:hover:not(.disabled) {
     &:before {
-      transform: scale(0.95);
+      transform: scale(0.98);
       transform-origin: center;
     }
   }

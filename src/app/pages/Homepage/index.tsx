@@ -56,26 +56,20 @@ export function Homepage({ match }) {
     socket.on('users', users => {
       dispatch(lobbyActions.setUsersInRoom(users));
     });
-  });
+  }, [dispatch, lobbyActions, socket]);
 
   useEffect(() => {
     socket.on('joined_room', (room: string) => {
       dispatch(lobbyActions.setGroupCode(room));
     });
-  });
+  }, [dispatch, lobbyActions, socket]);
 
   useEffect(() => {
-    socket.on('pick_game', (id: number) => {
-      dispatch(homeActions.enableGame(id));
+    socket.on('left_room', () => {
+      dispatch(lobbyActions.setGroupCode(''));
+      dispatch(lobbyActions.setJoinedGroup(false));
     });
-  });
-
-  useEffect(() => {
-    socket.on('remove_game', (id: number) => {
-      console.log(`deactivate game with id: ${id}`);
-      dispatch(homeActions.disableGame(id));
-    });
-  });
+  }, [dispatch, lobbyActions, socket]);
 
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,11 +126,8 @@ export function Homepage({ match }) {
     }),
     hidden: { opacity: 0, scale: 0.9 },
     onHover: {
-      scale: 1.3,
-      boxShadow: '0px 8px 20px rgba(51, 51, 51, 0.116)',
+      scale: 1.1,
       transition: {
-        ease: 'easeInOut',
-        duration: 0.2,
         delay: 0,
       },
     },
@@ -181,7 +172,13 @@ export function Homepage({ match }) {
             )}
           </FlexColDiv>
           {avatar ? (
-            <BigAvatar src={avatar} />
+            <BigAvatar
+              src={avatar}
+              drag
+              dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              dragElastic={0.5}
+            />
           ) : (
             <BigAvatar src={undefinedAvatar} />
           )}
@@ -202,6 +199,7 @@ export function Homepage({ match }) {
                 custom={i}
                 initial="hidden"
                 animate="visible"
+                exit="exit"
                 onClick={() => setAvatar(entry)}
                 className={avatar === entry ? 'selected' : ''}
               />
@@ -242,7 +240,13 @@ export function Homepage({ match }) {
         >
           <div className="create-group">
             <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton onClick={handleCreateRoom}>
+            <SecondaryButton
+              onClick={handleCreateRoom}
+              variants={variants.buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="pressed"
+            >
               {t('home.creategroup')}
             </SecondaryButton>
           </div>
@@ -311,6 +315,8 @@ const BigAvatar = styled(motion.img)`
   margin: 24px 0;
   background-color: transparent;
   border-radius: 50%;
+  cursor: grab;
+  z-index: 1000;
 
   ${media.medium`
     margin: 0;
@@ -370,7 +376,7 @@ const AvatarImg = styled(motion.img)`
   object-fit: contain;
   background-size: 100% 100%;
   transition: 0.25s ease-out;
-  transition-property: border;
+  transition-property: border-color;
 
   cursor: pointer;
   ${media.medium`

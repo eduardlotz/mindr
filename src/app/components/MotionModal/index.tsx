@@ -12,6 +12,7 @@ import { media } from 'styles/media';
 import { useModalSlice } from './slice';
 import { selectModal } from './slice/selectors';
 import Icon from '../Icon';
+import { variants } from 'styles/variants';
 
 interface Props {}
 
@@ -84,7 +85,13 @@ export function MotionModal(props: Props) {
               },
             }}
           >
-            <CloseButton onClick={closeModal}>
+            <CloseButton
+              onClick={closeModal}
+              variants={variants.iconButtonVariants}
+              whileHover="hover"
+              whileTap="pressed"
+              initial="rest"
+            >
               <Icon name="close" width="24" />
             </CloseButton>
             <H2>{modal.title}</H2>
@@ -113,7 +120,13 @@ const CloseButton = styled(motion.button)`
   cursor: pointer;
 
   background-color: ${props => props.theme.container};
-  color: ${props => props.theme.containerContrast};
+  color: ${props => props.theme.containerSubtleText};
+
+  transition: color 0.25s ease-out;
+
+  &:hover {
+    color: ${props => props.theme.containerContrast};
+  }
 `;
 
 const Body = styled(motion.div)`
@@ -153,7 +166,7 @@ const Background = styled(motion.div)`
   height: 100vh;
   width: 100%;
 
-  background-color: ${props => props.theme.container};
+  background-color: ${props => props.theme.darkgrey};
   opacity: 0;
 
   z-index: 8000;

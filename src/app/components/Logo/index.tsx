@@ -6,6 +6,7 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import lightTheme from 'styles/lightTheme';
+import { media } from 'styles/media';
 
 interface Props {
   size?: number;
@@ -13,7 +14,7 @@ interface Props {
   iconOnly?: boolean;
 }
 
-export function Logo(props: Props) {
+export const Logo = (props: Props) => {
   return (
     <Span>
       <svg
@@ -52,7 +53,6 @@ export function Logo(props: Props) {
         <Text
           style={{
             color: props.color,
-            fontSize: (props.size ? props.size * 0.375 : 26) + 'px',
           }}
         >
           mindr
@@ -60,18 +60,33 @@ export function Logo(props: Props) {
       )}
     </Span>
   );
-}
+};
 
 const Span = styled.span`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  & > svg {
+    width: 40px;
+  }
+
+  ${media.medium`
+    & > svg {
+      width: 80px;
+    }
+  `}
 `;
 
 const Text = styled.span`
   font-family: 'Basier';
   font-style: normal;
-  font-weight: 800;
+  font-weight: bold;
   line-height: 34px;
+  font-size: 18px;
+
+  ${media.medium`
+    font-size: 25px;
+  `}
 `;

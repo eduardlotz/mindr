@@ -7,7 +7,9 @@
     "yourname": "Your name",
     "wherecode": "Where is the code?",
     "joingroupheader": "Want to join someone?",
-    "creategroupheader": "Create a new group"
+    "creategroupheader": "Create a new group",
+    "toggleTheme": "Switch theme",
+    "toggleLanguage": "Switch language"
   },
   "room": {
     "pickgames": "Pick the games you want to play",
@@ -19,6 +21,8 @@
     "room": "Room",
     "indevelopment": "In development",
     "gameduration": "Game duration",
+    "accessCode": "Access code",
+    "leaveRoom": "leave room",
     "length": {
       "short": "short",
       "normal": "normal",

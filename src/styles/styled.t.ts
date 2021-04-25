@@ -6,6 +6,7 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     //basic colors
     black: string;
+    darkgrey: string;
     grey: string;
     lightgrey: string;
     white: string;
@@ -16,6 +17,7 @@ declare module 'styled-components' {
     mainContrastText: string;
     container: string;
     containerContrast: string;
+    containerSubtleText: string;
 
     //accent colors
     primary: string;

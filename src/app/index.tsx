@@ -83,6 +83,8 @@ export function App() {
           <AnimatePresence exitBeforeEnter>
             <Switch location={location} key={location.key}>
               <Route exact path="/" component={Homepage} />
+              <Route exact path="/help" component={Help} />
+
               {joinedGroup ? (
                 isCreator ? (
                   <Route exact path="/lobby" component={Lobby} />
@@ -92,7 +94,6 @@ export function App() {
               ) : (
                 <Redirect to="/" />
               )}
-              <Route exact path="/help" component={Help} />
               <Route component={NotFoundPage} />
             </Switch>
           </AnimatePresence>

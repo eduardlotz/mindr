@@ -20,24 +20,7 @@ import { media } from 'styles/media';
 interface Props {}
 
 export const Help = memo((props: Props) => {
-  //array with all game modes & rules
-  //TODO swap out with real database
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
-
-  // Use the slice we created
-  // const { actions: modalActions } = useModalSlice();
-
-  // Used to dispatch slice actions
-  // const dispatch = useDispatch();
-
-  // const setModal = content => {
-  //   dispatch(modalActions.setModalTitle(t(`gamemode.${content.title}`)));
-  //   dispatch(modalActions.setModalContent(content.content));
-  //   dispatch(modalActions.setModalImage(content.imageClass));
-  //   dispatch(modalActions.setModalOpen(true));
-  // };
+  const { t } = useTranslation();
 
   const floatingBtnVariants = {
     hidden: {
@@ -115,11 +98,7 @@ export const Help = memo((props: Props) => {
             variants={variants.container}
             initial="hidden"
             animate="visible"
-          >
-            {/* {gameModes.map((mode, i) => {
-              return <GameSelectCard mode={mode} index={i} />;
-            })} */}
-          </HowToContainer>
+          ></HowToContainer>
         </ContentBlock>
       </InfoContainer>
       <Link to="/" style={{ width: '100%' }}>
