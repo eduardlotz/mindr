@@ -25,10 +25,9 @@ import { SocketContext } from 'app/socketContext';
 import { useEffect } from 'react';
 import { useHomepageSlice } from '../Homepage/slice';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
+import { useParams } from 'react-router-dom';
 
-interface Props {}
-
-export function Lobby(props: Props) {
+export function Lobby() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
@@ -41,6 +40,8 @@ export function Lobby(props: Props) {
   const { actions: lobbyActions } = useLobbySlice();
 
   const socket = React.useContext(SocketContext);
+
+  const { room } = useParams<{ room: string }>();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
@@ -60,6 +61,20 @@ export function Lobby(props: Props) {
   const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
 
   useEffect(() => {
+    socket.open();
+    socket.emit('joinRoom', { room });
+
+    socket.on('joinRoom', onlineUsers => {
+      console.log('socket received users in room', onlineUsers);
+      dispatch(lobbyActions.setUsersInRoom(onlineUsers));
+    });
+    return () => {
+      socket.removeAllListeners();
+      socket.close();
+    };
+  }, [dispatch, lobbyActions, room]);
+
+  useEffect(() => {
     socket.on('pick_game', (id: number) => {
       console.log(`socket-- pick game with id: ${id}`);
       dispatch(homeActions.enableGame(id));
@@ -68,7 +83,6 @@ export function Lobby(props: Props) {
 
   useEffect(() => {
     socket.on('remove_game', (id: number) => {
-      console.log(`socket--  remove game with id: ${id}`);
       dispatch(homeActions.disableGame(id));
     });
   });

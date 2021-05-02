@@ -66,7 +66,7 @@ export const SecondaryButton = styled(Button)`
   border-radius: 16px;
   padding: 16px;
 
-  background: transparent;
+  background: ${props => props.theme.mainBg};
   border: 2px solid ${props => props.theme.mainSubtleText};
   color: ${props => props.theme.mainContrastText};
 
@@ -80,8 +80,8 @@ export const SecondaryButton = styled(Button)`
   line-height: 26px;
 
   ${media.medium`
-    padding: 16px 72px;
-  `}
+    padding: 16px;
+  `};
 `;
 
 export const LinkButton = styled(motion.button)`

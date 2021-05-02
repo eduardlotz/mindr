@@ -12,7 +12,7 @@ import { colors } from 'styles/colors';
 // import { useDispatch } from 'react-redux';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { variants } from 'styles/variants';
 // import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
@@ -21,6 +21,8 @@ interface Props {}
 
 export const Help = memo((props: Props) => {
   const { t } = useTranslation();
+
+  const history = useHistory();
 
   const floatingBtnVariants = {
     hidden: {
@@ -54,6 +56,10 @@ export const Help = memo((props: Props) => {
         stiffness: 60,
       },
     },
+  };
+
+  const goBack = () => {
+    history.goBack();
   };
 
   return (
@@ -101,23 +107,22 @@ export const Help = memo((props: Props) => {
           ></HowToContainer>
         </ContentBlock>
       </InfoContainer>
-      <Link to="/" style={{ width: '100%' }}>
-        <PrimaryFloatingButton
-          variants={floatingBtnVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <Icon
-            name="circle-arrow-left"
-            fill="white"
-            height="24"
-            width="24"
-            style={{ marginRight: '16px' }}
-          />
-          {t('home.backtohome')}
-        </PrimaryFloatingButton>
-      </Link>
+      <PrimaryFloatingButton
+        variants={floatingBtnVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        onClick={goBack}
+      >
+        <Icon
+          name="circle-arrow-left"
+          fill="white"
+          height="24"
+          width="24"
+          style={{ marginRight: '16px' }}
+        />
+        {t('home.backtohome')}
+      </PrimaryFloatingButton>
     </>
   );
 });

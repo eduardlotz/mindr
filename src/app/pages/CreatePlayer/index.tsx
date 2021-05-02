@@ -6,73 +6,30 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { messages } from './messages';
 import { motion } from 'framer-motion';
-import { colors } from 'styles/colors';
+import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
+
 import avatars from '../../../assets/avatars/avatars';
-import { PrimaryButton, SecondaryButton } from 'app/components/Button';
-import Icon from 'app/components/Icon';
 import { StickyBottomActions } from 'app/components/StickyBottomActions';
 import { useLobbySlice } from '../Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
+import { Navbar } from 'app/components/Navbar/Loadable';
+import { H2 } from 'app/components/styled/Headers';
+import { SocketContext } from 'app/socketContext';
+import { media } from 'styles/media';
+import { variants } from 'styles/variants';
+import { useHomepageSlice } from '../Homepage/slice';
+import {
+  selectUsernameError,
+  selectAvatarError,
+} from '../Homepage/slice/selectors';
 interface Props {}
 
 export function CreatePlayer(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // framer motion variants
-  const containerFadeOutVariants = {
-    hidden: {
-      opacity: 0,
-      transition: {
-        ease: 'easeOut',
-        duration: 0.4,
-      },
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        ease: 'easeOut',
-        duration: 0.4,
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        ease: 'easeOut',
-        duration: 0.4,
-      },
-    },
-  };
-
-  const containerSlideUpVariants = {
-    hidden: {
-      y: 20,
-      opacity: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-      },
-    },
-    exit: {
-      y: 20,
-      opacity: 0,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-      },
-    },
-  };
 
   const popUpVariants = {
     visible: i => ({
@@ -107,167 +64,254 @@ export function CreatePlayer(props: Props) {
     },
   };
 
-  // redux store
+  // used to dispatch socket actions
+  const socket = React.useContext(SocketContext);
+
   // Use the slice we created
-  const { actions } = useLobbySlice();
+  const { actions: lobbyActions } = useLobbySlice();
+  const { actions: homeActions } = useHomepageSlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  // `selectors` are used to read the state.
-  const username = useSelector(selectUsername);
-  const selectedAvatar = useSelector(selectUserAvatar);
+  const name = useSelector(selectUsername);
+  const avatar = useSelector(selectUserAvatar);
+
+  const nameError = useSelector(selectUsernameError);
+  const avatarError = useSelector(selectAvatarError);
+
+  React.useEffect(() => {
+    socket.on('users', users => {
+      dispatch(lobbyActions.setUsersInRoom(users));
+    });
+  }, [dispatch, lobbyActions, socket]);
+
+  React.useEffect(() => {
+    socket.on('joined_room', (room: string) => {
+      dispatch(lobbyActions.setGroupCode(room));
+    });
+  }, [dispatch, lobbyActions, socket]);
 
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(actions.setUsername(e.target.value));
+    dispatch(lobbyActions.setUsername(e.target.value));
+    dispatch(homeActions.setUsernameErrorHidden(true));
   };
 
   const setAvatar = url => {
-    dispatch(actions.setAvatarUrl(url));
+    dispatch(lobbyActions.setAvatarUrl(url));
+    dispatch(homeActions.setAvatarErrorHidden(true));
   };
 
   // render
 
   return (
-    <MainContainer
-      variants={containerFadeOutVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
-      <UserContainer
-        variants={containerSlideUpVariants}
+    <>
+      <Navbar />
+      <UserCreationContainer
+        variants={variants.container}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <UsernameInput
-          placeholder="Your name"
-          value={username}
-          onChange={setUsername}
-        />
-
-        {selectedAvatar ? (
-          <BigAvatar src={selectedAvatar} />
-        ) : (
-          <BigAvatarEmpty />
-        )}
-      </UserContainer>
-      <AvatarSelectionContainer>
-        {avatars.map((avatar, i) => {
-          return (
-            <AvatarImg
-              src={avatar}
-              variants={popUpVariants}
-              key={i}
-              custom={i}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              whileHover="onHover"
-              onClick={() => setAvatar(avatar)}
-              className={selectedAvatar === avatar ? 'selected' : ''}
+        <UserContainer
+          variants={variants.slideUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <FlexColDiv>
+            <H2>{t('home.pickusername')}</H2>
+            <UsernameInput
+              placeholder={t('home.yourname')}
+              value={name}
+              onChange={setUsername}
+              maxLength={20}
+              className={nameError.isHidden ? '' : 'has-error'}
             />
-          );
-        })}
-      </AvatarSelectionContainer>
+            {!nameError.isHidden && (
+              <InputError>{nameError.message}</InputError>
+            )}
+          </FlexColDiv>
+          {avatar ? (
+            <BigAvatar
+              src={avatar}
+              drag
+              dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              dragElastic={0.5}
+            />
+          ) : (
+            <BigAvatar src={undefinedAvatar} />
+          )}
+        </UserContainer>
+        <AvatarSelectionContainer
+          variants={variants.slideUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className={avatarError.isHidden ? '' : 'has-error'}
+        >
+          {avatars.map((entry, i) => {
+            return (
+              <AvatarImg
+                src={entry}
+                variants={popUpVariants}
+                key={i}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={() => setAvatar(entry)}
+                className={avatar === entry ? 'selected' : ''}
+              />
+            );
+          })}
+        </AvatarSelectionContainer>
+        {!avatarError.isHidden && (
+          <InputError>{avatarError.message}</InputError>
+        )}
+      </UserCreationContainer>
       <StickyBottomActions />
-    </MainContainer>
+    </>
   );
 }
 
 // styled components
-
-const MainContainer = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
+const UserCreationContainer = styled(motion.div)`
+  margin-bottom: 40px;
 `;
 
 const UsernameInput = styled.input`
-  height: 56px;
+  height: 58px;
   width: 100%;
 
   padding: 16px 24px;
-  background: #ffffff;
-  border: 2px solid #f4f5f7;
+  margin-right: 16px;
+
+  background: transparent;
+  border: 2px solid ${props => props.theme.lightgrey};
   border-radius: 16px;
-  text-align: center;
+  color: ${props => props.theme.mainContrastText};
 
-  color: #000000;
+  font-family: 'Basier';
   font-style: normal;
-  font-weight: 800;
-  font-size: 60px;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 26px;
+  text-align: left;
+  letter-spacing: 0.4px;
 
-  transition: border 0.15s ease-in-out;
+  transition: 0.25s ease-out;
+  transition-property: border-color color;
 
-  &:focus {
+  &:focus,
+  &:hover {
     outline: none;
-    box-shadow: none;
-    border-color: $accent-color;
+    border-color: ${props => props.theme.primary};
   }
-
-  background-color: transparent;
-  border: none;
 
   &::placeholder {
-    color: #e7e7e7;
+    color: ${props => props.theme.grey};
+  }
+
+  &.has-error {
+    border-color: ${props => props.theme.error};
   }
 `;
 
-const BigAvatar = styled.img`
-  height: 100%;
-  width: 116px;
-  margin: 40px 0 0 0;
-  background-color: ${props => props.theme.mainBg};
-  border-radius: 50%;
+const InputError = styled(motion.small)`
+  margin: 0;
+
+  font-size: 14px;
+  font-family: 'Basier';
+  font-weight: normal;
+  text-align: left;
+
+  color: ${props => props.theme.error};
 `;
 
-const BigAvatarEmpty = styled(motion.div)`
-  height: 116px;
+const BigAvatar = styled(motion.img)`
+  height: 100%;
   width: 116px;
-  margin: 40px 0 0 0;
-
+  margin: 24px 0;
+  background-color: transparent;
   border-radius: 50%;
+  cursor: grab;
+  z-index: 1000;
 
-  background-color: ${props => props.theme.mainBg};
+  ${media.medium`
+    margin: 0;
+  `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 48px;
-  padding: 80px 0 0px 0;
+  width: 100%;
+
+  ${media.medium`
+    margin-bottom: 16px;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: row;
+  `}
 `;
 
 const AvatarSelectionContainer = styled(motion.div)`
   display: grid;
+  max-width: 100%;
+  width: 100%;
+  overflow-x: scroll;
 
-  grid-template-columns: repeat(6, 2fr);
-  grid-template-rows: auto 1fr;
-  grid-gap: 40px 80px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 24px;
+  justify-content: center;
 
-  margin-bottom: 40px;
+  padding: 40px 20px;
+  margin-bottom: 8px;
+
+  background: ${props => props.theme.mainBg};
+  border-radius: 16px;
+
+  ${media.medium`
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 32px 48px;
+    padding: 32px 40px;
+  `}
+
+  &.has-error {
+    border: 2px solid ${props => props.theme.error};
+  }
 `;
 
 const AvatarImg = styled(motion.img)`
   position: relative;
+  justify-self: center;
 
-  width: 72px;
-  height: 72px;
+  width: 100%;
+  height: auto;
 
   border-radius: 50%;
   object-fit: contain;
   background-size: 100% 100%;
+  transition: 0.25s ease-out;
+  transition-property: border-color;
+
+  cursor: pointer;
 
   &.selected {
-    box-shadow: 0px 8px 16px 0px rgba(12, 72, 163, 0.12);
-    transform: scale(1.3);
+    border: 3px solid ${props => props.theme.primary};
   }
+`;
+
+const FlexColDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  ${media.medium`
+    width: 80%;
+  `}
 `;

@@ -33,6 +33,7 @@ import { getLocalStorage, setLocalStorage } from 'helpers/localstorage';
 import { selectTheme } from './pages/Homepage/slice/selectors';
 import lightTheme from 'styles/lightTheme';
 import darkTheme from 'styles/darkTheme';
+import { CreatePlayer } from './pages/CreatePlayer/Loadable';
 
 export function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -84,15 +85,12 @@ export function App() {
             <Switch location={location} key={location.key}>
               <Route exact path="/" component={Homepage} />
               <Route exact path="/help" component={Help} />
+              <Route exact path="/join/:room" component={CreatePlayer} />
 
-              {joinedGroup ? (
-                isCreator ? (
-                  <Route exact path="/lobby" component={Lobby} />
-                ) : (
-                  <Route exact path="/lobby" component={JoinedRoom} />
-                )
+              {isCreator ? (
+                <Route exact path="/room/:room" component={Lobby} />
               ) : (
-                <Redirect to="/" />
+                <Route exact path="/room/:room" component={JoinedRoom} />
               )}
               <Route component={NotFoundPage} />
             </Switch>
@@ -111,6 +109,7 @@ const MainContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
   background: transparent;
+  position: relative;
 
   padding-bottom: 20px;
 `;

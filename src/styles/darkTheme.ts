@@ -14,7 +14,7 @@ const theme: DefaultTheme = {
   containerContrast: '#ffffff',
   containerSubtleText: '#707174',
 
-  primary: '#3877B2',
+  primary: '#0066FF',
   primaryContrast: '#ffffff',
   primaryMuted: '#dfd9f4',
   primaryFaded: '#1E232A',

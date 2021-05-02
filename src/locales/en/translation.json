@@ -1,7 +1,7 @@
 {
   "home": {
     "joingroup": "Join Group",
-    "creategroup": "Create a new group",
+    "createroom": "Create a new room",
     "backtohome": "back to Home",
     "pickusername": "Pick an username & avatar",
     "yourname": "Your name",
@@ -9,7 +9,8 @@
     "joingroupheader": "Want to join someone?",
     "creategroupheader": "Create a new group",
     "toggleTheme": "Switch theme",
-    "toggleLanguage": "Switch language"
+    "toggleLanguage": "Switch language",
+    "infoText": "You can invite your friends after you have created a new room."
   },
   "room": {
     "pickgames": "Pick the games you want to play",

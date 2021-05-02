@@ -42,7 +42,7 @@ export function Navbar(props: Props) {
           animate="visible"
           exit="exit"
         >
-          <Logo color={theme.primary} size={64} />
+          <Logo color={theme.primary} />
         </MotionDiv>
       </Link>
 

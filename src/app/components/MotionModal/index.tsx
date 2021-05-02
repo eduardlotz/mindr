@@ -3,7 +3,7 @@
  * MotionModal
  *
  */
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,9 @@ import { selectModal } from './slice/selectors';
 import Icon from '../Icon';
 import { variants } from 'styles/variants';
 
-interface Props {}
+interface Props {
+  content?: React.ReactChild[];
+}
 
 export function MotionModal(props: Props) {
   // Use the slice we created
@@ -95,7 +97,7 @@ export function MotionModal(props: Props) {
               <Icon name="close" width="24" />
             </CloseButton>
             <H2>{modal.title}</H2>
-            {modal.content}
+            {props.content}
           </Body>
         )}
       </AnimatePresence>

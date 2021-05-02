@@ -1,41 +1,35 @@
 /**
  *
- * ThemeSwitcher
+ * ChatButton
  *
  */
-import { motion } from 'framer-motion';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHomepageSlice } from 'app/pages/Homepage/slice';
-import { selectTheme } from 'app/pages/Homepage/slice/selectors';
+import * as React from 'react';
 import styled from 'styled-components/macro';
-import { setLocalStorage } from 'helpers/localstorage';
-import Icon from '../Icon';
-import React from 'react';
-import { variants } from 'styles/variants';
 import { useTranslation } from 'react-i18next';
+import Icon from '../Icon';
+import { variants } from 'styles/variants';
+import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { useModalSlice } from '../MotionModal/slice';
 
-export const ThemeSwitcher = () => {
+interface Props {}
+
+export function ChatButton(props: Props) {
   const { t } = useTranslation();
-  const { actions: homeActions } = useHomepageSlice();
+
+  const { actions: modalActions } = useModalSlice();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const currentTheme = useSelector(selectTheme);
-
-  const toggleTheme = () => {
-    if (currentTheme === 'light') {
-      dispatch(homeActions.setTheme('dark'));
-      setLocalStorage('theme', 'dark');
-    } else {
-      dispatch(homeActions.setTheme('light'));
-      setLocalStorage('theme', 'light');
-    }
+  const openChat = () => {
+    dispatch(modalActions.setModalOpen(true));
+    dispatch(modalActions.setModalTitle('Chat'));
   };
 
   return (
     <ButtonBody
-      onClick={toggleTheme}
+      onClick={openChat}
       variants={variants.iconButtonVariants}
       initial="rest"
       whileHover="hover"
@@ -47,14 +41,14 @@ export const ThemeSwitcher = () => {
       <MotionDiv>
         <Icon
           style={{ cursor: 'pointer' }}
-          name={currentTheme === 'light' ? 'sun' : 'moon'}
+          name={'chat'}
           height="24"
           width="24"
         />
       </MotionDiv>
     </ButtonBody>
   );
-};
+}
 
 const ButtonBody = styled(motion.div)`
   display: flex;

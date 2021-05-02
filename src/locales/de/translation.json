@@ -2,7 +2,7 @@
   "title": "Willkommen",
   "home": {
     "joingroup": "Gruppe beitreten",
-    "creategroup": "Erstelle eine Gruppe",
+    "createroom": "Neuen Raum erstellen",
     "backtohome": "Zurück zur Startseite",
     "pickusername": "Wähle einen Namen & Avatar",
     "yourname": "Dein Name",
@@ -10,7 +10,8 @@
     "joingroupheader": "Willst du jemandem beitreten?",
     "creategroupheader": "Eine neue Gruppe erstellen",
     "toggleTheme": "Theme wechseln",
-    "toggleLanguage": "Sprache wechseln"
+    "toggleLanguage": "Sprache wechseln",
+    "infoText": "Du kannst deine Freunde einladen, nachdem du einen neuen Raum erstellt hast."
   },
   "room": {
     "pickgames": "Wähle die Spiele, die du spielen möchtest",

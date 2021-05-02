@@ -3,37 +3,30 @@
  * Homepage
  *
  */
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { H2 } from 'app/components/styled/Headers';
-import { LinkButton, SecondaryButton } from 'app/components/Button';
-import { JoinGroup } from 'app/components/JoinGroup';
-
+import { PrimaryButton } from 'app/components/Button';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
 import { useHomepageSlice } from '../Homepage/slice';
-
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
-
-import { modalActions } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
-
-import { SocketContext } from 'app/socketContext';
 import { useHistory } from 'react-router';
 import { Navbar } from 'app/components/Navbar/Loadable';
 import { selectUsernameError, selectAvatarError } from './slice/selectors';
+import handleAuth from 'helpers/handleAuth';
+import axios from 'axios';
+import getApiPath from 'helpers/getApiPath';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
-
-  // used to dispatch socket actions
-  const socket = useContext(SocketContext);
 
   const history = useHistory();
 
@@ -50,27 +43,6 @@ export function Homepage({ match }) {
   const nameError = useSelector(selectUsernameError);
   const avatarError = useSelector(selectAvatarError);
 
-  //Checks to see if there's a user already present
-
-  useEffect(() => {
-    socket.on('users', users => {
-      dispatch(lobbyActions.setUsersInRoom(users));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
-  useEffect(() => {
-    socket.on('joined_room', (room: string) => {
-      dispatch(lobbyActions.setGroupCode(room));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
-  useEffect(() => {
-    socket.on('left_room', () => {
-      dispatch(lobbyActions.setGroupCode(''));
-      dispatch(lobbyActions.setJoinedGroup(false));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
   // type needs to be declared in order to work with typescript
   const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(lobbyActions.setUsername(e.target.value));
@@ -82,33 +54,28 @@ export function Homepage({ match }) {
     dispatch(homeActions.setAvatarErrorHidden(true));
   };
 
-  const openLinkInfoModal = () => {
-    dispatch(modalActions.setModalTitle(t('home.wherecode')));
-    dispatch(modalActions.setModalOpen(true));
-  };
-
   //Emits the login event and if successful redirects to chat and saves user data
   const handleCreateRoom = () => {
-    socket.emit('create_room', { name, avatar }, errors => {
-      if (errors) {
-        for (let error of errors) {
-          if (error.type === 'username') {
-            dispatch(homeActions.setUsernameError(t('error.' + error.message)));
-          }
-          if (error.type === 'room') {
-            dispatch(homeActions.setRoomError(t('error.' + error.message)));
-          }
-          if (error.type === 'avatar') {
-            dispatch(homeActions.setAvatarError(t('error.' + error.message)));
-          }
-        }
-        return;
-      }
+    const data = { username: name, avatar };
 
-      dispatch(lobbyActions.setJoinedGroup(true));
+    handleAuth(data, () => createAndJoinRoom(), console.log);
+  };
+
+  const createAndJoinRoom = async () => {
+    try {
+      const {
+        data: { data },
+      } = await axios.get(getApiPath() + '/api/room', {
+        withCredentials: true,
+      });
+      dispatch(lobbyActions.setGroupCode(data));
       dispatch(lobbyActions.setIsCreator(true));
-      history.push('/lobby');
-    });
+      dispatch(lobbyActions.setJoinedGroup(true));
+
+      history.push(`/room/${data}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // staggered pop up animation for avatars
@@ -211,46 +178,23 @@ export function Homepage({ match }) {
         )}
       </UserCreationContainer>
 
-      {/* Bottom Panel for joining or creating a group */}
+      {/* Bottom Panel for creating a group */}
       <StartGameContainer
         variants={variants.slideUp}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <ContentBlock
-          variants={variants.slideUpItem}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
+        <InfoBox>{t('home.infoText')}</InfoBox>
+        <PrimaryButton
+          onClick={handleCreateRoom}
+          variants={variants.buttonVariants}
+          initial="rest"
+          whileHover="hover"
+          whileTap="pressed"
         >
-          <InlineBlock>
-            <H2 className="margin-clear">{t('home.joingroupheader')}</H2>
-            <LinkButton onClick={openLinkInfoModal}>
-              {t('home.wherecode')}
-            </LinkButton>
-          </InlineBlock>
-          <JoinGroup />
-        </ContentBlock>
-        <ContentBlock
-          variants={variants.slideUpItem}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <div className="create-group">
-            <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton
-              onClick={handleCreateRoom}
-              variants={variants.buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="pressed"
-            >
-              {t('home.creategroup')}
-            </SecondaryButton>
-          </div>
-        </ContentBlock>
+          {t('home.createroom')}
+        </PrimaryButton>
       </StartGameContainer>
     </>
   );
@@ -258,6 +202,20 @@ export function Homepage({ match }) {
 
 const UserCreationContainer = styled(motion.div)`
   margin-bottom: 40px;
+`;
+
+const InfoBox = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 16px;
+  margin-bottom: 32px;
+  width: 100%;
+
+  font-size: 16px;
+  font-weight: 500;
+  color: ${props => props.theme.mainSubtleText};
 `;
 
 const UsernameInput = styled.input`
@@ -410,26 +368,4 @@ const StartGameContainer = styled(motion.div)`
   flex-direction: column;
 
   justify-content: center;
-`;
-
-const ContentBlock = styled(motion.div)`
-  width: 100%;
-  &:first-child {
-    margin-bottom: 40px;
-  }
-`;
-
-const InlineBlock = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-
-  ${media.medium`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-  `}
 `;
