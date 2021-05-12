@@ -15,7 +15,7 @@ export const initialState: HomepageState = {
     {
       title: '',
       imageClass: '',
-      rules: [],
+      images: [],
       isActive: false,
       isAvailable: false,
     },

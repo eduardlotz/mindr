@@ -28,8 +28,7 @@ import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 import { useParams } from 'react-router-dom';
 
 export function Lobby() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
@@ -62,8 +61,10 @@ export function Lobby() {
 
   useEffect(() => {
     socket.open();
-    socket.emit('joinRoom', { room });
+    socket.emit('joinRoom', room);
+  }, [room, socket]);
 
+  useEffect(() => {
     socket.on('joinRoom', onlineUsers => {
       console.log('socket received users in room', onlineUsers);
       dispatch(lobbyActions.setUsersInRoom(onlineUsers));
@@ -72,7 +73,7 @@ export function Lobby() {
       socket.removeAllListeners();
       socket.close();
     };
-  }, [dispatch, lobbyActions, room]);
+  }, [dispatch, lobbyActions, room, socket]);
 
   useEffect(() => {
     socket.on('pick_game', (id: number) => {

@@ -89,8 +89,10 @@ export function App() {
 
               {isCreator ? (
                 <Route exact path="/room/:room" component={Lobby} />
-              ) : (
+              ) : joinedGroup ? (
                 <Route exact path="/room/:room" component={JoinedRoom} />
+              ) : (
+                <Redirect to="/help" />
               )}
               <Route component={NotFoundPage} />
             </Switch>

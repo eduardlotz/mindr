@@ -16,12 +16,18 @@ import { useHistory } from 'react-router-dom';
 import { variants } from 'styles/variants';
 // import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
+import { GameModalCard } from 'app/components/GameModalCard';
+import { selectGameModes } from '../Homepage/slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { useModalSlice } from 'app/components/MotionModal/slice';
+import getImageByKey from 'assets/games/gameImages';
 
-interface Props {}
-
-export const Help = memo((props: Props) => {
+export const Help = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
+  const { actions: modalActions } = useModalSlice();
+  const gameModes = useSelector(selectGameModes);
   const history = useHistory();
 
   const floatingBtnVariants = {
@@ -56,6 +62,16 @@ export const Help = memo((props: Props) => {
         stiffness: 60,
       },
     },
+  };
+
+  const openModal = (gameId: string) => {
+    const selectedGame = gameModes.find(game => game.title === gameId);
+
+    if (selectedGame) {
+      dispatch(modalActions.setModalTitle(t(`gamemode.${selectedGame.title}`)));
+      dispatch(modalActions.setModalContent(selectedGame.title));
+      dispatch(modalActions.setModalOpen(true));
+    }
   };
 
   const goBack = () => {
@@ -100,11 +116,15 @@ export const Help = memo((props: Props) => {
         >
           <H1>{t('help.whatgames')}</H1>
           <Small>{t('help.whatgameshint')}</Small>
-          <HowToContainer
-            variants={variants.container}
-            initial="hidden"
-            animate="visible"
-          ></HowToContainer>
+          <HowToContainer>
+            {gameModes.map((item, i) => (
+              <GameModalCard
+                onClick={() => openModal(item.title)}
+                imageClass={item.imageClass}
+                title={item.title}
+              />
+            ))}
+          </HowToContainer>
         </ContentBlock>
       </InfoContainer>
       <PrimaryFloatingButton
@@ -125,7 +145,7 @@ export const Help = memo((props: Props) => {
       </PrimaryFloatingButton>
     </>
   );
-});
+};
 
 const Small = styled.small`
   display: flex;
@@ -194,6 +214,7 @@ const PrimaryFloatingButton = styled(PrimaryButton)`
   max-width: calc(100% - 32px);
   margin: 0 auto;
   width: 100%;
+  z-index: 1000;
   box-shadow: 0px 2.0370371341705322px 2.6888887882232666px 0px
       rgba(37, 67, 115, 0.0196),
     0px 9.629630088806152px 10.51111125946045px 0px rgba(37, 67, 115, 0.0304),

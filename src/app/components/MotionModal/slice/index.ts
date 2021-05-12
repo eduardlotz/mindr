@@ -6,8 +6,7 @@ import { ModalState } from './types';
 export const initialState: ModalState = {
   isOpen: false,
   title: '',
-  imageClass: '',
-  content: [],
+  content: '',
   mode: 'gameMode',
 };
 
@@ -20,7 +19,7 @@ const slice = createSlice({
       // Type-safe: It will expect `string` when firing the action. ✅
       state.isOpen = action.payload;
     },
-    setModalContent(state, action: PayloadAction<any>) {
+    setModalContent(state, action: PayloadAction<string>) {
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
       state.content = action.payload;
@@ -29,11 +28,6 @@ const slice = createSlice({
       // Here we say lets change the username in my Homepage state when changeUsername actions fires
       // Type-safe: It will expect `string` when firing the action. ✅
       state.title = action.payload;
-    },
-    setModalImage(state, action: PayloadAction<string>) {
-      // Here we say lets change the username in my Homepage state when changeUsername actions fires
-      // Type-safe: It will expect `string` when firing the action. ✅
-      state.imageClass = action.payload;
     },
   },
 });

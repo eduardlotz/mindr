@@ -14,11 +14,9 @@ const SocketProvider = ({ children }) => {
     ENDPOINT = 'https://mindr-server.herokuapp.com/';
   }
 
-  const socket = io(
-    ENDPOINT,
-    { transports: ['websocket', 'polling'] },
-    { autoConnect: false },
-  );
+  const socket = io(ENDPOINT, {
+    autoConnect: false,
+  });
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );

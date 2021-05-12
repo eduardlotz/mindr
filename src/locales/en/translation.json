@@ -49,6 +49,14 @@
     "survey": "Survey",
     "whoknowsyou": "Who knows you"
   },
+  "gameexplanation": {
+    "quiz": "Es wird eine Frage gestellt, die du mit einer der 4 Möglichkeiten richtig beantworten musst.",
+    "drawguess": "Einer Malt, alle anderen raten",
+    "mostlikely": "Kleine Umfrage wer am ehesten etwas tun würde, zerstört Freundschaften.",
+    "bestartist": "Diesmal malt jeder dasselbe Bild und der Sieger wird ausgewählt",
+    "survey": "Die Mehrheit hat immer recht",
+    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten den anderen Spielern zuzuordnen."
+  },
   "error": {
     "usernameTaken": "Username is already taken",
     "roomInvalid": "Room does not exist",

@@ -9,7 +9,6 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { H2 } from 'app/components/styled/Headers';
-import { PrimaryButton } from 'app/components/Button';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
@@ -17,18 +16,14 @@ import { useHomepageSlice } from '../Homepage/slice';
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
 import { media } from 'styles/media';
-import { useHistory } from 'react-router';
 import { Navbar } from 'app/components/Navbar/Loadable';
 import { selectUsernameError, selectAvatarError } from './slice/selectors';
-import handleAuth from 'helpers/handleAuth';
-import axios from 'axios';
-import getApiPath from 'helpers/getApiPath';
+
+import { CreateNewRoom } from 'app/components/CreateNewRoom';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
-
-  const history = useHistory();
 
   // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
@@ -52,30 +47,6 @@ export function Homepage({ match }) {
   const setAvatar = url => {
     dispatch(lobbyActions.setAvatarUrl(url));
     dispatch(homeActions.setAvatarErrorHidden(true));
-  };
-
-  //Emits the login event and if successful redirects to chat and saves user data
-  const handleCreateRoom = () => {
-    const data = { username: name, avatar };
-
-    handleAuth(data, () => createAndJoinRoom(), console.log);
-  };
-
-  const createAndJoinRoom = async () => {
-    try {
-      const {
-        data: { data },
-      } = await axios.get(getApiPath() + '/api/room', {
-        withCredentials: true,
-      });
-      dispatch(lobbyActions.setGroupCode(data));
-      dispatch(lobbyActions.setIsCreator(true));
-      dispatch(lobbyActions.setJoinedGroup(true));
-
-      history.push(`/room/${data}`);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   // staggered pop up animation for avatars
@@ -178,44 +149,13 @@ export function Homepage({ match }) {
         )}
       </UserCreationContainer>
 
-      {/* Bottom Panel for creating a group */}
-      <StartGameContainer
-        variants={variants.slideUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <InfoBox>{t('home.infoText')}</InfoBox>
-        <PrimaryButton
-          onClick={handleCreateRoom}
-          variants={variants.buttonVariants}
-          initial="rest"
-          whileHover="hover"
-          whileTap="pressed"
-        >
-          {t('home.createroom')}
-        </PrimaryButton>
-      </StartGameContainer>
+      <CreateNewRoom />
     </>
   );
 }
 
 const UserCreationContainer = styled(motion.div)`
   margin-bottom: 40px;
-`;
-
-const InfoBox = styled(motion.div)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 8px 16px;
-  margin-bottom: 32px;
-  width: 100%;
-
-  font-size: 16px;
-  font-weight: 500;
-  color: ${props => props.theme.mainSubtleText};
 `;
 
 const UsernameInput = styled.input`
@@ -317,6 +257,7 @@ const AvatarSelectionContainer = styled(motion.div)`
   ${media.medium`
     grid-gap: 32px 48px;
     padding: 32px 40px;
+    overflow: auto;
   `}
 
   &.has-error {
@@ -355,17 +296,4 @@ const FlexColDiv = styled.div`
   ${media.medium`
     width: 80%;
   `}
-`;
-
-const StartGameContainer = styled(motion.div)`
-  width: 100%;
-
-  margin: 0;
-  align-items: flex-start;
-
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
 `;
