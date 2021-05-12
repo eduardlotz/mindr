@@ -110,6 +110,8 @@ const SliderButton = styled.span`
   top: 50%;
   transform: translateY(-50%);
   z-index: 5000;
+  opacity: 0.5;
+  transition: opacity 0.25s ease-in;
 
   &.prev {
     left: 16px;
@@ -123,5 +125,6 @@ const SliderButton = styled.span`
 
   &:hover {
     cursor: pointer;
+    opacity: 1;
   }
 `;

@@ -3,7 +3,7 @@
  * Help
  *
  */
-import React, { memo } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { H1 } from 'app/components/styled/Headers';
@@ -20,7 +20,6 @@ import { GameModalCard } from 'app/components/GameModalCard';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useModalSlice } from 'app/components/MotionModal/slice';
-import getImageByKey from 'assets/games/gameImages';
 
 export const Help = () => {
   const { t } = useTranslation();
@@ -188,7 +187,7 @@ const HowToContainer = styled(motion.div)`
   `}
 
   margin: 16px 0 40px 0;
-  background-color: ${colors.basic.white};
+  background-color: ${props => props.theme.mainBg};
 `;
 
 const InfoContainer = styled(motion.div)`
