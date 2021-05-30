@@ -59,16 +59,12 @@ export const ThemeSwitcher = () => {
 const ButtonBody = styled(motion.div)`
   display: flex;
   padding: 4px;
-  background: ${props => props.theme.container};
+  background: ${props => props.theme.primaryFaded};
   border-radius: 10px;
-  color: ${props => props.theme.containerSubtleText};
+  color: ${props => props.theme.primary};
 
   transition: 0.25s ease-out;
   transition-property: color;
-
-  &:hover {
-    color: ${props => props.theme.containerContrast};
-  }
 `;
 
 const MotionDiv = styled(motion.div)``;

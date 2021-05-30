@@ -34,25 +34,17 @@ export const PrimaryButton = styled(Button)`
 
   &.icon-right {
     & > svg {
-      display: none;
-    }
-
-    &:hover {
-      & > svg {
-        margin-left: 32px;
-      }
-    }
-
-    @media (min-width: 400px) {
-      & > svg {
-        display: flex;
-      }
+      margin-left: 16px;
     }
   }
 
   &:disabled {
     background-color: ${props => props.theme.mutedBg};
     color: ${props => props.theme.mutedContrast};
+  }
+
+  &.shadow  {
+    box-shadow: ${props => props.theme.btnShadow};
   }
 `;
 

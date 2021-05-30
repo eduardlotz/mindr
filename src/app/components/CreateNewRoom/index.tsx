@@ -18,6 +18,7 @@ import {
   selectUsername,
   selectUserAvatar,
 } from 'app/pages/Lobby/slice/selectors';
+import Icon from '../Icon';
 
 export const CreateNewRoom = () => {
   const { t } = useTranslation();
@@ -71,8 +72,10 @@ export const CreateNewRoom = () => {
         initial="rest"
         whileHover="hover"
         whileTap="pressed"
+        className="shadow icon-right"
       >
         {t('home.createroom')}
+        <Icon name="arrow-right" height="24" width="24" fill="#ffffff" />
       </PrimaryButton>
     </Wrapper>
   );

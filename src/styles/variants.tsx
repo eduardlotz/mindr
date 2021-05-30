@@ -180,4 +180,35 @@ export const variants = {
       },
     },
   },
+  // staggered pop up animation for avatars
+  popUpVariants: {
+    visible: i => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.5,
+        stiffness: 70,
+        delay: i * 0.02,
+      },
+    }),
+    hidden: { opacity: 0, scale: 0.9 },
+    onHover: {
+      scale: 1.1,
+      transition: {
+        delay: 0,
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.9,
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.75,
+        stiffness: 40,
+      },
+    },
+  },
 };

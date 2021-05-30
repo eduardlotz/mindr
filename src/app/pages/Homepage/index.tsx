@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { H2 } from 'app/components/styled/Headers';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
-import avatars from 'assets/avatars/avatars';
 import { useLobbySlice } from '../Lobby/slice';
 import { useHomepageSlice } from '../Homepage/slice';
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
@@ -19,7 +18,11 @@ import { media } from 'styles/media';
 import { Navbar } from 'app/components/Navbar/Loadable';
 import { selectUsernameError, selectAvatarError } from './slice/selectors';
 
+import smallAvatars from 'assets/avatars/smallAvatars';
+import avatars from 'assets/avatars/avatars';
+
 import { CreateNewRoom } from 'app/components/CreateNewRoom';
+import { LoadingAvatars } from 'app/components/LoadingAvatars';
 
 export function Homepage({ match }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,41 +47,9 @@ export function Homepage({ match }) {
     dispatch(homeActions.setUsernameErrorHidden(true));
   };
 
-  const setAvatar = url => {
-    dispatch(lobbyActions.setAvatarUrl(url));
+  const setAvatar = index => {
+    dispatch(lobbyActions.setAvatarUrl(avatars[index]));
     dispatch(homeActions.setAvatarErrorHidden(true));
-  };
-
-  // staggered pop up animation for avatars
-  const popUpVariants = {
-    visible: i => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.5,
-        stiffness: 70,
-        delay: i * 0.02,
-      },
-    }),
-    hidden: { opacity: 0, scale: 0.9 },
-    onHover: {
-      scale: 1.1,
-      transition: {
-        delay: 0,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-      },
-    },
   };
 
   return (
@@ -121,29 +92,34 @@ export function Homepage({ match }) {
             <BigAvatar src={undefinedAvatar} />
           )}
         </UserContainer>
-        <AvatarSelectionContainer
-          variants={variants.slideUp}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className={avatarError.isHidden ? '' : 'has-error'}
-        >
-          {avatars.map((entry, i) => {
-            return (
-              <AvatarImg
-                src={entry}
-                variants={popUpVariants}
-                key={i}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                onClick={() => setAvatar(entry)}
-                className={avatar === entry ? 'selected' : ''}
-              />
-            );
-          })}
-        </AvatarSelectionContainer>
+        {smallAvatars ? (
+          <AvatarSelectionContainer
+            variants={variants.slideUp}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className={avatarError.isHidden ? '' : 'has-error'}
+          >
+            {smallAvatars.map((entry, i) => {
+              return (
+                <AvatarImg
+                  src={entry}
+                  variants={variants.popUpVariants}
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  onClick={() => setAvatar(i)}
+                  className={avatar === entry ? 'selected' : ''}
+                />
+              );
+            })}
+          </AvatarSelectionContainer>
+        ) : (
+          <LoadingAvatars length={16} />
+        )}
+
         {!avatarError.isHidden && (
           <InputError>{avatarError.message}</InputError>
         )}
@@ -165,8 +141,8 @@ const UsernameInput = styled.input`
   padding: 16px 24px;
   margin-right: 16px;
 
-  background: transparent;
-  border: 2px solid ${props => props.theme.lightgrey};
+  background: ${props => props.theme.container};
+  border: 2px solid ${props => props.theme.container};
   border-radius: 16px;
   color: ${props => props.theme.mainContrastText};
 
@@ -243,7 +219,8 @@ const AvatarSelectionContainer = styled(motion.div)`
 
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto 1fr;
-  grid-gap: 24px 24px;
+
+  grid-gap: 24px;
 
   padding: 24px;
   margin-bottom: 8px;
@@ -255,7 +232,7 @@ const AvatarSelectionContainer = styled(motion.div)`
   transition-property: background-color;
 
   ${media.medium`
-    grid-gap: 32px 48px;
+  grid-gap: auto 24px;
     padding: 32px 40px;
     overflow: auto;
   `}
@@ -278,10 +255,6 @@ const AvatarImg = styled(motion.img)`
   transition-property: border-color;
 
   cursor: pointer;
-  ${media.medium`
-    width: 48px;
-    height: 48px;
-  `}
 
   &.selected {
     border: 3px solid ${props => props.theme.primary};

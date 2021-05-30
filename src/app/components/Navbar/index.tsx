@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
 import { variants } from 'styles/variants';
-import { HelpLink } from '../HelpLink';
+import Icon from '../Icon';
 import { Logo } from '../Logo';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 
@@ -33,7 +33,12 @@ export function Navbar(props: Props) {
       animate="visible"
       exit="exit"
     >
-      <HelpLink />
+      <Link to="/help" style={{ display: 'flex', alignItems: 'center' }}>
+        <HelpLink>
+          {t('help.whatismindr')}
+          <Icon style={{ marginLeft: '4px' }} name="circle-help" width="20" />
+        </HelpLink>
+      </Link>
 
       <Link to="/">
         <MotionDiv
@@ -65,7 +70,6 @@ export function Navbar(props: Props) {
           >
             DE
           </Language>
-          /
           <Language
             className={i18n.language === 'en' ? 'is-active' : ''}
             initial="rest"
@@ -99,12 +103,26 @@ const FlexRowDiv = styled(motion.div)`
   align-items: center;
 `;
 
+const HelpLink = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background-color: ${props => props.theme.primaryFaded};
+  color: ${props => props.theme.primary};
+
+  font-size: 16px;
+  font-family: 'Basier';
+  font-weight: 600;
+`;
+
 const LanguageSwitcher = styled(motion.button)`
   display: flex;
-  flex-direction: row;
+
   margin-right: 16px;
   border: none;
-  background: ${props => props.theme.container};
+  background: ${props => props.theme.primaryFaded};
   padding: 8px;
   border-radius: 10px;
 
@@ -117,8 +135,6 @@ const LanguageSwitcher = styled(motion.button)`
   align-items: center;
 
   cursor: pointer;
-
-  color: ${props => props.theme.containerSubtleText};
 
   transition: 0.25s ease-out;
   transition-property: color;
@@ -137,21 +153,19 @@ const Language = styled(motion.p)`
   line-height: 18px;
   display: flex;
   align-items: center;
+  margin: 0;
 
-  color: ${props => props.theme.containerSubtleText};
+  color: ${props => props.theme.primary};
+  opacity: 0.5;
 
   transition: 0.25s ease-out;
   transition-property: color;
 
   &.is-active {
-    color: ${props => props.theme.containerContrast};
+    opacity: 1;
   }
 
   &:first-child {
-    margin: 0 4px 0 0;
-  }
-
-  &:last-child {
-    margin: 0 0 0 4px;
+    margin-right: 8px;
   }
 `;
