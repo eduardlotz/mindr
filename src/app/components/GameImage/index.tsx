@@ -4,8 +4,7 @@
  *
  */
 import React from 'react';
-import styled, { useTheme } from 'styled-components/macro';
-import { media } from 'styles/media';
+import { useTheme } from 'styled-components/macro';
 import Icon from '../Icon';
 
 interface Props {

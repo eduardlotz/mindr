@@ -29,7 +29,6 @@ import { CreateNewRoom } from 'app/components/CreateNewRoom';
 import { LoadingAvatars } from 'app/components/LoadingAvatars';
 import { JoinRoom } from 'app/components/JoinRoom/Loadable';
 import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
-import ReactTooltip from 'react-tooltip';
 
 export function Homepage({ match }) {
   const { t } = useTranslation();

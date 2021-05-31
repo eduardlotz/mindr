@@ -14,16 +14,11 @@ import { PrimaryFloatingButton } from 'app/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { useLobbySlice } from './slice';
-import {
-  selectIsStandardMode,
-  selectUsersInRoom,
-  selectGameLength,
-} from './slice/selectors';
+import { selectUsersInRoom, selectGameLength } from './slice/selectors';
 import { media } from 'styles/media';
 import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 import { SocketContext } from 'app/socketContext';
 import { useEffect } from 'react';
-import { useHomepageSlice } from '../Homepage/slice';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 import { useParams } from 'react-router-dom';
 
@@ -31,11 +26,9 @@ export function Lobby() {
   const { t } = useTranslation();
 
   const gameModes = useSelector(selectGameModes);
-  const isStandardMode = useSelector(selectIsStandardMode);
   const gameLength = useSelector(selectGameLength);
   const usersInRoom = useSelector(selectUsersInRoom);
 
-  const { actions: homeActions } = useHomepageSlice();
   const { actions: lobbyActions } = useLobbySlice();
 
   const socket = React.useContext(SocketContext);

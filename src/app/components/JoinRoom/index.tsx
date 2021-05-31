@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { PrimaryButton, SecondaryButton } from '../Button';
+import { PrimaryButton } from '../Button';
 import Icon from '../Icon';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
 import {
@@ -15,7 +15,7 @@ import {
   selectGroupCode,
 } from 'app/pages/Lobby/slice/selectors';
 import { SocketContext } from 'app/socketContext';
-import { AnimateSharedLayout, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { variants } from 'styles/variants';

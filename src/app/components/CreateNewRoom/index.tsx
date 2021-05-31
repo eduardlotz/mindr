@@ -3,7 +3,7 @@
  * CreateNewRoom
  *
  */
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from 'app/components/Button';
@@ -11,7 +11,7 @@ import { PrimaryButton } from 'app/components/Button';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { variants } from 'styles/variants';
-import { motion, AnimateSharedLayout } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   selectUsername,
   selectUserAvatar,

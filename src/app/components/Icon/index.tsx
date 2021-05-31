@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React from 'react';
 import { useTheme } from 'styled-components';
-import theme from 'styles/lightTheme';
 
 const getViewBox = name => {
   switch (name) {

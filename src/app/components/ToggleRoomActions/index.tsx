@@ -38,7 +38,7 @@ const ToggleButton = styled(SecondaryButton)`
   width: 100%;
   padding: 8px 14px;
   margin: 0;
-  
+
   min-width: fit-content;
   height: auto;
   font-weight: 600;
