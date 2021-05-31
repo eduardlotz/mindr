@@ -58,7 +58,7 @@ export const ThemeSwitcher = () => {
 
 const ButtonBody = styled(motion.div)`
   display: flex;
-  padding: 4px;
+  padding: 8px;
   background: ${props => props.theme.primaryFaded};
   border-radius: 10px;
   color: ${props => props.theme.primary};

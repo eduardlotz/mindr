@@ -45,48 +45,22 @@ export function Lobby() {
   // Used to dispatch slice actions
   const dispatch = useDispatch();
 
-  const setToStandardMode = () => {
-    dispatch(lobbyActions.setIsStandardMode(true));
-  };
-
   const setGameLength = (length: string) => {
     dispatch(lobbyActions.setGameLength(length));
-  };
-
-  const setToDrinkingMode = () => {
-    dispatch(lobbyActions.setIsStandardMode(false));
   };
 
   const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
 
   useEffect(() => {
-    socket.open();
-    socket.emit('joinRoom', room);
-  }, [room, socket]);
-
-  useEffect(() => {
-    socket.on('joinRoom', onlineUsers => {
-      console.log('socket received users in room', onlineUsers);
-      dispatch(lobbyActions.setUsersInRoom(onlineUsers));
+    socket.on('joinRoom', room => {
+      console.log('socket received users in room', room.users);
+      dispatch(lobbyActions.setUsersInRoom(room.users));
     });
     return () => {
       socket.removeAllListeners();
       socket.close();
     };
   }, [dispatch, lobbyActions, room, socket]);
-
-  useEffect(() => {
-    socket.on('pick_game', (id: number) => {
-      console.log(`socket-- pick game with id: ${id}`);
-      dispatch(homeActions.enableGame(id));
-    });
-  });
-
-  useEffect(() => {
-    socket.on('remove_game', (id: number) => {
-      dispatch(homeActions.disableGame(id));
-    });
-  });
 
   const floatingBtnVariants = {
     hidden: {
@@ -221,27 +195,6 @@ export function Lobby() {
       >
         <H2>{t('room.settings')}</H2>
         <OptionsContainer>
-          {/* TODO refactor using layout it by framer  */}
-          <ModeSwitcher>
-            <ModeTab
-              onClick={setToStandardMode}
-              className={isStandardMode ? 'is-active' : ''}
-            >
-              {t('room.standardmode')}
-            </ModeTab>
-            <ModeTab
-              onClick={setToDrinkingMode}
-              className={!isStandardMode ? 'is-active' : ''}
-            >
-              {t('room.drinkingmode')}
-            </ModeTab>
-            <ModeTabActiveIndicator
-              variants={variants.modeTab}
-              initial="standard"
-              animate={isStandardMode ? 'left' : 'right'}
-            />
-          </ModeSwitcher>
-
           <ModeSwitcher>
             <ModeTab
               onClick={() => setGameLength('short')}

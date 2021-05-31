@@ -12,21 +12,21 @@ export const variants = {
   },
   buttonVariants: {
     rest: {
-      scale: 1,
+      y: 0,
       transition: {
         type: 'spring',
         bounce: 0.9,
       },
     },
     hover: {
-      scale: 1.03,
+      y: -8,
       transition: {
         type: 'spring',
         bounce: 0.9,
       },
     },
     pressed: {
-      scale: 1.2,
+      y: 0,
     },
   },
   slideUp: {

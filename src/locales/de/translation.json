@@ -1,17 +1,17 @@
 {
   "title": "Willkommen",
   "home": {
-    "joingroup": "Gruppe beitreten",
     "createroom": "Neuen Raum erstellen",
+    "headersubtext": "Gib deinen Namen ein und wähle einen Avatar aus.",
+    "joinroom": "Einem Raum beitreten",
+    "joinInfo": "Du hast einen Zugangscode und möchtest einem Raum beitreten? ",
+    "createInfo": "Lieber einen neuen Raum erstellen und deine Freunde einladen?",
     "backtohome": "Zurück zur Startseite",
     "pickusername": "Wähle einen Namen & Avatar",
     "yourname": "Dein Name",
     "wherecode": "Wo ist der Code?",
-    "joingroupheader": "Willst du jemandem beitreten?",
-    "creategroupheader": "Eine neue Gruppe erstellen",
     "toggleTheme": "Theme wechseln",
-    "toggleLanguage": "Sprache wechseln",
-    "infoText": "Du kannst deine Freunde einladen, nachdem du einen Raum erstellt hast."
+    "toggleLanguage": "Sprache wechseln"
   },
   "room": {
     "pickgames": "Wähle die Spiele, die du spielen möchtest",

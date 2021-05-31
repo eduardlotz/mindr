@@ -1,17 +1,22 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components/macro';
+import { media } from 'styles/media';
 
 export const H1 = styled(motion.h1)`
   width: 100%;
   margin: 0 0 8px 0;
 
-  font-family: Basier, sans-serif;
+  font-family: 'Basier', sans-serif;
   font-style: normal;
   font-weight: 800;
-  font-size: 38px;
-  line-height: 50px;
+  font-size: 32px;
 
   color: ${props => props.theme.mainContrastText};
+
+  ${media.medium`
+    font-size: 38px;
+    line-height: 50px;
+  `}
 `;
 
 export const H2 = styled(motion.h2)`
@@ -55,7 +60,7 @@ export const H5 = styled(motion.h5)`
 
   z-index: 10;
 
-  color: ${props => props.theme.mainContrastText};
+  color: ${props => props.theme.containerContrast};
 
   &.highlighted {
     color: ${props => props.theme.primary};
@@ -68,4 +73,11 @@ export const H5 = styled(motion.h5)`
 
 export const Highlighted = styled(motion.span)`
   color: ${props => props.theme.primary};
+`;
+
+export const SubText = styled(motion.p)`
+  color: ${props => props.theme.mainSubtleText};
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0 0 16px 0;
 `;

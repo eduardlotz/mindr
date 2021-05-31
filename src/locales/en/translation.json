@@ -1,16 +1,16 @@
 {
   "home": {
-    "joingroup": "Join Group",
     "createroom": "Create a new room",
+    "joinroom": "Join an existing room",
+    "headersubtext": "Enter your name and pick an avatar.",
+    "joinInfo": "You have an access code and want to join a room?",
+    "createInfo": "Instead create a new room and invite your friends?",
     "backtohome": "back to Home",
     "pickusername": "Pick an username & avatar",
     "yourname": "Your name",
     "wherecode": "Where is the code?",
-    "joingroupheader": "Want to join someone?",
-    "creategroupheader": "Create a new group",
     "toggleTheme": "Switch theme",
-    "toggleLanguage": "Switch language",
-    "infoText": "You can invite your friends after you have created a new room."
+    "toggleLanguage": "Switch language"
   },
   "room": {
     "pickgames": "Pick the games you want to play",

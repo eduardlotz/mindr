@@ -52,10 +52,10 @@ export const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
+    font-family: 'Basier Circle', Helvetica, sans-serif;
   }
 
   body {
-    font-family: 'Basier Circle', Helvetica, Arial, sans-serif;
     background: ${props => props.theme.mainBg};
 
     transition: 0.25s ease-out;
@@ -65,11 +65,6 @@ export const GlobalStyle = createGlobalStyle`
   #root {
     min-height: 100%;
     min-width: 100%;
-  }
-
-  p,
-  label, a {
-    font-family: 'Basier Circle', Helvetica, Arial, sans-serif;
   }
 
   input, select {

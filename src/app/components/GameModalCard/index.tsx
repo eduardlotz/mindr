@@ -32,8 +32,8 @@ export function GameModalCard(props: Props) {
       onClick={props.onClick}
     >
       <GameImage
-        color={theme.containerContrast}
-        size="92px"
+        color={theme.mainContrastText}
+        size="92"
         name={props.imageClass}
       />
       <H5>{t(`gamemode.${props.title}`)}</H5>
@@ -47,20 +47,20 @@ const CardContainer = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px 16px;
-  height: auto;
   position: relative;
-  border: 2px solid ${props => props.theme.lightgrey};
+
+  height: auto;
+  padding: 24px 16px;
   border-radius: 12px;
+  background: transparent;
+  border: 2px solid ${props => props.theme.container};
+  transition: 0.25s ease-out;
+  transition-property: border-color box-shadow;
+  cursor: pointer;
 
   ${media.medium`
     padding: 16px 32px;
   `}
-
-  background: transparent;
-  transition: 0.25s ease-out;
-  transition-property: border-color box-shadow;
-  cursor: pointer;
 
   &:hover {
     border-color: transparent;

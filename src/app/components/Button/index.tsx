@@ -59,7 +59,7 @@ export const SecondaryButton = styled(Button)`
   padding: 16px;
 
   background: ${props => props.theme.mainBg};
-  border: 2px solid ${props => props.theme.mainSubtleText};
+  border: 2px solid ${props => props.theme.container};
   color: ${props => props.theme.mainContrastText};
 
   transition: 0.25s ease-out;
@@ -74,6 +74,10 @@ export const SecondaryButton = styled(Button)`
   ${media.medium`
     padding: 16px;
   `};
+
+  &:hover {
+    background-color: ${props => props.theme.container};
+  }
 `;
 
 export const LinkButton = styled(motion.button)`

@@ -177,9 +177,9 @@ const P = styled(motion.p)`
 const HowToContainer = styled(motion.div)`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: 16px;
+  grid-gap: 16px;
 
   ${media.medium`
     grid-template-columns: repeat(3, 1fr);
@@ -187,7 +187,6 @@ const HowToContainer = styled(motion.div)`
   `}
 
   margin: 16px 0 40px 0;
-  background-color: ${props => props.theme.mainBg};
 `;
 
 const InfoContainer = styled(motion.div)`
@@ -199,9 +198,9 @@ const InfoContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
 
-  margin-top: 40px;
+  margin: 40px 0 80px 0;
   ${media.medium`
-    margin-top: 64px;
+    margin-top: 64px 0 120px 0;
   `}
 `;
 

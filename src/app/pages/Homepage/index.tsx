@@ -7,9 +7,13 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { H2 } from 'app/components/styled/Headers';
-import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+import { H1, SubText } from 'app/components/styled/Headers';
+import {
+  selectIsCreator,
+  selectUserAvatar,
+  selectUsername,
+} from '../Lobby/slice/selectors';
 import { useLobbySlice } from '../Lobby/slice';
 import { useHomepageSlice } from '../Homepage/slice';
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
@@ -23,26 +27,28 @@ import avatars from 'assets/avatars/avatars';
 
 import { CreateNewRoom } from 'app/components/CreateNewRoom';
 import { LoadingAvatars } from 'app/components/LoadingAvatars';
+import { JoinRoom } from 'app/components/JoinRoom/Loadable';
+import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
+import ReactTooltip from 'react-tooltip';
 
 export function Homepage({ match }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
   const { actions: homeActions } = useHomepageSlice();
 
-  // Used to dispatch slice actions
   const dispatch = useDispatch();
 
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
 
+  const isCreator = useSelector(selectIsCreator);
+
   const nameError = useSelector(selectUsernameError);
   const avatarError = useSelector(selectAvatarError);
 
   // type needs to be declared in order to work with typescript
-  const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setUsername = e => {
     dispatch(lobbyActions.setUsername(e.target.value));
     dispatch(homeActions.setUsernameErrorHidden(true));
   };
@@ -61,6 +67,25 @@ export function Homepage({ match }) {
         animate="visible"
         exit="exit"
       >
+        {isCreator ? (
+          <H1
+            variants={variants.slideUpItem}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {t('home.createroom')}
+          </H1>
+        ) : (
+          <H1
+            variants={variants.slideUpItem}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {t('home.joinroom')}
+          </H1>
+        )}
         <UserContainer
           variants={variants.slideUp}
           initial="hidden"
@@ -68,7 +93,7 @@ export function Homepage({ match }) {
           exit="exit"
         >
           <FlexColDiv>
-            <H2>{t('home.pickusername')}</H2>
+            <SubText>{t('home.headersubtext')}</SubText>
             <UsernameInput
               placeholder={t('home.yourname')}
               value={name}
@@ -89,7 +114,13 @@ export function Homepage({ match }) {
               dragElastic={0.5}
             />
           ) : (
-            <BigAvatar src={undefinedAvatar} />
+            <BigAvatar
+              src={undefinedAvatar}
+              drag
+              dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              dragElastic={0.5}
+            />
           )}
         </UserContainer>
         {smallAvatars ? (
@@ -124,14 +155,30 @@ export function Homepage({ match }) {
           <InputError>{avatarError.message}</InputError>
         )}
       </UserCreationContainer>
+      <AnimateSharedLayout>
+        {isCreator ? <CreateNewRoom /> : <JoinRoom />}
 
-      <CreateNewRoom />
+        <ToggleActionsWrapper
+          layout
+          variants={variants.slideUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {isCreator ? (
+            <SubText>{t('home.joinInfo')}</SubText>
+          ) : (
+            <SubText>{t('home.createInfo')}</SubText>
+          )}
+          <ToggleRoomActions />
+        </ToggleActionsWrapper>
+      </AnimateSharedLayout>
     </>
   );
 }
 
 const UserCreationContainer = styled(motion.div)`
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 `;
 
 const UsernameInput = styled.input`
@@ -186,27 +233,28 @@ const InputError = styled(motion.small)`
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
-  margin: 24px 0;
+  margin: 16px;
+
   background-color: transparent;
   border-radius: 50%;
   cursor: grab;
   z-index: 1000;
-
-  ${media.medium`
-    margin: 0;
+  ${media.small`
+    margin: 0 0 0 24px;
   `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+  flex-direction: column;
 
-  ${media.medium`
-    margin-bottom: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+
+  ${media.small`
     justify-content: space-between;
-    align-items: flex-end;
     flex-direction: row;
   `}
 `;
@@ -261,12 +309,24 @@ const AvatarImg = styled(motion.img)`
   }
 `;
 
+const ToggleActionsWrapper = styled(motion.div)`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  ${media.small`
+    flex-direction: row;
+  `}
+
+  margin: 16px 0;
+`;
+
 const FlexColDiv = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
-
-  ${media.medium`
-    width: 80%;
-  `}
 `;
