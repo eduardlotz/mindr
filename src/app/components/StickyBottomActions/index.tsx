@@ -6,7 +6,6 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { messages } from './messages';
 import { PrimaryButton, SecondaryButton } from '../Button';
 import Icon from '../Icon';
 import { motion } from 'framer-motion';
@@ -14,8 +13,7 @@ import { motion } from 'framer-motion';
 interface Props {}
 
 export function StickyBottomActions(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const containerSlideUpVariants = {
     hidden: {
@@ -59,6 +57,7 @@ export function StickyBottomActions(props: Props) {
           scale: 1.03,
         }}
         type="submit"
+        style={{ width: '60%' }}
       >
         {t('home.joingroup')}
         <Icon
@@ -83,5 +82,7 @@ const FloatingButtonGroup = styled(motion.div)`
   justify-content: space-between;
 
   margin: 0 auto;
-  width: 70%;
+
+  width: calc(100% - 32px);
+  max-width: 800px;
 `;

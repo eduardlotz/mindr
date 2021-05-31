@@ -74,7 +74,7 @@ const Span = styled.span`
 
   ${media.medium`
     & > svg {
-      width: 80px;
+      width: 52px;
     }
   `}
 `;
@@ -82,11 +82,13 @@ const Span = styled.span`
 const Text = styled.span`
   font-family: 'Basier';
   font-style: normal;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 34px;
   font-size: 18px;
+  margin-top: -6px;
 
   ${media.medium`
+    margin-top: -4px;
     font-size: 25px;
   `}
 `;

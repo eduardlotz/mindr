@@ -14,7 +14,6 @@ import avatar13 from './avatar-13.jpg';
 import avatar14 from './avatar-14.jpg';
 import avatar15 from './avatar-15.jpg';
 import avatar16 from './avatar-16.jpg';
-// TODO refactor to a dynamic method
 
 const avatars = [
   avatar1,

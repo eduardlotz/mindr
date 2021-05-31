@@ -3,7 +3,7 @@
  * Help
  *
  */
-import React, { memo } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { H1 } from 'app/components/styled/Headers';
@@ -12,15 +12,22 @@ import { colors } from 'styles/colors';
 // import { useDispatch } from 'react-redux';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { variants } from 'styles/variants';
 // import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
+import { GameModalCard } from 'app/components/GameModalCard';
+import { selectGameModes } from '../Homepage/slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { useModalSlice } from 'app/components/MotionModal/slice';
 
-interface Props {}
-
-export const Help = memo((props: Props) => {
+export const Help = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const { actions: modalActions } = useModalSlice();
+  const gameModes = useSelector(selectGameModes);
+  const history = useHistory();
 
   const floatingBtnVariants = {
     hidden: {
@@ -54,6 +61,20 @@ export const Help = memo((props: Props) => {
         stiffness: 60,
       },
     },
+  };
+
+  const openModal = (gameId: string) => {
+    const selectedGame = gameModes.find(game => game.title === gameId);
+
+    if (selectedGame) {
+      dispatch(modalActions.setModalTitle(t(`gamemode.${selectedGame.title}`)));
+      dispatch(modalActions.setModalContent(selectedGame.title));
+      dispatch(modalActions.setModalOpen(true));
+    }
+  };
+
+  const goBack = () => {
+    history.goBack();
   };
 
   return (
@@ -94,33 +115,36 @@ export const Help = memo((props: Props) => {
         >
           <H1>{t('help.whatgames')}</H1>
           <Small>{t('help.whatgameshint')}</Small>
-          <HowToContainer
-            variants={variants.container}
-            initial="hidden"
-            animate="visible"
-          ></HowToContainer>
+          <HowToContainer>
+            {gameModes.map((item, i) => (
+              <GameModalCard
+                onClick={() => openModal(item.title)}
+                imageClass={item.imageClass}
+                title={item.title}
+              />
+            ))}
+          </HowToContainer>
         </ContentBlock>
       </InfoContainer>
-      <Link to="/" style={{ width: '100%' }}>
-        <PrimaryFloatingButton
-          variants={floatingBtnVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <Icon
-            name="circle-arrow-left"
-            fill="white"
-            height="24"
-            width="24"
-            style={{ marginRight: '16px' }}
-          />
-          {t('home.backtohome')}
-        </PrimaryFloatingButton>
-      </Link>
+      <PrimaryFloatingButton
+        variants={floatingBtnVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        onClick={goBack}
+      >
+        <Icon
+          name="circle-arrow-left"
+          fill="white"
+          height="24"
+          width="24"
+          style={{ marginRight: '16px' }}
+        />
+        {t('home.backtohome')}
+      </PrimaryFloatingButton>
     </>
   );
-});
+};
 
 const Small = styled.small`
   display: flex;
@@ -153,9 +177,9 @@ const P = styled(motion.p)`
 const HowToContainer = styled(motion.div)`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: 16px;
+  grid-gap: 16px;
 
   ${media.medium`
     grid-template-columns: repeat(3, 1fr);
@@ -163,7 +187,6 @@ const HowToContainer = styled(motion.div)`
   `}
 
   margin: 16px 0 40px 0;
-  background-color: ${colors.basic.white};
 `;
 
 const InfoContainer = styled(motion.div)`
@@ -175,9 +198,9 @@ const InfoContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
 
-  margin-top: 40px;
+  margin: 40px 0 80px 0;
   ${media.medium`
-    margin-top: 64px;
+    margin-top: 64px 0 120px 0;
   `}
 `;
 
@@ -189,6 +212,7 @@ const PrimaryFloatingButton = styled(PrimaryButton)`
   max-width: calc(100% - 32px);
   margin: 0 auto;
   width: 100%;
+  z-index: 1000;
   box-shadow: 0px 2.0370371341705322px 2.6888887882232666px 0px
       rgba(37, 67, 115, 0.0196),
     0px 9.629630088806152px 10.51111125946045px 0px rgba(37, 67, 115, 0.0304),

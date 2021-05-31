@@ -3,18 +3,18 @@ import { DefaultTheme } from 'styled-components';
 const theme: DefaultTheme = {
   black: '#111111',
   darkgrey: '#3d3d3d',
-  grey: '#DEDEDE',
+  grey: '#CECECE',
   lightgrey: '#E5E5E8',
   white: '#ffffff',
 
   mainBg: '#ffffff',
   mainSubtleText: '#B7B7B7',
   mainContrastText: '#212121',
-  container: '#faf9fa',
+  container: '#F6F6F8',
   containerContrast: '#000000',
   containerSubtleText: '#707174',
 
-  primary: '#3877B2',
+  primary: '#3A76E9',
   primaryContrast: '#ffffff',
   primaryMuted: '#dfd9f4',
   primaryFaded: '#F6F9FE',

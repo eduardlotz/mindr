@@ -13,6 +13,8 @@ import { selectGroupCode } from 'app/pages/Lobby/slice/selectors';
 import { useSelector } from 'react-redux';
 import { Highlighted } from '../styled/Headers';
 import ReactTooltip from 'react-tooltip';
+import { ChatButton } from '../ChatButton';
+import { media } from 'styles/media';
 
 export function RoomTopBar() {
   const { t } = useTranslation();
@@ -31,23 +33,33 @@ export function RoomTopBar() {
       </RoomInfo>
       <FlexGrowEndWrapper>
         <ThemeSwitcher />
+        <ChatButton />
       </FlexGrowEndWrapper>
     </Wrapper>
   );
 }
 
 const FlexGrowEndWrapper = styled.div`
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 16px;
   justify-content: flex-end;
-  flex: 1 1 100%;
+  flex: 1 1 50%;
+
+  ${media.medium`
+    flex: 1 1 100%;
+  `};
 `;
 
 const FlexGrowWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  flex: 1 1 100%;
+  flex: 1 1 50%;
+
+  ${media.medium`
+    flex: 1 1 100%;
+  `};
 `;
 
 const Wrapper = styled(motion.div)`

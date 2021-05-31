@@ -34,25 +34,17 @@ export const PrimaryButton = styled(Button)`
 
   &.icon-right {
     & > svg {
-      display: none;
-    }
-
-    &:hover {
-      & > svg {
-        margin-left: 32px;
-      }
-    }
-
-    @media (min-width: 400px) {
-      & > svg {
-        display: flex;
-      }
+      margin-left: 16px;
     }
   }
 
   &:disabled {
     background-color: ${props => props.theme.mutedBg};
     color: ${props => props.theme.mutedContrast};
+  }
+
+  &.shadow  {
+    box-shadow: ${props => props.theme.btnShadow};
   }
 `;
 
@@ -66,8 +58,8 @@ export const SecondaryButton = styled(Button)`
   border-radius: 16px;
   padding: 16px;
 
-  background: transparent;
-  border: 2px solid ${props => props.theme.mainSubtleText};
+  background: ${props => props.theme.mainBg};
+  border: 2px solid ${props => props.theme.container};
   color: ${props => props.theme.mainContrastText};
 
   transition: 0.25s ease-out;
@@ -80,8 +72,12 @@ export const SecondaryButton = styled(Button)`
   line-height: 26px;
 
   ${media.medium`
-    padding: 16px 72px;
-  `}
+    padding: 16px;
+  `};
+
+  &:hover {
+    background-color: ${props => props.theme.container};
+  }
 `;
 
 export const LinkButton = styled(motion.button)`

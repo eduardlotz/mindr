@@ -1,14 +1,15 @@
 {
   "title": "Willkommen",
   "home": {
-    "joingroup": "Gruppe beitreten",
-    "creategroup": "Erstelle eine Gruppe",
+    "createroom": "Neuen Raum erstellen",
+    "headersubtext": "Gib deinen Namen ein und wähle einen Avatar aus.",
+    "joinroom": "Einem Raum beitreten",
+    "joinInfo": "Du hast einen Zugangscode und möchtest einem Raum beitreten? ",
+    "createInfo": "Lieber einen neuen Raum erstellen und deine Freunde einladen?",
     "backtohome": "Zurück zur Startseite",
     "pickusername": "Wähle einen Namen & Avatar",
     "yourname": "Dein Name",
     "wherecode": "Wo ist der Code?",
-    "joingroupheader": "Willst du jemandem beitreten?",
-    "creategroupheader": "Eine neue Gruppe erstellen",
     "toggleTheme": "Theme wechseln",
     "toggleLanguage": "Sprache wechseln"
   },
@@ -48,6 +49,14 @@
     "bestartist": "Größter Künstler",
     "survey": "Umfrage",
     "whoknowsyou": "Wer kennt dich"
+  },
+  "gameexplanation": {
+    "quiz": "Quizfragen: welcher dieser Fotos zeigt 'x', wo liegt 'y' auf der Erde, wieviel wiegt ein 'z'",
+    "drawguess": "Einer Malt, alle anderen erraten was es sein soll",
+    "mostlikely": "Eine Umfrage wer am ehesten etwas tun würde. (zerstört Freundschaften)",
+    "bestartist": "Jeder malt dasselbe Bild und der Sieger wird ausgewählt",
+    "survey": "Die Mehrheit hat immer recht",
+    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten den anderen Spielern zuzuordnen."
   },
   "error": {
     "usernameTaken": "Der Name ist schon vergeben",

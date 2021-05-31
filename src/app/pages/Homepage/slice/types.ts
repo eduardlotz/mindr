@@ -18,7 +18,7 @@ export interface HomepageState {
 export interface iGameMode {
   title: string;
   imageClass: string;
-  rules: Array<string>;
+  images: Array<string>;
   isActive: boolean;
   isAvailable: boolean;
 }

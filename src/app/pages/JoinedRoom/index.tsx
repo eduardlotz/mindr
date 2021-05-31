@@ -11,7 +11,7 @@ import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
 import Icon from 'app/components/Icon';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { media } from 'styles/media';
 import {
@@ -21,17 +21,33 @@ import {
 } from '../Lobby/slice/selectors';
 import { GameImage } from 'app/components/GameImage';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
+import { useEffect } from 'react';
+import { SocketContext } from 'app/socketContext';
+import { useLobbySlice } from '../Lobby/slice';
 
 interface Props {}
 
 export function JoinedRoom(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { actions: lobbyActions } = useLobbySlice();
+  const socket = React.useContext(SocketContext);
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);
   const gameLength = useSelector(selectGameLength);
   const usersInRoom = useSelector(selectUsersInRoom);
+
+  useEffect(() => {
+    socket.on('joinRoom', room => {
+      console.log('socket received users in room', room.users);
+      dispatch(lobbyActions.setUsersInRoom(room.users));
+    });
+    return () => {
+      socket.removeAllListeners();
+      socket.close();
+    };
+  }, [dispatch, lobbyActions, socket]);
 
   const gameVariants = {
     active: i => ({

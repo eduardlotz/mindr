@@ -78,8 +78,8 @@ export const GameSelectCard = ({ mode, index, onClick }) => {
         <NotAvailableBanner>{t('room.indevelopment')}</NotAvailableBanner>
       )}
       <GameImage
-        color={theme.containerContrast}
-        size="92px"
+        color={theme.mainContrastText}
+        size="92"
         name={mode.imageClass}
         opacity={getImageColor()}
       />

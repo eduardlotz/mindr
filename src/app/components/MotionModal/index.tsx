@@ -3,7 +3,7 @@
  * MotionModal
  *
  */
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,12 +13,14 @@ import { useModalSlice } from './slice';
 import { selectModal } from './slice/selectors';
 import Icon from '../Icon';
 import { variants } from 'styles/variants';
+import gameImages from 'assets/games/gameImages';
+import { ImageSlider } from '../ImageSlider';
+import { useTranslation } from 'react-i18next';
 
-interface Props {}
-
-export function MotionModal(props: Props) {
+export const MotionModal = () => {
   // Use the slice we created
   const { actions } = useModalSlice();
+  const { t } = useTranslation();
 
   const modal = useSelector(selectModal);
 
@@ -95,13 +97,39 @@ export function MotionModal(props: Props) {
               <Icon name="close" width="24" />
             </CloseButton>
             <H2>{modal.title}</H2>
-            {modal.content}
+            <ImageSliderWrapper>
+              <ImageSlider images={gameImages[modal.content]} />
+            </ImageSliderWrapper>
+            <ExplanationText>
+              {t(`gameexplanation.${modal.content}`)}
+            </ExplanationText>
           </Body>
         )}
       </AnimatePresence>
     </>
   );
-}
+};
+
+const ExplanationText = styled.p`
+  width: 100%;
+  font-size: 14px;
+  font-weight: normal;
+  color: ${props => props.theme.mainContrastText};
+  text-align: left;
+  margin: 16px 0;
+`;
+
+const ImageSliderWrapper = styled.div`
+  width: 100%;
+  height: 440px;
+  max-height: 440px;
+
+  margin: 24px auto;
+  overflow: hidden;
+  position: relative;
+
+  display: grid;
+`;
 
 const CloseButton = styled(motion.button)`
   position: absolute;
@@ -140,8 +168,10 @@ const Body = styled(motion.div)`
   flex-direction: column;
   align-items: flex-start;
 
-  min-height: 50vh;
-  height: fit-content;
+  height: 80%;
+  width: 40%;
+  max-height: 80%;
+
   width: calc(100% - 32px);
   margin: auto 16px;
 

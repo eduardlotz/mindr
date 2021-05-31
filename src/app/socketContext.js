@@ -8,13 +8,15 @@ const SocketProvider = ({ children }) => {
 
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // dev code
-    ENDPOINT = 'localhost:5000';
+    ENDPOINT = 'localhost:4000';
   } else {
     // production code
     ENDPOINT = 'https://mindr-server.herokuapp.com/';
   }
 
-  const socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
+  const socket = io(ENDPOINT, {
+    autoConnect: false,
+  });
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );

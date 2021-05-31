@@ -12,21 +12,21 @@ export const variants = {
   },
   buttonVariants: {
     rest: {
-      scale: 1,
+      y: 0,
       transition: {
         type: 'spring',
         bounce: 0.9,
       },
     },
     hover: {
-      scale: 1.03,
+      y: -8,
       transition: {
         type: 'spring',
         bounce: 0.9,
       },
     },
     pressed: {
-      scale: 1.2,
+      y: 0,
     },
   },
   slideUp: {
@@ -177,6 +177,37 @@ export const variants = {
         damping: 10,
         mass: 0.3,
         stiffness: 100,
+      },
+    },
+  },
+  // staggered pop up animation for avatars
+  popUpVariants: {
+    visible: i => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.5,
+        stiffness: 70,
+        delay: i * 0.02,
+      },
+    }),
+    hidden: { opacity: 0, scale: 0.9 },
+    onHover: {
+      scale: 1.1,
+      transition: {
+        delay: 0,
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.9,
+      transition: {
+        type: 'spring',
+        damping: 10,
+        mass: 0.75,
+        stiffness: 40,
       },
     },
   },

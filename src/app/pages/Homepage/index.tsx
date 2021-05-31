@@ -3,144 +3,58 @@
  * Homepage
  *
  */
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { H2 } from 'app/components/styled/Headers';
-import { LinkButton, SecondaryButton } from 'app/components/Button';
-import { JoinGroup } from 'app/components/JoinGroup';
-
-import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
-import avatars from 'assets/avatars/avatars';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+import { H1, SubText } from 'app/components/styled/Headers';
+import {
+  selectIsCreator,
+  selectUserAvatar,
+  selectUsername,
+} from '../Lobby/slice/selectors';
 import { useLobbySlice } from '../Lobby/slice';
 import { useHomepageSlice } from '../Homepage/slice';
-
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
-
-import { modalActions } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
-
-import { SocketContext } from 'app/socketContext';
-import { useHistory } from 'react-router';
 import { Navbar } from 'app/components/Navbar/Loadable';
 import { selectUsernameError, selectAvatarError } from './slice/selectors';
 
+import smallAvatars from 'assets/avatars/smallAvatars';
+import avatars from 'assets/avatars/avatars';
+
+import { CreateNewRoom } from 'app/components/CreateNewRoom';
+import { LoadingAvatars } from 'app/components/LoadingAvatars';
+import { JoinRoom } from 'app/components/JoinRoom/Loadable';
+import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
+
 export function Homepage({ match }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  // used to dispatch socket actions
-  const socket = useContext(SocketContext);
-
-  const history = useHistory();
-
-  // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
   const { actions: homeActions } = useHomepageSlice();
 
-  // Used to dispatch slice actions
   const dispatch = useDispatch();
 
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
 
+  const isCreator = useSelector(selectIsCreator);
+
   const nameError = useSelector(selectUsernameError);
   const avatarError = useSelector(selectAvatarError);
 
-  //Checks to see if there's a user already present
-
-  useEffect(() => {
-    socket.on('users', users => {
-      dispatch(lobbyActions.setUsersInRoom(users));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
-  useEffect(() => {
-    socket.on('joined_room', (room: string) => {
-      dispatch(lobbyActions.setGroupCode(room));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
-  useEffect(() => {
-    socket.on('left_room', () => {
-      dispatch(lobbyActions.setGroupCode(''));
-      dispatch(lobbyActions.setJoinedGroup(false));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
   // type needs to be declared in order to work with typescript
-  const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setUsername = e => {
     dispatch(lobbyActions.setUsername(e.target.value));
     dispatch(homeActions.setUsernameErrorHidden(true));
   };
 
-  const setAvatar = url => {
-    dispatch(lobbyActions.setAvatarUrl(url));
+  const setAvatar = index => {
+    dispatch(lobbyActions.setAvatarUrl(avatars[index]));
     dispatch(homeActions.setAvatarErrorHidden(true));
-  };
-
-  const openLinkInfoModal = () => {
-    dispatch(modalActions.setModalTitle(t('home.wherecode')));
-    dispatch(modalActions.setModalOpen(true));
-  };
-
-  //Emits the login event and if successful redirects to chat and saves user data
-  const handleCreateRoom = () => {
-    socket.emit('create_room', { name, avatar }, errors => {
-      if (errors) {
-        for (let error of errors) {
-          if (error.type === 'username') {
-            dispatch(homeActions.setUsernameError(t('error.' + error.message)));
-          }
-          if (error.type === 'room') {
-            dispatch(homeActions.setRoomError(t('error.' + error.message)));
-          }
-          if (error.type === 'avatar') {
-            dispatch(homeActions.setAvatarError(t('error.' + error.message)));
-          }
-        }
-        return;
-      }
-
-      dispatch(lobbyActions.setJoinedGroup(true));
-      dispatch(lobbyActions.setIsCreator(true));
-      history.push('/lobby');
-    });
-  };
-
-  // staggered pop up animation for avatars
-  const popUpVariants = {
-    visible: i => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.5,
-        stiffness: 70,
-        delay: i * 0.02,
-      },
-    }),
-    hidden: { opacity: 0, scale: 0.9 },
-    onHover: {
-      scale: 1.1,
-      transition: {
-        delay: 0,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-      },
-    },
   };
 
   return (
@@ -152,6 +66,25 @@ export function Homepage({ match }) {
         animate="visible"
         exit="exit"
       >
+        {isCreator ? (
+          <H1
+            variants={variants.slideUpItem}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {t('home.createroom')}
+          </H1>
+        ) : (
+          <H1
+            variants={variants.slideUpItem}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {t('home.joinroom')}
+          </H1>
+        )}
         <UserContainer
           variants={variants.slideUp}
           initial="hidden"
@@ -159,7 +92,7 @@ export function Homepage({ match }) {
           exit="exit"
         >
           <FlexColDiv>
-            <H2>{t('home.pickusername')}</H2>
+            <SubText>{t('home.headersubtext')}</SubText>
             <UsernameInput
               placeholder={t('home.yourname')}
               value={name}
@@ -180,84 +113,71 @@ export function Homepage({ match }) {
               dragElastic={0.5}
             />
           ) : (
-            <BigAvatar src={undefinedAvatar} />
+            <BigAvatar
+              src={undefinedAvatar}
+              drag
+              dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              dragElastic={0.5}
+            />
           )}
         </UserContainer>
-        <AvatarSelectionContainer
-          variants={variants.slideUp}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className={avatarError.isHidden ? '' : 'has-error'}
-        >
-          {avatars.map((entry, i) => {
-            return (
-              <AvatarImg
-                src={entry}
-                variants={popUpVariants}
-                key={i}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                onClick={() => setAvatar(entry)}
-                className={avatar === entry ? 'selected' : ''}
-              />
-            );
-          })}
-        </AvatarSelectionContainer>
+        {smallAvatars ? (
+          <AvatarSelectionContainer
+            variants={variants.slideUp}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className={avatarError.isHidden ? '' : 'has-error'}
+          >
+            {smallAvatars.map((entry, i) => {
+              return (
+                <AvatarImg
+                  src={entry}
+                  variants={variants.popUpVariants}
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  onClick={() => setAvatar(i)}
+                  className={avatar === entry ? 'selected' : ''}
+                />
+              );
+            })}
+          </AvatarSelectionContainer>
+        ) : (
+          <LoadingAvatars length={16} />
+        )}
+
         {!avatarError.isHidden && (
           <InputError>{avatarError.message}</InputError>
         )}
       </UserCreationContainer>
+      <AnimateSharedLayout>
+        {isCreator ? <CreateNewRoom /> : <JoinRoom />}
 
-      {/* Bottom Panel for joining or creating a group */}
-      <StartGameContainer
-        variants={variants.slideUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <ContentBlock
-          variants={variants.slideUpItem}
+        <ToggleActionsWrapper
+          layout
+          variants={variants.slideUp}
           initial="hidden"
           animate="visible"
           exit="exit"
         >
-          <InlineBlock>
-            <H2 className="margin-clear">{t('home.joingroupheader')}</H2>
-            <LinkButton onClick={openLinkInfoModal}>
-              {t('home.wherecode')}
-            </LinkButton>
-          </InlineBlock>
-          <JoinGroup />
-        </ContentBlock>
-        <ContentBlock
-          variants={variants.slideUpItem}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <div className="create-group">
-            <H2>{t('home.creategroupheader')}</H2>
-            <SecondaryButton
-              onClick={handleCreateRoom}
-              variants={variants.buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="pressed"
-            >
-              {t('home.creategroup')}
-            </SecondaryButton>
-          </div>
-        </ContentBlock>
-      </StartGameContainer>
+          {isCreator ? (
+            <SubText>{t('home.joinInfo')}</SubText>
+          ) : (
+            <SubText>{t('home.createInfo')}</SubText>
+          )}
+          <ToggleRoomActions />
+        </ToggleActionsWrapper>
+      </AnimateSharedLayout>
     </>
   );
 }
 
 const UserCreationContainer = styled(motion.div)`
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 `;
 
 const UsernameInput = styled.input`
@@ -267,8 +187,8 @@ const UsernameInput = styled.input`
   padding: 16px 24px;
   margin-right: 16px;
 
-  background: transparent;
-  border: 2px solid ${props => props.theme.lightgrey};
+  background: ${props => props.theme.container};
+  border: 2px solid ${props => props.theme.container};
   border-radius: 16px;
   color: ${props => props.theme.mainContrastText};
 
@@ -312,27 +232,28 @@ const InputError = styled(motion.small)`
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
-  margin: 24px 0;
+  margin: 16px;
+
   background-color: transparent;
   border-radius: 50%;
   cursor: grab;
   z-index: 1000;
-
-  ${media.medium`
-    margin: 0;
+  ${media.small`
+    margin: 0 0 0 24px;
   `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+  flex-direction: column;
 
-  ${media.medium`
-    margin-bottom: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+
+  ${media.small`
     justify-content: space-between;
-    align-items: flex-end;
     flex-direction: row;
   `}
 `;
@@ -345,7 +266,8 @@ const AvatarSelectionContainer = styled(motion.div)`
 
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto 1fr;
-  grid-gap: 24px 24px;
+
+  grid-gap: 24px;
 
   padding: 24px;
   margin-bottom: 8px;
@@ -357,8 +279,9 @@ const AvatarSelectionContainer = styled(motion.div)`
   transition-property: background-color;
 
   ${media.medium`
-    grid-gap: 32px 48px;
+  grid-gap: auto 24px;
     padding: 32px 40px;
+    overflow: auto;
   `}
 
   &.has-error {
@@ -379,57 +302,30 @@ const AvatarImg = styled(motion.img)`
   transition-property: border-color;
 
   cursor: pointer;
-  ${media.medium`
-    width: 48px;
-    height: 48px;
-  `}
 
   &.selected {
     border: 3px solid ${props => props.theme.primary};
   }
 `;
 
+const ToggleActionsWrapper = styled(motion.div)`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  ${media.small`
+    flex-direction: row;
+  `}
+
+  margin: 16px 0;
+`;
+
 const FlexColDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-
-  ${media.medium`
-    width: 80%;
-  `}
-`;
-
-const StartGameContainer = styled(motion.div)`
-  width: 100%;
-
-  margin: 0;
+  justify-content: center;
   align-items: flex-start;
-
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-`;
-
-const ContentBlock = styled(motion.div)`
   width: 100%;
-  &:first-child {
-    margin-bottom: 40px;
-  }
-`;
-
-const InlineBlock = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-
-  ${media.medium`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-  `}
 `;

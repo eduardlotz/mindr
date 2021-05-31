@@ -1,13 +1,14 @@
 {
   "home": {
-    "joingroup": "Join Group",
-    "creategroup": "Create a new group",
+    "createroom": "Create a new room",
+    "joinroom": "Join an existing room",
+    "headersubtext": "Enter your name and pick an avatar.",
+    "joinInfo": "You have an access code and want to join a room?",
+    "createInfo": "Instead create a new room and invite your friends?",
     "backtohome": "back to Home",
     "pickusername": "Pick an username & avatar",
     "yourname": "Your name",
     "wherecode": "Where is the code?",
-    "joingroupheader": "Want to join someone?",
-    "creategroupheader": "Create a new group",
     "toggleTheme": "Switch theme",
     "toggleLanguage": "Switch language"
   },
@@ -47,6 +48,14 @@
     "bestartist": "Best Artist",
     "survey": "Survey",
     "whoknowsyou": "Who knows you"
+  },
+  "gameexplanation": {
+    "quiz": "Es wird eine Frage gestellt, die du mit einer der 4 Möglichkeiten richtig beantworten musst.",
+    "drawguess": "Einer Malt, alle anderen raten",
+    "mostlikely": "Kleine Umfrage wer am ehesten etwas tun würde, zerstört Freundschaften.",
+    "bestartist": "Diesmal malt jeder dasselbe Bild und der Sieger wird ausgewählt",
+    "survey": "Die Mehrheit hat immer recht",
+    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten den anderen Spielern zuzuordnen."
   },
   "error": {
     "usernameTaken": "Username is already taken",
