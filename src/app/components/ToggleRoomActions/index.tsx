@@ -35,7 +35,6 @@ export function ToggleRoomActions(props: Props) {
 }
 
 const ToggleButton = styled(SecondaryButton)`
-  width: 100%;
   padding: 8px 14px;
   margin: 0;
 

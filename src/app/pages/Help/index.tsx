@@ -140,7 +140,7 @@ export const Help = () => {
           width="24"
           style={{ marginRight: '16px' }}
         />
-        {t('home.backtohome')}
+        {t('home.goback')}
       </PrimaryFloatingButton>
     </>
   );

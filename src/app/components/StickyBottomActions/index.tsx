@@ -50,7 +50,7 @@ export function StickyBottomActions(props: Props) {
       exit="exit"
     >
       <SecondaryButton style={{ width: '40%', marginRight: '16px' }}>
-        {t('home.backtohome')}
+        {t('home.goback')}
       </SecondaryButton>
       <PrimaryButton
         whileHover={{

@@ -10,12 +10,9 @@ import { selectTheme } from 'app/pages/Homepage/slice/selectors';
 import styled from 'styled-components/macro';
 import { setLocalStorage } from 'helpers/localstorage';
 import Icon from '../Icon';
-import React from 'react';
 import { variants } from 'styles/variants';
-import { useTranslation } from 'react-i18next';
 
 export const ThemeSwitcher = () => {
-  const { t } = useTranslation();
   const { actions: homeActions } = useHomepageSlice();
 
   // Used to dispatch slice actions
@@ -40,17 +37,9 @@ export const ThemeSwitcher = () => {
       initial="rest"
       whileHover="hover"
       whileTap="pressed"
-      data-tip={t('home.toggleTheme')}
-      data-effect="solid"
-      data-arrow-color="transparent"
     >
       <MotionDiv>
-        <Icon
-          style={{ cursor: 'pointer' }}
-          name={currentTheme === 'light' ? 'sun' : 'moon'}
-          height="24"
-          width="24"
-        />
+        <Icon name={currentTheme === 'light' ? 'sun' : 'moon'} width="24" />
       </MotionDiv>
     </ButtonBody>
   );
@@ -59,12 +48,17 @@ export const ThemeSwitcher = () => {
 const ButtonBody = styled(motion.div)`
   display: flex;
   padding: 8px;
-  background: ${props => props.theme.primaryFaded};
+  background: ${props => props.theme.container};
   border-radius: 10px;
-  color: ${props => props.theme.primary};
+  color: ${props => props.theme.containerContrast};
 
   transition: 0.25s ease-out;
   transition-property: color;
+
+  &:hover {
+    cursor: pointer;
+    color: ${props => props.theme.primary};
+  }
 `;
 
 const MotionDiv = styled(motion.div)``;

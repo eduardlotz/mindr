@@ -3,7 +3,7 @@
  * LeaveRoomBtn
  *
  */
-import * as React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import Icon from '../Icon';
@@ -13,22 +13,23 @@ import { media } from 'styles/media';
 import { SocketContext } from 'app/socketContext';
 import { useContext } from 'react';
 import { useHistory } from 'react-router';
+import { selectGroupCode } from 'app/pages/Lobby/slice/selectors';
 
 export const LeaveRoomBtn = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
   const history = useHistory();
-
+  const room = useSelector(selectGroupCode);
   const socket = useContext(SocketContext);
 
   const leaveRoom = () => {
-    socket.emit('leave_room', errors => {
-      if (errors) {
-        console.log(errors);
-      } else {
+    socket.open();
+    socket.emit('leaveRoom', { roomName: room }, res => {
+      if (res.statusCode === 200) {
         history.push('/');
       }
+      console.log(res);
     });
   };
 
@@ -40,9 +41,6 @@ export const LeaveRoomBtn = () => {
       initial="rest"
       type="button"
       onClick={leaveRoom}
-      data-tip={t('room.leaveRoom')}
-      data-effect="solid"
-      data-arrow-color="transparent"
     >
       <Icon name="circle-arrow-left" width="16" />
       <ButtonText>{t('room.leaveRoom')}</ButtonText>
@@ -54,10 +52,10 @@ const ButtonBody = styled(motion.button)`
   display: flex;
   align-items: center;
   padding: 8px;
-  background: ${props => props.theme.container};
+  background: ${props => props.theme.mainBg};
   border: none;
   box-shadow: none;
-  border-radius: 10px;
+  border-radius: 16px;
 
   color: ${props => props.theme.containerSubtleText};
 
@@ -70,6 +68,7 @@ const ButtonBody = styled(motion.button)`
 
   &:hover {
     color: ${props => props.theme.containerContrast};
+    background: ${props => props.theme.container};
     cursor: pointer;
   }
 

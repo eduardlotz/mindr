@@ -313,9 +313,10 @@ const ToggleActionsWrapper = styled(motion.div)`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 
   ${media.small`
+    justify-content: space-between;
     flex-direction: row;
   `}
 

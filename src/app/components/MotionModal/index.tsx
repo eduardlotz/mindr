@@ -97,12 +97,12 @@ export const MotionModal = () => {
               <Icon name="close" width="24" />
             </CloseButton>
             <H2>{modal.title}</H2>
-            <ImageSliderWrapper>
-              <ImageSlider images={gameImages[modal.content]} />
-            </ImageSliderWrapper>
             <ExplanationText>
               {t(`gameexplanation.${modal.content}`)}
             </ExplanationText>
+            <ImageSliderWrapper>
+              <ImageSlider images={gameImages[modal.content]} />
+            </ImageSliderWrapper>
           </Body>
         )}
       </AnimatePresence>
@@ -112,7 +112,7 @@ export const MotionModal = () => {
 
 const ExplanationText = styled.p`
   width: 100%;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: normal;
   color: ${props => props.theme.mainContrastText};
   text-align: left;
@@ -127,8 +127,6 @@ const ImageSliderWrapper = styled.div`
   margin: 24px auto;
   overflow: hidden;
   position: relative;
-
-  display: grid;
 `;
 
 const CloseButton = styled(motion.button)`
@@ -175,10 +173,10 @@ const Body = styled(motion.div)`
   width: calc(100% - 32px);
   margin: auto 16px;
 
-  ${media.medium`
-    width: 50%;
+  ${media.small`
+    width: 70%;
     margin: auto;
-    `}
+  `}
 
   padding: 24px 40px;
 

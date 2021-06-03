@@ -4,22 +4,28 @@
     "joinroom": "Join an existing room",
     "headersubtext": "Enter your name and pick an avatar.",
     "joinInfo": "You have an access code and want to join a room?",
+    "roomCodeLabel": "Enter the access code of the room you want to join.",
     "createInfo": "Instead create a new room and invite your friends?",
-    "backtohome": "back to Home",
     "pickusername": "Pick an username & avatar",
     "yourname": "Your name",
     "wherecode": "Where is the code?",
     "toggleTheme": "Switch theme",
-    "toggleLanguage": "Switch language"
+    "toggleLanguage": "Switch language",
+    "goback": "Go back"
+  },
+  "join": {
+    "header": "Welcome to mindr",
+    "goback": "Go back",
+    "join": "Join this room"
   },
   "room": {
     "pickgames": "Pick the games you want to play",
     "letsgo": "Let’s goooooo",
-    "settings": "Pick the mode & game length",
+    "settings": "How long should the game last?",
     "standardmode": "Standard",
     "drinkingmode": "Drinking",
     "userlistheader": "Anyone else missing?",
-    "room": "Room",
+    "copyLink": "Copy link",
     "indevelopment": "In development",
     "gameduration": "Game duration",
     "accessCode": "Access code",
@@ -50,12 +56,12 @@
     "whoknowsyou": "Who knows you"
   },
   "gameexplanation": {
-    "quiz": "Es wird eine Frage gestellt, die du mit einer der 4 Möglichkeiten richtig beantworten musst.",
-    "drawguess": "Einer Malt, alle anderen raten",
-    "mostlikely": "Kleine Umfrage wer am ehesten etwas tun würde, zerstört Freundschaften.",
-    "bestartist": "Diesmal malt jeder dasselbe Bild und der Sieger wird ausgewählt",
-    "survey": "Die Mehrheit hat immer recht",
-    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten den anderen Spielern zuzuordnen."
+    "quiz": "Trivia questions: which of these photos shows 'x', where is 'y' located on Earth, how much does a 'z' weigh?",
+    "drawguess": "One person draws a term while everyone else guesses what it is supposed to represent.",
+    "mostlikely": "An activity or characteristic is described and everyone picks the person to whom it fits best.",
+    "bestartist": "Everyone paints the same term and then rates the pictures of the other players.",
+    "survey": "Everyone chooses his/her favorite from four things in the same super category. The majority wins.",
+    "whoknowsyou": "Everyone answers the same question and tries to connect the answers of the others to each person."
   },
   "error": {
     "usernameTaken": "Username is already taken",

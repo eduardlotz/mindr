@@ -12,7 +12,6 @@ import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
-import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Help } from './pages/Help/Loadable';
@@ -36,7 +35,6 @@ import darkTheme from 'styles/darkTheme';
 import { CreatePlayer } from './pages/CreatePlayer/Loadable';
 
 export function App() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { i18n } = useTranslation();
   const location = useLocation();
 
@@ -92,9 +90,8 @@ export function App() {
               ) : joinedGroup ? (
                 <Route exact path="/room/:room" component={JoinedRoom} />
               ) : (
-                <Redirect to="/help" />
+                <Redirect to="/" />
               )}
-              <Route component={NotFoundPage} />
             </Switch>
           </AnimatePresence>
         </MainContainer>

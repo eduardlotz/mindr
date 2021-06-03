@@ -78,7 +78,7 @@ export const GameSelectCard = ({ mode, index, onClick }) => {
         <NotAvailableBanner>{t('room.indevelopment')}</NotAvailableBanner>
       )}
       <GameImage
-        color={theme.mainContrastText}
+        color={mode.isActive ? theme.primary : theme.mainContrastText}
         size="92"
         name={mode.imageClass}
         opacity={getImageColor()}
@@ -142,6 +142,7 @@ const CardContainer = styled(motion.div)`
 
     background: ${props => props.theme.mainBg};
     border-radius: 16px;
+    border: 2px solid ${props => props.theme.container};
 
     transition: 0.24s ease-in-out;
     transition-property: transform background-color;
@@ -149,12 +150,17 @@ const CardContainer = styled(motion.div)`
   //"80" after color hex => opacity = 0.5
 
   &:hover:not(.disabled) {
+    border-color: transparent;
     &:before {
       transform: scale(0.98);
       transform-origin: center;
     }
   }
   &.active {
+    & > svg {
+      color: ${props => props.theme.primary};
+    }
+
     &:before {
       z-index: 1;
       position: absolute;

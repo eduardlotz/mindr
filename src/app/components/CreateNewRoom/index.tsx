@@ -34,13 +34,12 @@ export const CreateNewRoom = () => {
 
   const handleBtnClick = () => {
     socket.open();
-    socket.emit('createRoom', { name, avatar });
-
-    socket.on('createRoom', room => {
+    socket.emit('createRoom', { name, avatar }, room => {
       console.log('socket received users in room', room.users);
       dispatch(lobbyActions.setUsersInRoom(room.users));
       dispatch(lobbyActions.setIsCreator(true));
       dispatch(lobbyActions.setJoinedGroup(true));
+      dispatch(lobbyActions.setGroupCode(room.name));
 
       history.push(`/room/${room.name}`);
     });

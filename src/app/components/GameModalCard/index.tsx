@@ -63,7 +63,6 @@ const CardContainer = styled(motion.div)`
   `}
 
   &:hover {
-    border-color: transparent;
-    box-shadow: 0px 14px 26px 0px rgba(0, 0, 0, 0.07);
+    background-color: ${props => props.theme.container};
   }
 `;

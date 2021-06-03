@@ -45,7 +45,7 @@ export function Lobby() {
   const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
 
   useEffect(() => {
-    socket.on('joinRoom', room => {
+    socket.on('roomData', room => {
       console.log('socket received users in room', room.users);
       dispatch(lobbyActions.setUsersInRoom(room.users));
     });
@@ -422,7 +422,7 @@ const MaxUsersCount = styled(motion.span)`
   letter-spacing: 1px;
   opacity: 0.3;
 
-  color: ${props => props.theme.primaryLight};
+  color: ${props => props.theme.mainSubtleText};
 `;
 
 const UsersList = styled(motion.div)`

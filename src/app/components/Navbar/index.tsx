@@ -8,7 +8,6 @@ import { motion } from 'framer-motion';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
 import styled, { useTheme } from 'styled-components/macro';
 import { media } from 'styles/media';
 import { variants } from 'styles/variants';
@@ -34,8 +33,6 @@ export function Navbar(props: Props) {
       animate="visible"
       exit="exit"
     >
-      <ReactTooltip />
-
       <Link to="/help" style={{ display: 'flex', alignItems: 'center' }}>
         <HelpLink>
           <LinkText>{t('help.whatismindr')}</LinkText>
@@ -61,9 +58,6 @@ export function Navbar(props: Props) {
           initial="rest"
           whileTap="pressed"
           whileHover="hover"
-          data-tip={t('home.toggleLanguage')}
-          data-effect="solid"
-          data-arrow-color="transparent"
         >
           <Language
             className={i18n.language === 'de' ? 'is-active' : ''}
@@ -113,8 +107,8 @@ const HelpLink = styled.div`
 
   padding: 8px;
   border-radius: 10px;
-  background-color: ${props => props.theme.primaryFaded};
-  color: ${props => props.theme.primary};
+  background-color: ${props => props.theme.container};
+  color: ${props => props.theme.containerContrast};
 
   font-size: 16px;
   font-family: 'Basier';
@@ -152,7 +146,7 @@ const LanguageSwitcher = styled(motion.button)`
 
   margin-right: 16px;
   border: none;
-  background: ${props => props.theme.primaryFaded};
+  background: ${props => props.theme.container};
   padding: 8px 14px;
   border-radius: 10px;
 
@@ -185,7 +179,7 @@ const Language = styled(motion.p)`
   align-items: center;
   margin: 0;
 
-  color: ${props => props.theme.primary};
+  color: ${props => props.theme.containerContrast};
   opacity: 0.5;
 
   transition: 0.25s ease-out;

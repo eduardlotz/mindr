@@ -4,23 +4,29 @@
     "createroom": "Neuen Raum erstellen",
     "headersubtext": "Gib deinen Namen ein und wähle einen Avatar aus.",
     "joinroom": "Einem Raum beitreten",
+    "roomCodeLabel": "Gib den Zugangscode des Raumes ein, dem du beitreten möchtest.",
     "joinInfo": "Du hast einen Zugangscode und möchtest einem Raum beitreten? ",
     "createInfo": "Lieber einen neuen Raum erstellen und deine Freunde einladen?",
-    "backtohome": "Zurück zur Startseite",
     "pickusername": "Wähle einen Namen & Avatar",
     "yourname": "Dein Name",
     "wherecode": "Wo ist der Code?",
     "toggleTheme": "Theme wechseln",
-    "toggleLanguage": "Sprache wechseln"
+    "toggleLanguage": "Sprache wechseln",
+    "goback": "Zurück"
+  },
+  "join": {
+    "header": "Willkommen auf mindr",
+    "goback": "Zurück",
+    "join": "Diesem Raum beitreten"
   },
   "room": {
     "pickgames": "Wähle die Spiele, die du spielen möchtest",
     "letsgo": "Let’s goooooo",
-    "settings": "Wähle den Spielmodus und die Länge",
+    "settings": "Wie lang soll das Spiel dauern?",
     "standardmode": "Standard",
     "drinkingmode": "Trinkspiel",
     "userlistheader": "Fehlt noch jemand?",
-    "room": "Raum",
+    "copyLink": "Link kopieren",
     "indevelopment": "In Entwicklung",
     "accessCode": "Zugangscode",
     "leaveRoom": "Raum verlassen",
@@ -52,11 +58,11 @@
   },
   "gameexplanation": {
     "quiz": "Quizfragen: welcher dieser Fotos zeigt 'x', wo liegt 'y' auf der Erde, wieviel wiegt ein 'z'",
-    "drawguess": "Einer Malt, alle anderen erraten was es sein soll",
-    "mostlikely": "Eine Umfrage wer am ehesten etwas tun würde. (zerstört Freundschaften)",
-    "bestartist": "Jeder malt dasselbe Bild und der Sieger wird ausgewählt",
-    "survey": "Die Mehrheit hat immer recht",
-    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten den anderen Spielern zuzuordnen."
+    "drawguess": "Eine Person malt einen Begriff während alle anderen erraten was es darstellen soll.",
+    "mostlikely": "Es wird eine Aktivität oder Charaktereigenschaft beschrieben und jeder wählt die Person aus, zu der es am besten passt.",
+    "bestartist": "Jeder malt denselben Begriff und bewertet danach die Bilder der Mitspieler.",
+    "survey": "Jeder wählt aus vier Dingen derselben Überkategorie seinen/ihren Favoriten. Die Mehrheit gewinnt.",
+    "whoknowsyou": "Jeder beantwortet dieselbe Frage und versucht die Antworten der anderen jeweils einer Person zuzuordnen."
   },
   "error": {
     "usernameTaken": "Der Name ist schon vergeben",

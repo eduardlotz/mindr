@@ -1,109 +1,62 @@
 /**
  *
- * CreatePlayer
+ * Homepage
  *
  */
-import * as React from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
-
-import avatars from '../../../assets/avatars/avatars';
-import { StickyBottomActions } from 'app/components/StickyBottomActions';
-import { useLobbySlice } from '../Lobby/slice';
-import { useDispatch, useSelector } from 'react-redux';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+import { H1, SubText } from 'app/components/styled/Headers';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
-import { Navbar } from 'app/components/Navbar/Loadable';
-import { H2 } from 'app/components/styled/Headers';
-import { SocketContext } from 'app/socketContext';
-import { media } from 'styles/media';
-import { variants } from 'styles/variants';
+import { useLobbySlice } from '../Lobby/slice';
 import { useHomepageSlice } from '../Homepage/slice';
+import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
+import { variants } from 'styles/variants';
+import { media } from 'styles/media';
+import { Navbar } from 'app/components/Navbar/Loadable';
+
+import smallAvatars from 'assets/avatars/smallAvatars';
+import avatars from 'assets/avatars/avatars';
+
+import { CreateNewRoom } from 'app/components/CreateNewRoom';
+import { LoadingAvatars } from 'app/components/LoadingAvatars';
+import { JoinRoom } from 'app/components/JoinRoom/Loadable';
+import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
+import { useParams } from 'react-router-dom';
 import {
   selectUsernameError,
   selectAvatarError,
 } from '../Homepage/slice/selectors';
-interface Props {}
+import { restoreDefaultPrompts } from 'inquirer';
 
-export function CreatePlayer(props: Props) {
+export function CreatePlayer({ match }) {
   const { t } = useTranslation();
 
-  // framer motion variants
-
-  const popUpVariants = {
-    visible: i => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-        delay: 0.4 + i * 0.02,
-      },
-    }),
-    hidden: { opacity: 0, scale: 0.9 },
-    onHover: {
-      scale: 1.3,
-      transition: {
-        ease: 'easeInOut',
-        duration: 0.2,
-        delay: 0,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      transition: {
-        type: 'spring',
-        damping: 10,
-        mass: 0.75,
-        stiffness: 40,
-      },
-    },
-  };
-
-  // used to dispatch socket actions
-  const socket = React.useContext(SocketContext);
-
-  // Use the slice we created
   const { actions: lobbyActions } = useLobbySlice();
   const { actions: homeActions } = useHomepageSlice();
 
-  // Used to dispatch slice actions
   const dispatch = useDispatch();
 
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
 
+  const { room } = useParams<{ room: string }>();
+
   const nameError = useSelector(selectUsernameError);
   const avatarError = useSelector(selectAvatarError);
 
-  React.useEffect(() => {
-    socket.on('users', users => {
-      dispatch(lobbyActions.setUsersInRoom(users));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
-  React.useEffect(() => {
-    socket.on('joined_room', (room: string) => {
-      dispatch(lobbyActions.setGroupCode(room));
-    });
-  }, [dispatch, lobbyActions, socket]);
-
   // type needs to be declared in order to work with typescript
-  const setUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setUsername = e => {
     dispatch(lobbyActions.setUsername(e.target.value));
     dispatch(homeActions.setUsernameErrorHidden(true));
   };
 
-  const setAvatar = url => {
-    dispatch(lobbyActions.setAvatarUrl(url));
+  const setAvatar = index => {
+    dispatch(lobbyActions.setAvatarUrl(avatars[index]));
     dispatch(homeActions.setAvatarErrorHidden(true));
   };
-
-  // render
 
   return (
     <>
@@ -114,6 +67,14 @@ export function CreatePlayer(props: Props) {
         animate="visible"
         exit="exit"
       >
+        <H1
+          variants={variants.slideUpItem}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {t('join.header')}
+        </H1>
         <UserContainer
           variants={variants.slideUp}
           initial="hidden"
@@ -121,7 +82,7 @@ export function CreatePlayer(props: Props) {
           exit="exit"
         >
           <FlexColDiv>
-            <H2>{t('home.pickusername')}</H2>
+            <SubText>{t('home.headersubtext')}</SubText>
             <UsernameInput
               placeholder={t('home.yourname')}
               value={name}
@@ -142,44 +103,54 @@ export function CreatePlayer(props: Props) {
               dragElastic={0.5}
             />
           ) : (
-            <BigAvatar src={undefinedAvatar} />
+            <BigAvatar
+              src={undefinedAvatar}
+              drag
+              dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              dragElastic={0.5}
+            />
           )}
         </UserContainer>
-        <AvatarSelectionContainer
-          variants={variants.slideUp}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className={avatarError.isHidden ? '' : 'has-error'}
-        >
-          {avatars.map((entry, i) => {
-            return (
-              <AvatarImg
-                src={entry}
-                variants={popUpVariants}
-                key={i}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                onClick={() => setAvatar(entry)}
-                className={avatar === entry ? 'selected' : ''}
-              />
-            );
-          })}
-        </AvatarSelectionContainer>
+        {smallAvatars ? (
+          <AvatarSelectionContainer
+            variants={variants.slideUp}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className={avatarError.isHidden ? '' : 'has-error'}
+          >
+            {smallAvatars.map((entry, i) => {
+              return (
+                <AvatarImg
+                  src={entry}
+                  variants={variants.popUpVariants}
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  onClick={() => setAvatar(i)}
+                  className={avatar === entry ? 'selected' : ''}
+                />
+              );
+            })}
+          </AvatarSelectionContainer>
+        ) : (
+          <LoadingAvatars length={16} />
+        )}
+
         {!avatarError.isHidden && (
           <InputError>{avatarError.message}</InputError>
         )}
       </UserCreationContainer>
-      <StickyBottomActions />
+      <JoinRoom room={room} />
     </>
   );
 }
 
-// styled components
 const UserCreationContainer = styled(motion.div)`
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 `;
 
 const UsernameInput = styled.input`
@@ -189,8 +160,8 @@ const UsernameInput = styled.input`
   padding: 16px 24px;
   margin-right: 16px;
 
-  background: transparent;
-  border: 2px solid ${props => props.theme.lightgrey};
+  background: ${props => props.theme.container};
+  border: 2px solid ${props => props.theme.container};
   border-radius: 16px;
   color: ${props => props.theme.mainContrastText};
 
@@ -234,29 +205,30 @@ const InputError = styled(motion.small)`
 const BigAvatar = styled(motion.img)`
   height: 100%;
   width: 116px;
-  margin: 24px 0;
+  margin: 16px;
+
   background-color: transparent;
   border-radius: 50%;
   cursor: grab;
   z-index: 1000;
-
-  ${media.medium`
-    margin: 0;
-  `}
+  ${media.small`
+     margin: 0 0 0 24px;
+   `}
 `;
 
 const UserContainer = styled(motion.div)`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+  flex-direction: column;
 
-  ${media.medium`
-    margin-bottom: 16px;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-direction: row;
-  `}
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+
+  ${media.small`
+     justify-content: space-between;
+     flex-direction: row;
+   `}
 `;
 
 const AvatarSelectionContainer = styled(motion.div)`
@@ -265,21 +237,25 @@ const AvatarSelectionContainer = styled(motion.div)`
   width: 100%;
   overflow-x: scroll;
 
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 24px;
-  justify-content: center;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto 1fr;
 
-  padding: 40px 20px;
+  grid-gap: 24px;
+
+  padding: 24px;
   margin-bottom: 8px;
 
-  background: ${props => props.theme.mainBg};
+  background: ${props => props.theme.container};
   border-radius: 16px;
 
+  transition: 0.25s ease-out;
+  transition-property: background-color;
+
   ${media.medium`
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 32px 48px;
-    padding: 32px 40px;
-  `}
+   grid-gap: auto 24px;
+     padding: 32px 40px;
+     overflow: auto;
+   `}
 
   &.has-error {
     border: 2px solid ${props => props.theme.error};
@@ -288,10 +264,9 @@ const AvatarSelectionContainer = styled(motion.div)`
 
 const AvatarImg = styled(motion.img)`
   position: relative;
-  justify-self: center;
 
-  width: 100%;
-  height: auto;
+  width: 64px;
+  height: 64px;
 
   border-radius: 50%;
   object-fit: contain;
@@ -306,12 +281,25 @@ const AvatarImg = styled(motion.img)`
   }
 `;
 
+const ToggleActionsWrapper = styled(motion.div)`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  ${media.small`
+     justify-content: space-between;
+     flex-direction: row;
+   `}
+
+  margin: 16px 0;
+`;
+
 const FlexColDiv = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
-
-  ${media.medium`
-    width: 80%;
-  `}
 `;

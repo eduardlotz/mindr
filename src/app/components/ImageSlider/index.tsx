@@ -33,26 +33,38 @@ const swipePower = (offset: number, velocity: number) => {
 
 export const ImageSlider = ({ images }) => {
   const [[page, direction], setPage] = useState([0, 0]);
-
+  const [fullscreenImage, setFullscreenImage] = useState('');
   const imageIndex = wrap(0, images.length, page);
 
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
   };
 
+  const showInFullscreen = () => {
+    fullscreenImage
+      ? setFullscreenImage('')
+      : setFullscreenImage(images[imageIndex]);
+  };
+
   return (
     <>
       <AnimatePresence initial={false} custom={direction}>
+        {fullscreenImage && (
+          <FullscreenImage src={fullscreenImage} onClick={showInFullscreen} />
+        )}
         <SliderButton className="prev" onClick={() => paginate(-1)}>
-          <Icon name="circle-arrow-left" width="24" />
+          <Icon name="circle-arrow-left" width="40" />
         </SliderButton>
 
         <SliderButton className="next" onClick={() => paginate(1)}>
-          <Icon name="circle-arrow-right" width="24" />
+          <Icon name="circle-arrow-right" width="40" />
         </SliderButton>
         <Image
+          onClick={showInFullscreen}
           key={page}
           src={images[imageIndex]}
+          className={fullscreenImage ? 'fullscreen' : ''}
+          //framer motion variants
           custom={direction}
           variants={variants}
           initial="enter"
@@ -62,6 +74,7 @@ export const ImageSlider = ({ images }) => {
             x: { type: 'spring', stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
           }}
+          //dragging props
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
@@ -79,6 +92,21 @@ export const ImageSlider = ({ images }) => {
     </>
   );
 };
+
+const FullscreenImage = styled(motion.img)`
+  position: absolute;
+  z-index: 10000;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  object-fit: contain;
+  margin: auto;
+  border-radius: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
 
 const Image = styled(motion.img)`
   width: 100%;
@@ -102,12 +130,12 @@ const SliderButton = styled.span`
   transition: opacity 0.25s ease-in;
 
   &.prev {
-    left: 16px;
+    left: 4px;
     right: auto;
   }
 
   &.next {
-    right: 16px;
+    right: 4px;
     left: auto;
   }
 

@@ -3,9 +3,7 @@
  * ChatButton
  *
  */
-import * as React from 'react';
 import styled from 'styled-components/macro';
-import { useTranslation } from 'react-i18next';
 import Icon from '../Icon';
 import { variants } from 'styles/variants';
 import { motion } from 'framer-motion';
@@ -15,8 +13,6 @@ import { useModalSlice } from '../MotionModal/slice';
 interface Props {}
 
 export function ChatButton(props: Props) {
-  const { t } = useTranslation();
-
   const { actions: modalActions } = useModalSlice();
 
   // Used to dispatch slice actions
@@ -34,17 +30,9 @@ export function ChatButton(props: Props) {
       initial="rest"
       whileHover="hover"
       whileTap="pressed"
-      data-tip={t('home.toggleTheme')}
-      data-effect="solid"
-      data-arrow-color="transparent"
     >
       <MotionDiv>
-        <Icon
-          style={{ cursor: 'pointer' }}
-          name={'chat'}
-          height="24"
-          width="24"
-        />
+        <Icon style={{ cursor: 'pointer' }} name={'chat'} width="24" />
       </MotionDiv>
     </ButtonBody>
   );
@@ -52,16 +40,16 @@ export function ChatButton(props: Props) {
 
 const ButtonBody = styled(motion.div)`
   display: flex;
-  padding: 4px;
+  padding: 8px;
   background: ${props => props.theme.container};
-  border-radius: 10px;
-  color: ${props => props.theme.containerSubtleText};
+  border-radius: 12px;
+  color: ${props => props.theme.containerContrast};
 
   transition: 0.25s ease-out;
   transition-property: color;
 
   &:hover {
-    color: ${props => props.theme.containerContrast};
+    color: ${props => props.theme.primary};
   }
 `;
 
