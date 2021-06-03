@@ -11,7 +11,7 @@ const SocketProvider = ({ children }) => {
     ENDPOINT = 'localhost:4000';
   } else {
     // production code
-    ENDPOINT = 'https://mindr-server.herokuapp.com';
+    ENDPOINT = process.env.SERVER_URL;
   }
 
   const socket = io(ENDPOINT, {
