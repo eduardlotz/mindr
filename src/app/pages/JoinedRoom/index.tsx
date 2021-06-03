@@ -36,17 +36,6 @@ export function JoinedRoom(props: Props) {
   const isStandardMode = useSelector(selectIsStandardMode);
   const gameLength = useSelector(selectGameLength);
 
-  useEffect(() => {
-    socket.on('roomData', room => {
-      console.log('socket received roomData', room);
-      dispatch(lobbyActions.setUsersInRoom(room.users));
-    });
-    return () => {
-      socket.removeAllListeners();
-      socket.close();
-    };
-  }, [dispatch, lobbyActions, socket]);
-
   const gameVariants = {
     active: i => ({
       opacity: 1,

@@ -17,18 +17,14 @@ import {
 import { SocketContext } from 'app/socketContext';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { variants } from 'styles/variants';
 import { media } from 'styles/media';
 import { SubText } from '../styled/Headers';
 import getApiPath from 'helpers/getApiPath';
 import axios from 'axios';
 
-interface Props {
-  room?: string;
-}
-
-export const JoinRoom = (props: Props) => {
+export const JoinRoom = () => {
   const [roomError, setRoomError] = useState('');
 
   const { t } = useTranslation();
@@ -41,6 +37,8 @@ export const JoinRoom = (props: Props) => {
   const avatar = useSelector(selectUserAvatar);
   const roomCode = useSelector(selectGroupCode);
 
+  const { room } = useParams<{ room: string }>();
+
   const { actions: lobbyActions } = useLobbySlice();
 
   const joinRoom = e => {
@@ -52,16 +50,21 @@ export const JoinRoom = (props: Props) => {
         const translatedError = t(`error.${res.message}`);
         setRoomError(translatedError);
       } else {
-        setRoomError('');
+        dispatch(lobbyActions.setUsersInRoom(res.users));
+        dispatch(lobbyActions.setJoinedGroup(true));
+
+        history.push(`/room/${res.name}`);
       }
     });
   };
 
+  //check if the room link is valid,
+  //go to back to homepage if the room doesn't exist
   useEffect(() => {
-    async function validateRoom() {
+    async function validateRoom(room) {
       try {
         await axios.post(getApiPath() + 'api/validateRoom', {
-          room: props.room,
+          room,
         });
       } catch (err) {
         console.log(err);
@@ -69,25 +72,11 @@ export const JoinRoom = (props: Props) => {
         history.push(`/`);
       }
     }
-    if (props.room) {
-      dispatch(lobbyActions.setGroupCode(props.room));
-      validateRoom();
+    if (room) {
+      dispatch(lobbyActions.setGroupCode(room));
+      validateRoom(room);
     }
-  }, [dispatch, history, lobbyActions, props.room]);
-
-  useEffect(() => {
-    socket.on('joinRoom', room => {
-      console.log('socket received users in room', room.users);
-      dispatch(lobbyActions.setUsersInRoom(room.users));
-      dispatch(lobbyActions.setJoinedGroup(true));
-
-      history.push(`/room/${room.name}`);
-    });
-    return () => {
-      socket.removeAllListeners();
-      socket.close();
-    };
-  }, [dispatch, history, lobbyActions, socket]);
+  }, [dispatch, history, lobbyActions]);
 
   const handleInputChange = e => {
     dispatch(lobbyActions.setGroupCode(e.target.value));
@@ -101,7 +90,7 @@ export const JoinRoom = (props: Props) => {
       exit="exit"
     >
       {/* if user wants to join via link, only show the join button */}
-      {props.room ? (
+      {room ? (
         <PrimaryButton
           variants={variants.buttonVariants}
           initial="rest"

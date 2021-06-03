@@ -21,6 +21,7 @@ import { SocketContext } from 'app/socketContext';
 import { useEffect } from 'react';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 import { useParams } from 'react-router-dom';
+import { RoomUserList } from 'app/components/RoomUserList';
 
 export function Lobby() {
   const { t } = useTranslation();
@@ -43,17 +44,6 @@ export function Lobby() {
   };
 
   const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
-
-  useEffect(() => {
-    socket.on('roomData', room => {
-      console.log('socket received users in room', room.users);
-      dispatch(lobbyActions.setUsersInRoom(room.users));
-    });
-    return () => {
-      socket.removeAllListeners();
-      socket.close();
-    };
-  }, [dispatch, lobbyActions, room, socket]);
 
   const floatingBtnVariants = {
     hidden: {
@@ -121,45 +111,7 @@ export function Lobby() {
   return (
     <LobbyContainer>
       <RoomTopBar />
-      <ContentBlock
-        variants={variants.slideUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <InlineBlock style={{ margin: 0 }}>
-          <InfoLine>{t('room.min-user-info')}</InfoLine>
-          <UsersCounter>
-            <UsersCount>{usersInRoom.length}</UsersCount>
-            <MaxUsersCount>/10</MaxUsersCount>
-          </UsersCounter>
-        </InlineBlock>
-        <UsersList>
-          {usersInRoom.map(user => {
-            return (
-              <AnimatePresence>
-                <JoinedUser
-                  variants={variants.slideUp}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <UserAvatar src={user.avatar} />
-                  {user.isCreator && (
-                    <Icon
-                      name="star"
-                      height="24"
-                      width="24"
-                      style={{ marginRight: '8px' }}
-                    />
-                  )}
-                  <Username>{user.name}</Username>
-                </JoinedUser>
-              </AnimatePresence>
-            );
-          })}
-        </UsersList>
-      </ContentBlock>
+      <RoomUserList />
       <ContentBlock
         variants={variants.slideUp}
         initial="hidden"

@@ -8,7 +8,7 @@ const SocketProvider = ({ children }) => {
 
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // dev code
-    ENDPOINT = 'localhost:4000';
+    ENDPOINT = 'localhost:4000/';
   } else {
     // production code
     ENDPOINT = 'https://mindr-server.herokuapp.com/';
