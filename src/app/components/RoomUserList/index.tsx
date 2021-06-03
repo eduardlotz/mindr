@@ -18,7 +18,6 @@ export function RoomUserList(props: Props) {
   const { t } = useTranslation();
   const usersInRoom = useSelector(selectUsersInRoom);
 
-
   return (
     <ContentBlock
       variants={variants.slideUp}
@@ -79,7 +78,6 @@ const UserAvatar = styled.img`
   object-fit: contain;
   background-size: 100% 100%;
 `;
-
 
 const Username = styled.span`
   font-family: 'Basier';

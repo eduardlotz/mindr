@@ -3,11 +3,10 @@
  * Homepage
  *
  */
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
-import { AnimateSharedLayout, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { H1, SubText } from 'app/components/styled/Headers';
 import { selectUserAvatar, selectUsername } from '../Lobby/slice/selectors';
 import { useLobbySlice } from '../Lobby/slice';
@@ -20,18 +19,15 @@ import { Navbar } from 'app/components/Navbar/Loadable';
 import smallAvatars from 'assets/avatars/smallAvatars';
 import avatars from 'assets/avatars/avatars';
 
-import { CreateNewRoom } from 'app/components/CreateNewRoom';
 import { LoadingAvatars } from 'app/components/LoadingAvatars';
 import { JoinRoom } from 'app/components/JoinRoom/Loadable';
-import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
 import { useParams } from 'react-router-dom';
 import {
   selectUsernameError,
   selectAvatarError,
 } from '../Homepage/slice/selectors';
-import { restoreDefaultPrompts } from 'inquirer';
 
-export function CreatePlayer({ match }) {
+export function CreatePlayer() {
   const { t } = useTranslation();
 
   const { actions: lobbyActions } = useLobbySlice();
@@ -279,21 +275,6 @@ const AvatarImg = styled(motion.img)`
   &.selected {
     border: 3px solid ${props => props.theme.primary};
   }
-`;
-
-const ToggleActionsWrapper = styled(motion.div)`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  ${media.small`
-     justify-content: space-between;
-     flex-direction: row;
-   `}
-
-  margin: 16px 0;
 `;
 
 const FlexColDiv = styled.div`

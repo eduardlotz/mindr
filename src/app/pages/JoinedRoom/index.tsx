@@ -10,14 +10,12 @@ import { H2, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
-import Icon from 'app/components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { media } from 'styles/media';
 import {
   selectIsStandardMode,
   selectGameLength,
-  selectUsersInRoom,
 } from '../Lobby/slice/selectors';
 import { GameImage } from 'app/components/GameImage';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';

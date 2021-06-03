@@ -30,7 +30,6 @@ interface Props {
 
 export const JoinRoom = (props: Props) => {
   const [roomError, setRoomError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const { t } = useTranslation();
 
@@ -46,7 +45,6 @@ export const JoinRoom = (props: Props) => {
 
   const joinRoom = e => {
     e.preventDefault();
-    setIsLoading(true);
 
     socket.open();
     socket.emit('joinRoom', { name, avatar, roomName: roomCode }, res => {
@@ -55,7 +53,6 @@ export const JoinRoom = (props: Props) => {
         setRoomError(translatedError);
       } else {
         setRoomError('');
-        setIsLoading(false);
       }
     });
   };
@@ -76,7 +73,7 @@ export const JoinRoom = (props: Props) => {
       dispatch(lobbyActions.setGroupCode(props.room));
       validateRoom();
     }
-  }, []);
+  }, [dispatch, history, lobbyActions, props.room]);
 
   useEffect(() => {
     socket.on('joinRoom', room => {
