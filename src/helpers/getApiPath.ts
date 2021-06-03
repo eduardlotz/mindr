@@ -4,7 +4,7 @@ const getApiPath = () => {
     return 'http://localhost:4000';
   } else {
     // production code
-    return 'https://mindr-server.herokuapp.com/';
+    return process.env.SERVER_URL;
   }
 };
 
