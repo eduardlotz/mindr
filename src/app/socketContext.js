@@ -4,15 +4,9 @@ import io from 'socket.io-client';
 const SocketContext = React.createContext();
 
 const SocketProvider = ({ children }) => {
-  let ENDPOINT;
-
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    // dev code
-    ENDPOINT = 'localhost:4000';
-  } else {
-    // production code
-    ENDPOINT = process.env.SERVER_URL;
-  }
+  const ENDPOINT = process.env.SERVER_URL
+    ? process.env.SERVER_URL
+    : 'localhost:4000';
 
   const socket = io(ENDPOINT, {
     autoConnect: false,

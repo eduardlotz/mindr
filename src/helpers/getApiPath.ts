@@ -1,11 +1,5 @@
 const getApiPath = () => {
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    // dev code
-    return 'http://localhost:4000';
-  } else {
-    // production code
-    return process.env.SERVER_URL;
-  }
+  return process.env.SERVER_URL ? process.env.SERVER_URL : 'localhost:4000';
 };
 
 export default getApiPath;
