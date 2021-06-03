@@ -60,7 +60,7 @@ export const JoinRoom = (props: Props) => {
   useEffect(() => {
     async function validateRoom() {
       try {
-        await axios.post(getApiPath() + '/api/validateRoom', {
+        await axios.post(getApiPath() + 'api/validateRoom', {
           room: props.room,
         });
       } catch (err) {
