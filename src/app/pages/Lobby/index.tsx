@@ -18,9 +18,7 @@ import { selectUsersInRoom, selectGameLength } from './slice/selectors';
 import { media } from 'styles/media';
 import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 import { SocketContext } from 'app/socketContext';
-import { useEffect } from 'react';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
-import { useParams } from 'react-router-dom';
 import { RoomUserList } from 'app/components/RoomUserList';
 
 export function Lobby() {
@@ -33,8 +31,6 @@ export function Lobby() {
   const { actions: lobbyActions } = useLobbySlice();
 
   const socket = React.useContext(SocketContext);
-
-  const { room } = useParams<{ room: string }>();
 
   // Used to dispatch slice actions
   const dispatch = useDispatch();

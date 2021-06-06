@@ -21,7 +21,6 @@ import avatars from 'assets/avatars/avatars';
 
 import { LoadingAvatars } from 'app/components/LoadingAvatars';
 import { JoinRoom } from 'app/components/JoinRoom';
-import { useParams } from 'react-router-dom';
 import {
   selectUsernameError,
   selectAvatarError,

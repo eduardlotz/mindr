@@ -3,14 +3,13 @@
  * Lobby
  *
  */
-import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { H2, H5 } from 'app/components/styled/Headers';
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { colors } from 'styles/colors';
 import { variants } from 'styles/variants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectGameModes } from '../Homepage/slice/selectors';
 import { media } from 'styles/media';
 import {
@@ -19,18 +18,12 @@ import {
 } from '../Lobby/slice/selectors';
 import { GameImage } from 'app/components/GameImage';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
-import { useEffect } from 'react';
-import { SocketContext } from 'app/socketContext';
-import { useLobbySlice } from '../Lobby/slice';
 import { RoomUserList } from 'app/components/RoomUserList';
 
 interface Props {}
 
 export function JoinedRoom(props: Props) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const { actions: lobbyActions } = useLobbySlice();
-  const socket = React.useContext(SocketContext);
 
   const gameModes = useSelector(selectGameModes);
   const isStandardMode = useSelector(selectIsStandardMode);

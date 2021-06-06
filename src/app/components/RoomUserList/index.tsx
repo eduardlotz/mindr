@@ -14,12 +14,10 @@ import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
-import { media } from 'styles/media';
 import { variants } from 'styles/variants';
 import Icon from '../Icon';
 import { Button } from '../Button';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
-import { useHistory } from 'react-router-dom';
 
 interface Props {}
 
@@ -30,7 +28,6 @@ export function RoomUserList(props: Props) {
   const room = useSelector(selectGroupCode);
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const { actions: lobbyActions } = useLobbySlice();
 
@@ -49,6 +46,12 @@ export function RoomUserList(props: Props) {
       dispatch(lobbyActions.setUsersInRoom(room.users));
       dispatch(lobbyActions.setJoinedGroup(true));
     });
+    return () => {
+      socket.open();
+      socket.emit('leaveRoom', { roomName: room }, res => {
+        console.log(res);
+      });
+    };
   }, [dispatch, lobbyActions, socket]);
 
   return (

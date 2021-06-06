@@ -76,7 +76,7 @@ export const JoinRoom = () => {
       dispatch(lobbyActions.setGroupCode(room));
       validateRoom(room);
     }
-  }, [dispatch, history, lobbyActions]);
+  }, [dispatch, history, lobbyActions, room]);
 
   const handleInputChange = e => {
     dispatch(lobbyActions.setGroupCode(e.target.value));
