@@ -3,7 +3,6 @@
  * GameModalCard
  *
  */
-import * as React from 'react';
 import styled, { useTheme } from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';

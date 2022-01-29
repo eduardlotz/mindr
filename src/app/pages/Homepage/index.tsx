@@ -30,7 +30,7 @@ import { LoadingAvatars } from 'app/components/LoadingAvatars';
 import { JoinRoom } from 'app/components/JoinRoom/Loadable';
 import { ToggleRoomActions } from 'app/components/ToggleRoomActions';
 
-export function Homepage({ match }) {
+export function Homepage() {
   const { t } = useTranslation();
 
   const { actions: lobbyActions } = useLobbySlice();

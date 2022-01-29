@@ -14,14 +14,13 @@ import { useHomepageSlice } from '../Homepage/slice';
 import undefinedAvatar from '../../../assets/avatars/avatar-undefined.jpg';
 import { variants } from 'styles/variants';
 import { media } from 'styles/media';
-import { Navbar } from 'app/components/Navbar/Loadable';
+import { Navbar } from 'app/components/Navbar';
 
 import smallAvatars from 'assets/avatars/smallAvatars';
 import avatars from 'assets/avatars/avatars';
 
 import { LoadingAvatars } from 'app/components/LoadingAvatars';
-import { JoinRoom } from 'app/components/JoinRoom/Loadable';
-import { useParams } from 'react-router-dom';
+import { JoinRoom } from 'app/components/JoinRoom';
 import {
   selectUsernameError,
   selectAvatarError,
@@ -37,8 +36,6 @@ export function CreatePlayer() {
 
   const name = useSelector(selectUsername);
   const avatar = useSelector(selectUserAvatar);
-
-  const { room } = useParams<{ room: string }>();
 
   const nameError = useSelector(selectUsernameError);
   const avatarError = useSelector(selectAvatarError);
@@ -140,7 +137,7 @@ export function CreatePlayer() {
           <InputError>{avatarError.message}</InputError>
         )}
       </UserCreationContainer>
-      <JoinRoom room={room} />
+      <JoinRoom />
     </>
   );
 }

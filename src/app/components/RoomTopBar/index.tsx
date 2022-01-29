@@ -17,6 +17,7 @@ import { media } from 'styles/media';
 import { SecondaryButton } from '../Button';
 import Icon from '../Icon';
 import { variants } from 'styles/variants';
+import getApiPath from 'helpers/getApiPath';
 
 export function RoomTopBar() {
   const { t } = useTranslation();

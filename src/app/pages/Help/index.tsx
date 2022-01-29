@@ -12,7 +12,7 @@ import { colors } from 'styles/colors';
 // import { useDispatch } from 'react-redux';
 import { PrimaryButton } from 'app/components/Button';
 import Icon from 'app/components/Icon';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { variants } from 'styles/variants';
 // import { useModalSlice } from 'app/components/MotionModal/slice';
 import { media } from 'styles/media';
@@ -27,7 +27,7 @@ export const Help = () => {
 
   const { actions: modalActions } = useModalSlice();
   const gameModes = useSelector(selectGameModes);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const floatingBtnVariants = {
     hidden: {
@@ -74,7 +74,7 @@ export const Help = () => {
   };
 
   const goBack = () => {
-    history.goBack();
+    navigate(-1);
   };
 
   return (

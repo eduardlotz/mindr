@@ -6,10 +6,10 @@ const handleAuth = async (data, successCallback, errCallback) => {
   try {
     const {
       data: { token },
-    } = await axios.post(getApiPath() + 'api/auth', data);
+    } = await axios.post(getApiPath() + '/api/auth', data);
     setLocalStorage('token', token);
     successCallback();
-  } catch (err) {
+  } catch (err: any) {
     let errMessage;
 
     if (err.response.status) {
