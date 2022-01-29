@@ -18,13 +18,14 @@ import {
 } from 'app/pages/Lobby/slice/selectors';
 import Icon from '../Icon';
 import { SocketContext } from 'app/socketContext';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { setLocalStorage } from 'helpers/localstorage';
 
 export const CreateNewRoom = () => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const socket = React.useContext(SocketContext);
 
   const name = useSelector(selectUsername);
@@ -41,7 +42,9 @@ export const CreateNewRoom = () => {
       dispatch(lobbyActions.setJoinedGroup(true));
       dispatch(lobbyActions.setGroupCode(room.name));
 
-      history.push(`/room/${room.name}`);
+      setLocalStorage('mindr-room-code', room.name);
+
+      navigate(`/room/${room.name}`);
     });
     return () => {
       socket.removeAllListeners();

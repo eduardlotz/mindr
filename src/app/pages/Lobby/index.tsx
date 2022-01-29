@@ -20,6 +20,9 @@ import { GameSelectCard } from 'app/components/GameSelectCard/Loadable';
 import { SocketContext } from 'app/socketContext';
 import { RoomTopBar } from 'app/components/RoomTopBar/Loadable';
 import { RoomUserList } from 'app/components/RoomUserList';
+import { useNavigate } from 'react-router-dom';
+import { getLocalStorage } from 'helpers/localstorage';
+import { useEffect } from 'react';
 
 export function Lobby() {
   const { t } = useTranslation();
@@ -30,6 +33,8 @@ export function Lobby() {
 
   const { actions: lobbyActions } = useLobbySlice();
 
+  const navigate = useNavigate();
+
   const socket = React.useContext(SocketContext);
 
   // Used to dispatch slice actions
@@ -39,7 +44,13 @@ export function Lobby() {
     dispatch(lobbyActions.setGameLength(length));
   };
 
-  const isRoomReady = () => (usersInRoom.length >= 4 ? true : false);
+  const room = getLocalStorage('mindr-room-code');
+
+  useEffect(() => {
+    if (room === null) navigate('/');
+  }, [navigate, room]);
+
+  const isRoomReady = () => (usersInRoom.length >= 2 ? true : false);
 
   const floatingBtnVariants = {
     hidden: {
@@ -293,105 +304,4 @@ const GameModesContainer = styled.div`
 
   margin: 16px 0 40px 0;
   background-color: transparent;
-`;
-
-const UserAvatar = styled.img`
-  position: relative;
-
-  width: 48px;
-  height: 48px;
-
-  margin-right: 8px;
-
-  border-radius: 50%;
-  object-fit: contain;
-  background-size: 100% 100%;
-`;
-
-const Username = styled.span`
-  font-family: 'Basier';
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 23px;
-  text-align: left;
-
-  color: ${props => props.theme.mainContrastText};
-`;
-
-const InfoLine = styled.p`
-  font-family: 'Basier';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 21px;
-  text-align: left;
-  margin: 0 0 16px 0;
-
-  color: ${props => props.theme.mainSubtleText};
-`;
-
-const InlineBlock = styled(motion.div)`
-  width: 100%;
-  display: flex;
-
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-`;
-
-const UsersCounter = styled(motion.span)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
-const UsersCount = styled(motion.span)`
-  font-family: 'Basier';
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 800;
-  line-height: 42px;
-  text-align: center;
-  margin: 0 8px 0 0;
-
-  color: ${props => props.theme.mainContrastText};
-`;
-
-const MaxUsersCount = styled(motion.span)`
-  font-family: 'Basier';
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 800;
-  line-height: 21px;
-  text-align: center;
-  letter-spacing: 1px;
-  opacity: 0.3;
-
-  color: ${props => props.theme.mainSubtleText};
-`;
-
-const UsersList = styled(motion.div)`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 8px;
-  grid-row-gap: 16px;
-
-  ${media.medium`
-    grid-template-columns: repeat(4, 1fr);
-    grid-column-gap: 24px;
-    grid-row-gap: 24px;
-  `}
-`;
-
-const JoinedUser = styled(motion.div)`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  padding: 0;
-  align-items: center;
-  justify-content: flex-start;
 `;

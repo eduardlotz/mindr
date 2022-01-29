@@ -12,14 +12,14 @@ import { variants } from 'styles/variants';
 import { media } from 'styles/media';
 import { SocketContext } from 'app/socketContext';
 import { useContext } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { selectGroupCode } from 'app/pages/Lobby/slice/selectors';
 
 export const LeaveRoomBtn = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const room = useSelector(selectGroupCode);
   const socket = useContext(SocketContext);
 
@@ -27,7 +27,7 @@ export const LeaveRoomBtn = () => {
     socket.open();
     socket.emit('leaveRoom', { roomName: room }, res => {
       if (res.statusCode === 200) {
-        history.push('/');
+        navigate('/');
       }
       console.log(res);
     });

@@ -17,7 +17,7 @@ import {
 import { SocketContext } from 'app/socketContext';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { variants } from 'styles/variants';
 import { media } from 'styles/media';
 import { SubText } from '../styled/Headers';
@@ -30,7 +30,7 @@ export const JoinRoom = () => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const socket = React.useContext(SocketContext);
 
   const name = useSelector(selectUsername);
@@ -53,7 +53,7 @@ export const JoinRoom = () => {
         dispatch(lobbyActions.setUsersInRoom(res.users));
         dispatch(lobbyActions.setJoinedGroup(true));
 
-        history.push(`/room/${res.name}`);
+        navigate(`/room/${res.name}`);
       }
     });
   };
@@ -63,20 +63,20 @@ export const JoinRoom = () => {
   useEffect(() => {
     async function validateRoom(room) {
       try {
-        await axios.post(getApiPath() + 'api/validateRoom', {
+        await axios.post(getApiPath() + '/api/validateRoom', {
           room,
         });
       } catch (err) {
         console.log(err);
         dispatch(lobbyActions.setGroupCode(''));
-        history.push(`/`);
+        navigate(`/`);
       }
     }
     if (room) {
       dispatch(lobbyActions.setGroupCode(room));
       validateRoom(room);
     }
-  }, [dispatch, history, lobbyActions, room]);
+  }, [dispatch, navigate, lobbyActions, room]);
 
   const handleInputChange = e => {
     dispatch(lobbyActions.setGroupCode(e.target.value));

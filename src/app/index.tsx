@@ -8,7 +8,6 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
@@ -33,6 +32,7 @@ import { selectTheme } from './pages/Homepage/slice/selectors';
 import lightTheme from 'styles/lightTheme';
 import darkTheme from 'styles/darkTheme';
 import { CreatePlayer } from './pages/CreatePlayer/Loadable';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -80,19 +80,19 @@ export function App() {
         <MainContainer>
           <MotionModal />
           <AnimatePresence exitBeforeEnter>
-            <Switch location={location} key={location.key}>
-              <Route exact path="/" component={Homepage} />
-              <Route exact path="/help" component={Help} />
-              <Route exact path="/join/:room" component={CreatePlayer} />
+            <Routes location={location} key={location.key}>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/join/:room" element={<CreatePlayer />} />
 
               {isCreator ? (
-                <Route exact path="/room/:room" component={Lobby} />
+                <Route path="/room/:room" element={<Lobby />} />
               ) : joinedGroup ? (
-                <Route exact path="/room/:room" component={JoinedRoom} />
+                <Route path="/room/:room" element={<JoinedRoom />} />
               ) : (
-                <Redirect to="/" />
+                <Route element={() => <Navigate to="/" />} />
               )}
-            </Switch>
+            </Routes>
           </AnimatePresence>
         </MainContainer>
         <GlobalStyle />

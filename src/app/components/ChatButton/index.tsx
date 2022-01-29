@@ -7,8 +7,6 @@ import styled from 'styled-components/macro';
 import Icon from '../Icon';
 import { variants } from 'styles/variants';
 import { motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
-import { useModalSlice } from '../MotionModal/slice';
 
 interface Props {}
 

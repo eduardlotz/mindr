@@ -18,6 +18,7 @@ import { variants } from 'styles/variants';
 import Icon from '../Icon';
 import { Button } from '../Button';
 import { useLobbySlice } from 'app/pages/Lobby/slice';
+import { SimpleTooltip } from '../SimpleToolTip';
 
 interface Props {}
 
@@ -52,6 +53,7 @@ export function RoomUserList(props: Props) {
         console.log(res);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, lobbyActions, socket]);
 
   return (
@@ -81,15 +83,23 @@ export function RoomUserList(props: Props) {
                   layout
                   style={{ zIndex: i }}
                 >
-                  <UserAvatar src={user.avatar} />
-                  {user.isCreator && (
+                  <UserAvatarWrapper
+                    initial="hidden"
+                    whileHover="visible"
+                    animate="exit"
+                    exit="exit"
+                  >
+                    <UserAvatar src={user.avatar} />
+                    <SimpleTooltip text={user.name} />
+                  </UserAvatarWrapper>
+                  {/* {user.isCreator && (
                     <Icon
                       name="star"
                       height="24"
                       width="24"
                       style={{ marginRight: '8px' }}
                     />
-                  )}
+                  )} */}
                   <Username
                     variants={variants.popUp}
                     initial="hidden"
@@ -99,11 +109,11 @@ export function RoomUserList(props: Props) {
                   >
                     {user.name}
                   </Username>
-                  {isCreator && (
+                  {/* {isCreator && (
                     <DeleteButton onClick={() => removeUserFromRoom(user)}>
                       <Icon name="delete" width="24" height="24" />
                     </DeleteButton>
-                  )}
+                  )} */}
                 </JoinedUser>
               </AnimateSharedLayout>
             </AnimatePresence>
@@ -114,15 +124,18 @@ export function RoomUserList(props: Props) {
   );
 }
 
-const DeleteButton = styled(Button)`
-  padding: 0;
-  background-color: transparent;
-  color: ${props => props.theme.error};
-`;
-
 const ContentBlock = styled(motion.div)`
   width: 100%;
   margin-bottom: 40px;
+`;
+
+const UserAvatarWrapper = styled(motion.div)`
+  display: flex;
+  padding: 0;
+  background-color: transparent;
+  margin-right: 8px;
+
+  position: relative;
 `;
 
 const UserAvatar = styled.img`
@@ -130,8 +143,6 @@ const UserAvatar = styled.img`
 
   width: 48px;
   height: 48px;
-
-  margin-right: 8px;
 
   border-radius: 50%;
   object-fit: contain;
@@ -230,24 +241,8 @@ const JoinedUser = styled(motion.div)`
   transition: 0.25s ease-out;
   transition-property: background-color margin padding;
 
-  & > span,
-  svg {
-    display: none;
-  }
-
-  &:not(:first-child) {
-    margin: 0 0 0 -24px;
-  }
-
   &:hover {
-    padding-right: 24px;
-    background-color: ${props => props.theme.container};
-    margin-right: 24px;
-    cursor: pointer;
-
-    & > span,
-    svg {
-      display: block;
-    }
+    margin-right: 8px;
+    margin-left: 8px;
   }
 `;
